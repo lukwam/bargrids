@@ -1,0 +1,8 @@
+app             = "bargrids"
+branch          = "main"
+billing_account = "00F201-DDF3DF-328A7F"
+domain_name     = "bargrids.lukwam.dev"
+folder_id       = "534999168571"
+project_id      = "lukwam-bargrids"
+project_name    = "Lukwam - Bargrids"
+region          = "us-east4"

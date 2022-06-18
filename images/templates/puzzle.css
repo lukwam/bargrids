@@ -1,0 +1,69 @@
+.bargrid-container {
+  /* position: relative; */
+  /* background: #ffffff; */
+}
+.bargrid {
+  position: absolute;
+  z-index: 1;
+  background: transparent;
+  border: {{ border }}px solid #000000;
+  width: {{ size * cols }}px;
+  height: {{ size * rows}}px;
+  display: grid;
+  grid-template: repeat({{ cols }}, {{100 / cols}}%) / repeat({{ rows }}, {{ 100/rows }}%);
+  /* list-style-type: none; */
+  /* padding: 0; */
+  /* margin: 0 auto; */
+}
+.bargrid__square {
+  border: 1px solid #aaaaaa;
+  background: transparent;
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+{%- for row in range(1, rows+1) %}
+{%- for col in range(1, cols+1) %}
+.bargrid__square--{{ row }}-{{ col }} {
+  grid-column: {{ col }}/{{ col}};
+  grid-row: {{ row }}/{{ row }};
+}
+{%- endfor %}
+{%- endfor %}
+.bargrid__square__bars {
+  /* position: absolute; */
+  border: none;
+  z-index: 20;
+}
+.bargrid__square__bars--left {
+  border-left: 2px solid #000000;
+}
+.bargrid__square__bars--right {
+  border-right: 2px solid #000000;
+}
+.bargrid__square__bars--top {
+  border-top: 2px solid #000000;
+}
+.bargrid__square__bars--bottom {
+  border-bottom: 2px solid #000000;
+}
+.bargrid__square__input {
+  background: transparent;
+  /* position: absolute; */
+  border: none;
+  z-index: 30;
+}
+.bargrid__square__labels {
+  border: none;
+  color: #333333;
+  font-family: {{ font_family }};
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  font-size: 12px;
+  line-height: 1;
+  z-index: 100;
+}

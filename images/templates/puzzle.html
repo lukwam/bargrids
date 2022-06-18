@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ stub }}.css">
+  </head>
+  <body>
+    <h1 class="puzzle-title">{{ title }}</h1>
+    <h2 class="puzzle-author">by Emily Cox and Henry Rathvon</h2>
+    <!-- Container for the entire BarGrid -->
+    <div class="bargrid-container">
+
+      <div class="bargrid">
+
+        <!-- Create the empty grid of square boxes -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        <div class="bargrid__square bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add in the across bars -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        <div class="bargrid__square bargrid__square__bars bargrid__square--{{ row+1 }}-{{ col+1 }}
+        {%- if col-1 in across_bars[row] %} bargrid__square__bars--left{% endif %}
+        {%- if col in across_bars[row] %} bargrid__square__bars--right{% endif %}
+        {%- if col in down_bars[row-1] %} bargrid__square__bars--top{% endif -%}
+        {%- if col in down_bars[row] %} bargrid__square__bars--bottom{% endif -%}
+        "></div>
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add in the labels -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        {%- if labels[row][col] %}
+        <div class="bargrid__square bargrid__square__labels bargrid__square--{{ row+1 }}-{{ col+1 }}">
+          {{- labels[row][col] -}}
+        </div>
+        {%- endif %}
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add in the solutions -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        <input id="item{{ row+1 }}-{{ col+1 }}" class="bargrid__square bargrid__square__input bargrid__square--{{ row+1 }}-{{ col+1 }}"
+          onfocusin="focusInput(this)" onfocusout="blurInput(this)"
+          type="text" minlength="1" maxlength="1" required="required" value="{{ "" if true else solution[row][col] }}" />
+        {%- endfor %}
+        {%- endfor %}
+
+      </div>
+
+    </div>
+    <script>
+      function focusInput(input) {
+        input.style.backgroundColor = "#ffff00";
+      }
+      function blurInput(input) {
+        input.style.backgroundColor = "transparent";
+      }
+    </script>
+  </body>
+</html>
