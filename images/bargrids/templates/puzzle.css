@@ -54,7 +54,7 @@
   background: transparent;
   /* position: absolute; */
   border: none;
-  z-index: 30;
+  z-index: 50;
 }
 .bargrid__square__labels {
   border: none;
@@ -66,4 +66,29 @@
   font-size: 12px;
   line-height: 1;
   z-index: 100;
+}
+.bargrid__square__barcaps {
+  background: transparent;
+  z-index: 30;
+  background: #000000;
+  border: none;
+  height: 2px;
+  width: 2px;
+  position: absolute;
+}
+.bargrid__square__barcaps--ne {
+  top: 0;
+  right: 0;
+}
+.bargrid__square__barcaps--se {
+  bottom: 0;
+  right: 0;
+}
+.bargrid__square__barcaps--nw {
+  top: 0;
+  left: 0;
+}
+.bargrid__square__barcaps--sw {
+  bottom: 0;
+  left: 0;
 }
