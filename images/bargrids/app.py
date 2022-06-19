@@ -46,17 +46,6 @@ def new_bargrid():
     return send_file("bargrids/index.html", mimetype="text/html")
 
 
-@app.route("/new_puzzle.css")
-def new_puzzle():
-    """CSS for creating a new puzzle."""
-    return send_file("bargrids/styles.css", mimetype="text/css")
-    # size = 25
-    # response = render_template(
-    #     "new_puzzle.css",
-    #     size=size,
-    # )
-    # return Response(response, 200, mimetype="text/css")
-
 
 @app.route("/puzzles/<slug>")
 def puzzle(slug):
@@ -79,10 +68,16 @@ def puzzle_stylesheet(slug):
     return Response(response, 200, mimetype="text/css")
 
 
-@app.route("/script.js")
+@app.route("/bargrids/script.js")
 def script_js():
     """Send javascript file."""
     return send_file("bargrids/script.js", mimetype="text/javascript")
+
+
+@app.route("/bargrids/styles.css")
+def new_puzzle():
+    """CSS for creating a new puzzle."""
+    return send_file("bargrids/styles.css", mimetype="text/css")
 
 
 if __name__ == "__main__":
