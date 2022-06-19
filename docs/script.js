@@ -271,11 +271,10 @@ function focusInput(input) {
 }
 
 function hideGridSizeControls() {
-  var grid_size = document.getElementById("grid-size-control-container");
-  var grid_toolbar = document.getElementById("grid-toolbar");
   console.log("Hiding Grid Size controls")
-  grid_size.classList.toggle("hidden");
-  grid_toolbar.classList.toggle("hidden");
+  document.getElementById("grid-size-control-container").classList.add("hidden");
+  document.getElementById("grid-toolbar").classList.remove("hidden");
+  document.getElementById("layers-tool").classList.remove("hidden");
 }
 
 function toggleTool(div) {
