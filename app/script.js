@@ -135,6 +135,7 @@ function createEmptyGrid(cols, rows) {
   grid.style["grid-template"] = grid_template;
 
   // Add basic squares
+  grid.appendChild(document.createComment("Grid Squares"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createSquare(grid, row, col);
@@ -142,6 +143,7 @@ function createEmptyGrid(cols, rows) {
   }
 
   // Add bar squares
+  grid.appendChild(document.createComment("Bar Squares"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createBarSquare(grid, row, col);
@@ -149,6 +151,7 @@ function createEmptyGrid(cols, rows) {
   }
 
   // Add bar buttons for across clues
+  grid.appendChild(document.createComment("Across and Down Bar Buttons"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createAcrossBarButton(grid, row, col);
@@ -157,6 +160,7 @@ function createEmptyGrid(cols, rows) {
   }
 
   // Add shade square buttons
+  grid.appendChild(document.createComment("Shade Square Square and Button"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createShadeSquareSquare(grid, row, col);
@@ -165,6 +169,7 @@ function createEmptyGrid(cols, rows) {
   }
 
   // Add shade circle buttons
+  grid.appendChild(document.createComment("Shade Circle Squares and Button"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createShadeCircleSquare(grid, row, col);
@@ -173,13 +178,13 @@ function createEmptyGrid(cols, rows) {
   }
 
   // Add circle squares
+  grid.appendChild(document.createComment("Circle Squares and Button"))
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createCircleSquare(grid, row, col);
       createCircleButton(grid, row, col);
     }
   }
-
 }
 
 function setAcrossBar(div) {
