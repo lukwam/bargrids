@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <title>New Puzzle</title>
+    <link rel="stylesheet" href="/new_puzzle.css">
+    <script type="text/javascript" src="/script.js"></script>
+  </head>
+  <body onload="createEmptyGrid(8, 8);">
+
+    <!-- BarGrid Container -->
+    <div class="bargrid-container">
+
+      <!-- Grid -->
+      <div id="grid" class="grid"></div>
+
+    </div>
+
+    <div class="controls-container">
+
+      <!-- Grid Size Control -->
+      <div id="grid-size-control-container" class="control-container">
+        <div id="grid-size-control" class="controls controls__grid-size">
+          <select class="controls__grid-size--select" name="grid_size" onchange="if (this.selectedIndex) setGridSize(this)">
+            <option>Set Grid Size</option>
+            <option id="8x8">8 by 8</option>
+            <option id="9x9">9 by 9</option>
+            <option id="10x10">10 by 10</option>
+            <option id="11x11">11 by 11</option>
+            <option id="12x12">12 by 12</option>
+            <option id="13x13">13 by 13</option>
+            <option id="14x14">14 by 14</option>
+            <option id="15x15">15 by 15</option>
+          </select>
+          <div class="controls__grid-size controls__grid-size--width">
+            Width:
+            <input type="text" id="width" name="width" size="5" value="8"
+              onchange="createEmptyGrid(this.value, document.getElementById('depth').value);">
+          </div>
+          <div class="controls__grid-size controls__grid-size--depth">
+            Depth:
+            <input type="text" id="depth" name="depth" size="5" value="8"
+              onchange="createEmptyGrid(document.getElementById('width').value, this.value);">
+          </div>
+          <input class="controls__grid-size controls__grid-size--button"
+            onclick="hideGridSizeControls();"
+            type="submit" name="create" value="Set This Size">
+        </div>
+      </div>
+
+      <!-- Grid Toolbar -->
+      <div id="grid-toolbar" class="grid__toolbar hidden">
+        <!-- Answer Text Toolbar Item -->
+        <div id="answer-tool" class="grid__toolbar__item__wrapper" title="Answer Text" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--answers unselectable">A</div>
+        </div>
+        <!-- Grid Bars Toolbar Item -->
+        <div id="bar-tool" class="grid__toolbar__item__wrapper" title="Grid Bars" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--bars unselectable">⌎</div>
+        </div>
+        <!-- Indexes Toolbar Item -->
+        <div id="index-tool" class="grid__toolbar__item__wrapper" title="Indexes" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--indexes unselectable">12</div>
+        </div>
+        <!-- Shade Squares Toolbar Item -->
+        <div id="shade-square-tool" class="grid__toolbar__item__wrapper" title="Shade Squares" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--shade-squares"></div>
+        </div>
+        <!-- Shade Circles Toolbar Item -->
+        <div id="shade-circle-tool" class="grid__toolbar__item__wrapper" title="Shade Circles" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--shade-circles"></div>
+        </div>
+        <!-- Circles Toolbar Item -->
+        <div id="circle-tool" class="grid__toolbar__item__wrapper" title="Circles" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--circles"></div>
+        </div>
+      </div>
+
+      <!-- Layers -->
+      <div id="layers-tool" class="control-container controls__layers">
+        <div class="controls__layers--header">Layers</div>
+
+        <input type="checkbox" id="view-answers" onchange="toggleAnswerLayer(this);"  checked>
+        <label for="view-answers" class="controls__layers--checkbox">Answers</label><br>
+
+        <input type="checkbox" id="view-bars" onchange="toggleBarLayer(this);" checked>
+        <label for="view-bars" class="controls__layers--checkbox">Bars</label><br>
+
+        <input type="checkbox" id="view-indexes" onchange="toggleIndexLayer(this);"  checked>
+        <label for="view-indexes" class="controls__layers--checkbox">Indexes</label><br>
+
+        <input type="checkbox" id="view-shade-squares" onchange="toggleShadeSquareLayer(this);"  checked>
+        <label for="view-shade-squares" class="controls__layers--checkbox">Shade Squares</label><br>
+
+        <input type="checkbox" id="view-shade-circles" onchange="toggleShadeCircleLayer(this);"  checked>
+        <label for="view-shade-circles" class="controls__layers--checkbox">Shade Circles</label><br>
+
+        <input type="checkbox" id="view-circles" onchange="toggleCircleLayer(this);"  checked>
+        <label for="view-circles" class="controls__layers--checkbox">Circles</label><br>
+      </div>
+    </div>
+  </body>
+</html>

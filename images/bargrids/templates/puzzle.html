@@ -3,7 +3,7 @@
 <html>
   <head>
     <title>{{ title }}</title>
-    <link rel="stylesheet" href="{{ stub }}.css">
+    <link rel="stylesheet" href="/puzzles/{{ slug }}.css">
   </head>
   <body>
     <h1 class="puzzle-title">{{ title }}</h1>
@@ -16,7 +16,47 @@
         <!-- Create the empty grid of square boxes -->
         {%- for row in range(0, rows) %}
         {%- for col in range(0, cols) %}
+        {%- if col in shaded_squares[row] %}
+        <div class="bargrid__square bargrid__square--shaded bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- else -%}
         <div class="bargrid__square bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endif %}
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add blanks -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        {%- if col in blanks[row] %}
+        <div class="bargrid__square bargrid__square--blank bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endif %}
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add shaded squares -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        {%- if col in shaded_squares[row] %}
+        <div class="bargrid__square bargrid__square--shaded bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endif %}
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add shaded circles -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        {%- if col in shaded_circles[row] %}
+        <div class="bargrid__square bargrid__square--shaded-circle bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endif %}
+        {%- endfor %}
+        {%- endfor %}
+
+        <!-- Add circles -->
+        {%- for row in range(0, rows) %}
+        {%- for col in range(0, cols) %}
+        {%- if col in circles[row] %}
+        <div class="bargrid__square bargrid__square--circle bargrid__square--{{ row+1 }}-{{ col+1 }}">&nbsp;</div>
+        {%- endif %}
         {%- endfor %}
         {%- endfor %}
 
@@ -32,7 +72,7 @@
         {%- endfor %}
         {%- endfor %}
 
-        <!-- Add in the bar caps -->
+        <!-- Add in the bar join caps -->
         {%- for row in range(0, rows) %}
         {%- for col in range(0, cols) %}
         {%- if col+1 in down_bars[row-1] and col in across_bars[row-1] %}
@@ -71,6 +111,7 @@
       </div>
 
     </div>
+    <div class="bargrid__flavor-text">{{ flavor_text }}</div>
     <script>
       function focusInput(input) {
         input.style.backgroundColor = "#ffff00";

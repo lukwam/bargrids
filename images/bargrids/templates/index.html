@@ -1,0 +1,9 @@
+
+<p><a href="/new">New Puzzle</a></p>
+
+<select name="puzzle" onchange="if (this.selectedIndex) location.href = '/puzzles/'+ this.options[this.selectedIndex].id">
+    <option> - Select a Puzzle - </option>
+    {%- for puzzle in puzzles %}
+    <option id="{{ puzzle.slug }}">{{ loop.index }} {{ puzzle.name }}</option>
+    {%- endfor %}
+</select>

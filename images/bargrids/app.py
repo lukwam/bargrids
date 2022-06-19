@@ -5,34 +5,69 @@ import yaml
 from flask import Flask
 from flask import Response
 from flask import render_template
+from flask import request
+from flask import send_file
 
 
 app = Flask(__name__)
 
 
-def get_puzzle_data(stub):
+def get_puzzle_data(slug):
     """Return the data from a puzzle yaml file path."""
-    with open(f"{stub}.yaml", "r") as stream:
+    with open(f"{slug}.yaml", "r") as stream:
         try:
             return yaml.safe_load(stream)
         except yaml.YAMLError as err:
-            logging.error(f"Failed to open puzzle file: {stub}: {err}")
+            logging.error(f"Failed to open puzzle file: {slug}: {err}")
     return None
 
 
 @app.route("/")
-def hello_world():
-    stub = "for_beginners"
-    puzzle_data = get_puzzle_data(stub)
+def index():
+    puzzles = [
+        {"name": "For Beginners", "slug": "for_beginners"},
+    ]
+    return render_template("index.html", puzzles=puzzles)
+
+
+@app.route("/new", methods=["GET", "POST"])
+def new_bargrid():
+    """Create a new BarGrid."""
+    # if request.method == "POST":
+    #     depth = request.form.get("depth")
+    #     width = request.form.get("width")
+    #     if depth.isnumeric() and width.isnumeric():
+    #         return render_template(
+    #             "new_puzzle.html",
+    #             depth=int(depth),
+    #             width=int(width),
+    #         )
+    return render_template("new_puzzle.html")
+
+
+@app.route("/new_puzzle.css")
+def new_puzzle():
+    """CSS for creating a new puzzle."""
+    size = 25
+    response = render_template(
+        "new_puzzle.css",
+        size=size,
+    )
+    return Response(response, 200, mimetype="text/css")
+
+
+@app.route("/puzzles/<slug>")
+def puzzle(slug):
+    puzzle_data = get_puzzle_data(slug)
     return render_template("puzzle.html", **puzzle_data)
 
 
-@app.route("/<stub>.css")
-def puzzle_stylesheet(stub):
+@app.route("/puzzles/<slug>.css")
+def puzzle_stylesheet(slug):
     border = 4
     font_family = "Arial, Helvetica, sans-serif"
     size = 50
-    puzzle_data = get_puzzle_data(stub)
+    puzzle_data = get_puzzle_data(slug)
     response = render_template("puzzle.css",
         border=border,
         font_family=font_family,
@@ -40,6 +75,12 @@ def puzzle_stylesheet(stub):
         **puzzle_data
     )
     return Response(response, 200, mimetype="text/css")
+
+
+@app.route("/script.js")
+def script_js():
+    """Send javascript file."""
+    return send_file("script.js", mimetype="text/javascript")
 
 
 if __name__ == "__main__":

@@ -1,9 +1,15 @@
 ---
 title: For Beginners
-stub: for_beginners
+slug: for_beginners
 
 cols: 13
 rows: 13
+
+flavor_text: >
+  Each clue's answer should have its first letter removed to the correspondingly numbered blank
+  before entry in the diagram. The letters thus removed will spell out the members of a certain
+  group. The unclued central Across entry will offer an explanation for the removed group.
+  Answers include six proper nouns and an uncommon word at 37 Across.
 
 solution:
   - "EAGERARPAULIN"
@@ -64,3 +70,69 @@ labels:
   - ["", "", "", 35, "", "", "", "", "", "", "", "", ""]
   - [36, "", "", "", "", "", "", "", 37, "", "", "", ""]
   - [38, "", "", "", "", "", "", "", 39, "", "", "", ""]
+
+blanks:
+  # - []
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+
+circles:
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+
+shaded_circles:
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+
+
+shaded_squares:
+  # - []
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []
+  # - []
+  # - [1, 3, 5, 7, 9, 11]
+  # - []
+  # - []

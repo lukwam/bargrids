@@ -1,11 +1,13 @@
 .bargrid-container {
-  /* position: relative; */
+  position: absolute;
   /* background: #ffffff; */
+  display: block;
+  float: left;
 }
 .bargrid {
   position: absolute;
   z-index: 1;
-  background: transparent;
+  background: #ffffff;
   border: {{ border }}px solid #000000;
   width: {{ size * cols }}px;
   height: {{ size * rows}}px;
@@ -15,15 +17,37 @@
   /* padding: 0; */
   /* margin: 0 auto; */
 }
+.bargrid__flavor-text {
+  z-index: 1;
+  margin-top: {{ size * rows + 50 }}px;
+  padding: 3px;
+  font-size: 20px;
+}
 .bargrid__square {
-  border: 1px solid #aaaaaa;
   background: transparent;
-  position: relative;
-  z-index: 10;
-  text-align: center;
+  border: 1px solid #aaaaaa;
   font-size: 20px;
   font-weight: bold;
+  position: relative;
+  text-align: center;
   text-transform: uppercase;
+  z-index: 10;
+}
+.bargrid__square--circle {
+  background: transparent;
+  border: 1px solid #aaaaaa;
+  border-radius: 50%;
+}
+.bargrid__square--blank {
+  background: #000000;
+  border: 1px solid #000000;
+}
+.bargrid__square--shaded {
+  background: #aaaaaa;
+}
+.bargrid__square--shaded-circle {
+  background: #aaaaaa;
+  border-radius: 50%;
 }
 {%- for row in range(1, rows+1) %}
 {%- for col in range(1, cols+1) %}
@@ -34,7 +58,7 @@
 {%- endfor %}
 {%- endfor %}
 .bargrid__square__bars {
-  /* position: absolute; */
+  position: relative;
   border: none;
   z-index: 20;
 }
@@ -91,4 +115,19 @@
 .bargrid__square__barcaps--sw {
   bottom: 0;
   left: 0;
+}
+.puzzle-title {
+  font-family: {{ font_family }};
+  font-size: 36px;
+  text-transform: uppercase;
+  margin-block-start: 0.5em;
+  margin-block-end: 0.25em;
+}
+.puzzle-author {
+  font-family: {{ font_family }};
+  font-size: 20px;
+  font-style: italic;
+  font-weight: normal;
+  margin-block-start: 0.25em;
+  margin-block-end: 1em;
 }
