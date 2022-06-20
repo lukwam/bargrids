@@ -1,11 +1,19 @@
 let puzzle = {
-  border: 3,  // external border of the puzzle
-  size: 50,   // size (width and height) of the squares
-  cols: 8,    // number of columns
-  rows: 8,    // number of rows
+  // Puzzle Title
+  title: null,
+  // Puzzle Size
+  cols: 8,
+  rows: 8,
   depth: function() {return size * rows},
   height: function() {return size * rows},
   width: function() {return size * cols},
+  // Puzzle Content
+  solutions: [],
+  across_bars: [],
+  down_bars: [],
+  shade_squares: [],
+  shade_circles: [],
+  circles: [],
 }
 
 function createSquare(grid, row, col) {
@@ -21,9 +29,9 @@ function createSquare(grid, row, col) {
 function createAnswerInput(grid, row, col) {
   answer = document.createElement("input");
   answer.id = "answer-" + row + "-" + col;
-  answer.addEventListener("focusin", (event) => {focusInput(event.target)});
-  answer.addEventListener("focusout", (event) => {blurInput(event.target)});
-  answer.addEventListener("keyup", (event) => {nextInput(event)});
+  answer.addEventListener("focusin", (event) => {focusInput(event.target);});
+  answer.addEventListener("focusout", (event) => {blurInput(event.target);});
+  answer.addEventListener("keyup", (event) => {nextInput(event);updateAnswer(event.target)});
   answer.classList.add("grid__answer__input");
   answer.disabled = true;
   answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
@@ -92,7 +100,7 @@ function createIndexInput(grid, row, col) {
   index.id = "index-" + row + "-" + col;
   index.addEventListener("focusin", (event) => {focusInput(event.target)});
   index.addEventListener("focusout", (event) => {blurInput(event.target)});
-  index.addEventListener("keyup", (event) => {nextInput(event)});
+  index.addEventListener("keyup", (event) => {nextInput(event);updateIndex(event.target)});
   index.disabled = true;
   index.classList.add("grid__index__input");
   index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
@@ -113,7 +121,6 @@ function createShadeCircleButton(grid, row, col) {
   shadecircle.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   grid.append(shadecircle);
 }
-
 
 function createShadeCircleSquare(grid, row, col) {
   shadecircle = document.createElement("div");
@@ -146,6 +153,35 @@ function createShadeSquareSquare(grid, row, col) {
 }
 
 function createEmptyGrid(cols, rows) {
+  puzzle.cols = cols;
+  puzzle.rows = rows;
+
+  puzzle.solutions = [];
+  puzzle.indexes = [];
+  puzzle.across_bars = [];
+  puzzle.down_bars = [];
+  puzzle.circles = [];
+  puzzle.shade_circles = [];
+  puzzle.shade_squares = [];
+
+  for (let row = 0; row < rows; row++) {
+    var solution_row = [];
+    var index_row = [];
+    for (let col = 0; col < cols; col++) {
+      solution_row.push("");
+      index_row.push("");
+    }
+    puzzle.solutions.push(solution_row);
+    puzzle.indexes.push(index_row);
+    puzzle.across_bars.push([]);
+    puzzle.across_bars.push([]);
+    puzzle.down_bars.push([]);
+    puzzle.circles.push([]);
+    puzzle.shade_circles.push([]);
+    puzzle.shade_squares.push([]);
+  }
+  console.log(puzzle);
+
   grid = document.getElementById("grid");
 
   // remove all elements from the grid
@@ -241,6 +277,21 @@ function setAcrossBar(div) {
   var div2 = document.getElementById(barsquare2);
   div1.classList.toggle("grid__bar--right");
   div2.classList.toggle("grid__bar--left");
+
+  if (puzzle.across_bars[row].includes(col)) {
+    console.log("Disabling Across Bar: " + circle);
+    // div.classList.remove("grid__bar--right");
+    // div.classList.remove("grid__bar--left");
+    n = puzzle.across_bars[row].indexOf(col)
+    if (n !== -1) {
+      puzzle.across_bars[row].splice(n, 1);
+    }
+  } else {
+    console.log("Enabling Across Bar: " + circle);
+    // div.classList.add("grid__bar--right");
+    // div.classList.add("grid__bar--left");
+    puzzle.across_bars[row].push(col);
+  }
 }
 
 function setDownBar(div) {
@@ -254,6 +305,20 @@ function setDownBar(div) {
   var div2 = document.getElementById(barsquare2);
   div1.classList.toggle("grid__bar--bottom");
   div2.classList.toggle("grid__bar--top");
+  if (puzzle.down_bars[row].includes(col)) {
+    console.log("Disabling Across Bar: " + circle);
+    // div.classList.remove("grid__bar--bottom");
+    // div.classList.remove("grid__bar--top");
+    n = puzzle.down_bars[row].indexOf(col)
+    if (n !== -1) {
+      puzzle.down_bars[row].splice(n, 1);
+    }
+  } else {
+    console.log("Enabling Across Bar: " + circle);
+    // div.classList.add("grid__bar--bottom");
+    // div.classList.add("grid__bar--top");
+    puzzle.down_bars[row].push(col);
+  }
 }
 
 function setCircle(div) {
@@ -263,8 +328,18 @@ function setCircle(div) {
   var col = parseInt(id[3]);
   var circle = "circle-" + row + "-" + col;
   var div = document.getElementById(circle);
-  console.log("Toggling Circle: " + circle);
-  div.classList.toggle("grid__circle__button--selected");
+  if (puzzle.circles[row].includes(col)) {
+    console.log("Disabling Circle: " + circle);
+    div.classList.remove("grid__circle__button--selected");
+    n = puzzle.circles[row].indexOf(col)
+    if (n !== -1) {
+      puzzle.circles[row].splice(n, 1);
+    }
+  } else {
+    console.log("Enabling Circle: " + circle);
+    div.classList.add("grid__circle__button--selected");
+    puzzle.circles[row].push(col);
+  }
 }
 
 function setShadeCircle(div) {
@@ -273,8 +348,18 @@ function setShadeCircle(div) {
   var col = parseInt(id[3]);
   var shadecircle = "shadecircle-" + row + "-" + col;
   var div = document.getElementById(shadecircle);
-  console.log("Toggling Shade Circle: " + shadecircle);
-  div.classList.toggle("grid__shadecircle__button--selected");
+  if (puzzle.shade_circles[row].includes(col)) {
+    console.log("Disabling Shade Circle: " + shadecircle);
+    div.classList.remove("grid__shadecircle__button--selected");
+    n = puzzle.shade_circles[row].indexOf(col)
+    if (n !== -1) {
+      puzzle.shade_circles[row].splice(n, 1);
+    }
+  } else {
+    console.log("Enabling Shade Circle: " + shadecircle);
+    div.classList.add("grid__shadecircle__button--selected");
+    puzzle.shade_circles[row].push(col);
+  }
 }
 
 function setShadeSquare(div) {
@@ -283,8 +368,18 @@ function setShadeSquare(div) {
   var col = parseInt(id[3]);
   var shadesquare = "shadesquare-" + row + "-" + col;
   var div = document.getElementById(shadesquare);
-  console.log("Toggling Shade Square: " + shadesquare);
-  div.classList.toggle("grid__shadesquare__button--selected");
+  if (puzzle.shade_squares[row].includes(col)) {
+    console.log("Disabling Shade Square: " + shadesquare);
+    div.classList.remove("grid__shadesquare__button--selected");
+    n = puzzle.shade_squares[row].indexOf(col)
+    if (n !== -1) {
+      puzzle.shade_squares[row].splice(n, 1);
+    }
+  } else {
+    console.log("Enabling Shade Square: " + shadesquare);
+    div.classList.add("grid__shadesquare__button--selected");
+    puzzle.shade_squares[row].push(col);
+  }
 }
 
 function setGridSize(select) {
@@ -311,6 +406,7 @@ function hideGridSizeControls() {
   console.log("Displaying Grid Toolbar and Layers Tool")
   document.getElementById("grid-toolbar").classList.remove("hidden");
   document.getElementById("layers-tool").classList.remove("hidden");
+  document.getElementById("downloads-tool").classList.remove("hidden");
 }
 
 function toggleTool(div) {
@@ -658,4 +754,37 @@ function nextInput(event) {
       input.nextSibling.focus();
     }
   }
+}
+
+function updateAnswer(input) {
+  var answer = input.value.toUpperCase();
+  var id = input.id.split("-");
+  var row = parseInt(id[1]);
+  var col = parseInt(id[2]);
+  puzzle.solutions[row][col] = answer;
+  console.log("Update Answer: row: " + row + ", col: " + col + ": " + answer);
+}
+
+function updateIndex(input) {
+  var index = input.value;
+  var id = input.id.split("-");
+  var row = parseInt(id[1]);
+  var col = parseInt(id[2]);
+  puzzle.indexes[row][col] = index;
+  console.log("Update Index: row: " + row + ", col: " + col + ": " + index);
+}
+
+function updateTitle(title) {
+  console.log("Updating Title: " + title);
+  puzzle.title = title;
+  console.log(puzzle);
+  console.log(JSON.stringify(puzzle));
+  updateJsonDownloadLink();
+}
+
+function updateJsonDownloadLink() {
+  var string = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(puzzle));
+  var button = document.getElementById("download-button");
+  button.setAttribute("href", string);
+  button.setAttribute("download", puzzle.title + ".json");
 }

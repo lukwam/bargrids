@@ -8,6 +8,9 @@
   </head>
   <body onload="createEmptyGrid(8, 8);">
 
+    <!-- Puzzle Title -->
+    <input type=text class="title" value="Puzzle Title" onfocusout="updateTitle(this.value);">
+
     <!-- BarGrid Container -->
     <div class="bargrid-container">
 
@@ -76,7 +79,7 @@
         </div>
       </div>
 
-      <!-- Layers -->
+      <!-- Layers Tool -->
       <div id="layers-tool" class="control-container controls__layers hidden">
         <div class="controls__layers--header">Layers</div>
 
@@ -98,6 +101,12 @@
         <input type="checkbox" id="view-circles" onchange="toggleCircleLayer(this);" checked>
         <label for="view-circles" class="controls__layers--checkbox">Circles</label><br>
       </div>
+
+      <!-- Download Tool -->
+      <div id="downloads-tool" class="control-container controls__layers hidden">
+        <a id="download-button" class="download-button"><button class="download-button">Download JSON</button></a>
+      </div>
+
     </div>
   </body>
 </html>
