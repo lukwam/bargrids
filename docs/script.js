@@ -24,9 +24,10 @@ function createAnswerInput(grid, row, col) {
   answer.id = "answer-" + row + "-" + col;
   answer.addEventListener("focusin", (event) => {focusInput(event.target)});
   answer.addEventListener("focusout", (event) => {blurInput(event.target)});
-  answer.onkeyup = function(){nextInput(this);}
+  answer.addEventListener("keyup", (event) => {nextInput(event)});
   answer.classList.add("hidden");
   answer.classList.add("grid__answer__input");
+  // answer.disabled = true;
   answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   answer.type = "text"
@@ -89,19 +90,20 @@ function createCircleSquare(grid, row, col) {
 }
 
 function createIndexInput(grid, row, col) {
-  answer = document.createElement("input");
-  answer.id = "index-" + row + "-" + col;
-  answer.addEventListener("focusin", (event) => {focusInput(event.target)});
-  answer.addEventListener("focusout", (event) => {blurInput(event.target)});
-  answer.onkeyup = function(){nextInput(this);}
-  answer.classList.add("hidden");
-  answer.classList.add("grid__answer__input");
-  answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
-  answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
-  answer.type = "text"
-  answer.minLength = "1"
-  answer.maxLength = "1"
-  grid.append(answer);
+  index = document.createElement("input");
+  index.id = "index-" + row + "-" + col;
+  index.addEventListener("focusin", (event) => {focusInput(event.target)});
+  index.addEventListener("focusout", (event) => {blurInput(event.target)});
+  index.onkeyup = function(){nextInput(this);}
+  // index.disabled = true;
+  index.classList.add("hidden");
+  index.classList.add("grid__index__input");
+  index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
+  index.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
+  index.type = "text"
+  index.minLength = "1"
+  index.maxLength = "1"
+  grid.append(index);
 }
 
 function createShadeCircleButton(grid, row, col) {
@@ -194,6 +196,14 @@ function createEmptyGrid(cols, rows) {
     for (let col = 0; col < cols; col++) {
       createAcrossBarButton(grid, row, col);
       createDownBarButton(grid, row, col);
+    }
+  }
+
+  // Add index squares
+  grid.appendChild(document.createComment("Index Inputs"))
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      createIndexInput(grid, row, col);
     }
   }
 
@@ -432,6 +442,10 @@ function enableBarTool(div) {
 
 function enableIndexTool(div) {
   console.log("Enabling Index Tool");
+  var inputs = document.getElementsByClassName("grid__index__input");
+  for (input of inputs) {
+    input.classList.remove("hidden");
+  }
 }
 
 function enableShadeSquareTool(div) {
@@ -631,8 +645,12 @@ function focusInput(input) {
   console.log("Focus Input: " + input.id);
 }
 
-function nextInput(input) {
+function nextInput(event) {
+  var key = event.keyCode || event.charCode;
+  var input = event.target;
   if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
     input.nextSibling.focus();
+  } else if (key == 8) {
+    input.previousSibling.focus();
   }
 }
