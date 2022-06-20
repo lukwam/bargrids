@@ -640,6 +640,7 @@ function blurInput(input) {
 
 function focusInput(input) {
   input.style.backgroundColor = "#ffff00";
+  input.select();
   console.log("Focus Input: " + input.id);
 }
 
@@ -647,12 +648,17 @@ function nextInput(event) {
   var key = event.keyCode || event.charCode;
   var input = event.target;
   var id = input.id.split("-");
-  console.log(id);
   if ([8, 37, 38].includes(key)) {
-    input.previousSibling.focus();
+    if (input.previousSibling.focus) {
+      input.previousSibling.focus();
+    }
   } else if ([39, 40].includes(key)) {
-    input.nextSibling.focus();
+    if (input.nextSibling.focus) {
+      input.nextSibling.focus();
+    }
   } else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
-    input.nextSibling.focus();
+    if (input.nextSibling.focus) {
+      input.nextSibling.focus();
+    }
   }
 }
