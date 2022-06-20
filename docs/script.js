@@ -29,7 +29,7 @@ function createAnswerInput(grid, row, col) {
   answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   answer.type = "text"
-  answer.minLength = "1"
+  // answer.minLength = "1"
   answer.maxLength = "1"
   grid.append(answer);
 }
@@ -98,8 +98,8 @@ function createIndexInput(grid, row, col) {
   index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   index.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   index.type = "text"
-  index.minLength = "1"
-  index.maxLength = "1"
+  // index.minLength = "1"
+  index.maxLength = "2"
   grid.append(index);
 }
 
