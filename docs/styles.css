@@ -46,11 +46,12 @@
   height: 12px;
   margin: 3px;
   padding: 1px;
+  text-align: center;
   vertical-align: top;
   width: 12px;
   z-index: 75;
 }
-.grid__index__input:hover {
+.grid__index__input:hover:enabled {
   background: #999999;
 }
 .grid__shadesquare__button {

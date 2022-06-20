@@ -24,7 +24,6 @@ function createAnswerInput(grid, row, col) {
   answer.addEventListener("focusin", (event) => {focusInput(event.target)});
   answer.addEventListener("focusout", (event) => {blurInput(event.target)});
   answer.addEventListener("keyup", (event) => {nextInput(event)});
-  // answer.classList.add("hidden");
   answer.classList.add("grid__answer__input");
   answer.disabled = true;
   answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
@@ -93,7 +92,7 @@ function createIndexInput(grid, row, col) {
   index.id = "index-" + row + "-" + col;
   index.addEventListener("focusin", (event) => {focusInput(event.target)});
   index.addEventListener("focusout", (event) => {blurInput(event.target)});
-  index.onkeyup = function(){nextInput(this);}
+  index.addEventListener("keyup", (event) => {nextInput(event)});
   index.disabled = true;
   index.classList.add("grid__index__input");
   index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
