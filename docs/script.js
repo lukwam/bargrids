@@ -9,7 +9,6 @@ let puzzle = {
 }
 
 function createSquare(grid, row, col) {
-  // create a basic square
   square = document.createElement("div");
   square.id = "square-" + row + "-" + col;
   square.classList.add("grid__square");
@@ -25,9 +24,9 @@ function createAnswerInput(grid, row, col) {
   answer.addEventListener("focusin", (event) => {focusInput(event.target)});
   answer.addEventListener("focusout", (event) => {blurInput(event.target)});
   answer.addEventListener("keyup", (event) => {nextInput(event)});
-  answer.classList.add("hidden");
+  // answer.classList.add("hidden");
   answer.classList.add("grid__answer__input");
-  // answer.disabled = true;
+  answer.disabled = true;
   answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   answer.type = "text"
@@ -95,7 +94,7 @@ function createIndexInput(grid, row, col) {
   index.addEventListener("focusin", (event) => {focusInput(event.target)});
   index.addEventListener("focusout", (event) => {blurInput(event.target)});
   index.onkeyup = function(){nextInput(this);}
-  // index.disabled = true;
+  index.disabled = true;
   index.classList.add("hidden");
   index.classList.add("grid__index__input");
   index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
@@ -359,7 +358,7 @@ function disableAnswerTool(div) {
   div.classList.remove("grid__toolbar__item--selected");
   var answers = document.getElementsByClassName("grid__answer__input");
   for (answer of answers) {
-    answer.classList.add("hidden");
+    answer.disabled = true;
   }
 }
 
@@ -428,7 +427,7 @@ function enableAnswerTool(div) {
   console.log("Enabling Answer Tool");
   var inputs = document.getElementsByClassName("grid__answer__input");
   for (input of inputs) {
-    input.classList.remove("hidden");
+    input.disabled = false;
   }
 }
 
@@ -648,9 +647,13 @@ function focusInput(input) {
 function nextInput(event) {
   var key = event.keyCode || event.charCode;
   var input = event.target;
+  var id = input.id.split("-");
+  console.log(id);
   if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
     input.nextSibling.focus();
-  } else if (key == 8) {
+  } else if ([8, 37, 38].includes(key)) {
     input.previousSibling.focus();
+  } else if ([39, 40].includes(key)) {
+    input.nextSibling.focus();
   }
 }
