@@ -95,7 +95,6 @@ function createIndexInput(grid, row, col) {
   index.addEventListener("focusout", (event) => {blurInput(event.target)});
   index.onkeyup = function(){nextInput(this);}
   index.disabled = true;
-  index.classList.add("hidden");
   index.classList.add("grid__index__input");
   index.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   index.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
@@ -374,9 +373,9 @@ function disableBarTool(div) {
 function disableIndexTool(div) {
   console.log("Disabling the Shade Square Tool");
   div.classList.remove("grid__toolbar__item--selected");
-  var buttons = document.getElementsByClassName("grid__index__button");
-  for (button of buttons) {
-    button.classList.add("hidden");
+  var inputs = document.getElementsByClassName("grid__index__input");
+  for (input of inputs) {
+    input.disabled = true;
   }
 }
 
@@ -443,7 +442,7 @@ function enableIndexTool(div) {
   console.log("Enabling Index Tool");
   var inputs = document.getElementsByClassName("grid__index__input");
   for (input of inputs) {
-    input.classList.remove("hidden");
+    input.disabled = false;
   }
 }
 
@@ -649,11 +648,11 @@ function nextInput(event) {
   var input = event.target;
   var id = input.id.split("-");
   console.log(id);
-  if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
-    input.nextSibling.focus();
-  } else if ([8, 37, 38].includes(key)) {
+  if ([8, 37, 38].includes(key)) {
     input.previousSibling.focus();
   } else if ([39, 40].includes(key)) {
+    input.nextSibling.focus();
+  } else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
     input.nextSibling.focus();
   }
 }

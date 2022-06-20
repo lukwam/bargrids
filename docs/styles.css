@@ -18,7 +18,7 @@
   font-weight: bold;
   text-align: center;
   text-transform: uppercase;
-  z-index: 200;
+  z-index: 70;
 }
 .grid__bar__square {
   z-index: 50;
@@ -37,6 +37,20 @@
   margin-bottom: 20px;
 }
 .grid__bar__button:hover {
+  background: #999999;
+}
+.grid__index__input {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  height: 12px;
+  margin: 3px;
+  padding: 1px;
+  vertical-align: top;
+  width: 12px;
+  z-index: 75;
+}
+.grid__index__input:hover {
   background: #999999;
 }
 .grid__shadesquare__button {
