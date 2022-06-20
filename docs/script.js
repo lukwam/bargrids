@@ -104,7 +104,6 @@ function createIndexInput(grid, row, col) {
 }
 
 function createShadeCircleButton(grid, row, col) {
-  // create the shade circle buttons
   shadecircle = document.createElement("div");
   shadecircle.id = "shadecircle-button-" + row + "-" + col;
   shadecircle.onclick = function() {setShadeCircle(this);};
@@ -127,7 +126,6 @@ function createShadeCircleSquare(grid, row, col) {
 
 
 function createShadeSquareButton(grid, row, col) {
-  // create the shade square buttons
   shadesquare = document.createElement("div");
   shadesquare.id = "shadesquare-button-" + row + "-" + col;
   shadesquare.onclick = function() {setShadeSquare(this);};
