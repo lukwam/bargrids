@@ -19,9 +19,24 @@ function createSquare(grid, row, col) {
   grid.append(square);
 }
 
+function createAnswerInput(grid, row, col) {
+  answer = document.createElement("input");
+  answer.id = "answer-" + row + "-" + col;
+  answer.addEventListener("focusin", (event) => {focusInput(event.target)});
+  answer.addEventListener("focusout", (event) => {blurInput(event.target)});
+  answer.onkeyup = function(){nextInput(this);}
+  answer.classList.add("hidden");
+  answer.classList.add("grid__answer__input");
+  answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
+  answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
+  answer.type = "text"
+  answer.minLength = "1"
+  answer.maxLength = "1"
+  grid.append(answer);
+}
+
 function createAcrossBarButton(grid, row, col) {
   across = document.createElement("div");
-  across.appendChild(document.createTextNode(""));
   across.id = "acrossbar-button-" + row + "-" + col;
   across.onclick = function() {setAcrossBar(this);};
   across.classList.add("hidden");
@@ -34,7 +49,6 @@ function createAcrossBarButton(grid, row, col) {
 
 function createDownBarButton(grid, row, col) {
   down = document.createElement("div");
-  down.appendChild(document.createTextNode(""));
   down.id = "downbar-button-" + row + "-" + col;
   down.onclick = function() {setDownBar(this);};
   down.classList.add("hidden");
@@ -72,6 +86,22 @@ function createCircleSquare(grid, row, col) {
   circle.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
   circle.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
   grid.append(circle);
+}
+
+function createIndexInput(grid, row, col) {
+  answer = document.createElement("input");
+  answer.id = "index-" + row + "-" + col;
+  answer.addEventListener("focusin", (event) => {focusInput(event.target)});
+  answer.addEventListener("focusout", (event) => {blurInput(event.target)});
+  answer.onkeyup = function(){nextInput(this);}
+  answer.classList.add("hidden");
+  answer.classList.add("grid__answer__input");
+  answer.style["grid-column"] = (col*2+1) + "/" + (col*2+3);
+  answer.style["grid-row"] = (row*2+1) + "/" + (row*2+3);
+  answer.type = "text"
+  answer.minLength = "1"
+  answer.maxLength = "1"
+  grid.append(answer);
 }
 
 function createShadeCircleButton(grid, row, col) {
@@ -139,6 +169,14 @@ function createEmptyGrid(cols, rows) {
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       createSquare(grid, row, col);
+    }
+  }
+
+  // Add answer squares
+  grid.appendChild(document.createComment("Answer Inputs"))
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      createAnswerInput(grid, row, col);
     }
   }
 
@@ -262,17 +300,10 @@ function setGridSize(select) {
   createEmptyGrid(cols, rows);
 }
 
-function blurInput(input) {
-  input.style.backgroundColor = "transparent";
-}
-
-function focusInput(input) {
-  input.style.backgroundColor = "#ffff00";
-}
-
 function hideGridSizeControls() {
   console.log("Hiding Grid Size controls")
   document.getElementById("grid-size-control-container").classList.add("hidden");
+  console.log("Displaying Grid Toolbar and Layers Tool")
   document.getElementById("grid-toolbar").classList.remove("hidden");
   document.getElementById("layers-tool").classList.remove("hidden");
 }
@@ -385,6 +416,10 @@ function enableTool(div) {
 
 function enableAnswerTool(div) {
   console.log("Enabling Answer Tool");
+  var inputs = document.getElementsByClassName("grid__answer__input");
+  for (input of inputs) {
+    input.classList.remove("hidden");
+  }
 }
 
 function enableBarTool(div) {
@@ -420,6 +455,33 @@ function enableCircleTool(div) {
   var circles = document.getElementsByClassName("grid__circle__button");
   for (circle of circles) {
     circle.classList.remove("hidden");
+  }
+}
+
+// Answer Layer
+function toggleAnswerLayer(input) {
+  if (input.checked) {
+    console.log("Enabling Layer: Answers");
+    showAnswers();
+  } else {
+    console.log("Disabling Layer: Answers");
+    hideAnswers();
+  }
+}
+
+function hideAnswers() {
+  console.log("Hiding all Answers");
+  var inputs = document.getElementsByClassName("grid__answer__input");
+  for (input of inputs) {
+    input.classList.add("hidden");
+  }
+}
+
+function showAnswers() {
+  console.log("Showing all Answers");
+  var inputs = document.getElementsByClassName("grid__answer__input");
+  for (input of inputs) {
+    input.classList.remove("hidden");
   }
 }
 
@@ -477,6 +539,33 @@ function showCircles() {
   }
 }
 
+// Index Layer
+function toggleIndexLayer(input) {
+  if (input.checked) {
+    console.log("Enabling Layer: Indexs");
+    showIndexs();
+  } else {
+    console.log("Disabling Layer: Indexs");
+    hideIndexs();
+  }
+}
+
+function hideIndexs() {
+  console.log("Hiding all Indexs");
+  var inputs = document.getElementsByClassName("grid__index__input");
+  for (input of inputs) {
+    input.classList.add("hidden");
+  }
+}
+
+function showIndexs() {
+  console.log("Showing all Indexs");
+  var inputs = document.getElementsByClassName("grid__index__input");
+  for (input of inputs) {
+    input.classList.remove("hidden");
+  }
+}
+
 // Shade Circle Layer
 function toggleShadeCircleLayer(input) {
   if (input.checked) {
@@ -531,3 +620,19 @@ function hideShadeSquares() {
   }
 }
 
+// Input Focus tools
+function blurInput(input) {
+  input.style.backgroundColor = "transparent";
+  console.log("Blur Input: " + input.id)
+}
+
+function focusInput(input) {
+  input.style.backgroundColor = "#ffff00";
+  console.log("Focus Input: " + input.id);
+}
+
+function nextInput(input) {
+  if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
+    input.nextSibling.focus();
+  }
+}

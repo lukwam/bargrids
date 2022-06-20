@@ -11,6 +11,15 @@
   border: 1px solid #999999;
   z-index: 10;
 }
+.grid__answer__input {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  z-index: 200;
+}
 .grid__bar__square {
   z-index: 50;
 }
@@ -31,6 +40,7 @@
   background: #999999;
 }
 .grid__shadesquare__button {
+  background: transparent;
   margin: 2px;
   z-index: 80;
 }
