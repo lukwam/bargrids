@@ -885,6 +885,7 @@ function updateIndex(input) {
 function updateTitle(title) {
   console.log("Updating Title: " + title);
   puzzle.title = title;
+  document.title = title;
   console.log(puzzle);
   console.log(JSON.stringify(puzzle));
 }
