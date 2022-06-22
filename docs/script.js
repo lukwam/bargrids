@@ -1,12 +1,12 @@
 let puzzle = {
   // Puzzle Title
-  title: null,
+  title: "Puzzle Title",
   // Puzzle Size
   cols: 8,
   rows: 8,
-  depth: function() {return size * rows},
-  height: function() {return size * rows},
-  width: function() {return size * cols},
+  // depth: function() {return size * rows},
+  // height: function() {return size * rows},
+  // width: function() {return size * cols},
   // Puzzle Content
   solutions: [],
   across_bars: [],
@@ -152,42 +152,24 @@ function createShadeSquareSquare(grid, row, col) {
   grid.append(shadesquare);
 }
 
-function createEmptyGrid(cols, rows) {
-  puzzle.cols = cols;
-  puzzle.rows = rows;
+function createGrid() {
+  var cols = puzzle.cols;
+  var rows = puzzle.rows;
 
-  puzzle.solutions = [];
-  puzzle.indexes = [];
-  puzzle.across_bars = [];
-  puzzle.down_bars = [];
-  puzzle.circles = [];
-  puzzle.shade_circles = [];
-  puzzle.shade_squares = [];
-
-  for (let row = 0; row < rows; row++) {
-    var solution_row = [];
-    var index_row = [];
-    for (let col = 0; col < cols; col++) {
-      solution_row.push("");
-      index_row.push("");
-    }
-    puzzle.solutions.push(solution_row);
-    puzzle.indexes.push(index_row);
-    puzzle.across_bars.push([]);
-    puzzle.across_bars.push([]);
-    puzzle.down_bars.push([]);
-    puzzle.circles.push([]);
-    puzzle.shade_circles.push([]);
-    puzzle.shade_squares.push([]);
-  }
-  console.log(puzzle);
-
+  container = document.getElementById("bargrid-container")
   grid = document.getElementById("grid");
 
   // remove all elements from the grid
   while (grid.firstChild) {
     grid.removeChild(grid.firstChild);
   }
+  // remove the grid
+  grid.remove();
+
+  grid = document.createElement("div");
+  grid.classList.add("grid");
+  grid.id = "grid";
+  container.appendChild(grid);
 
   // set the grid size style
   grid.style.width = (50 * cols) + "px";
@@ -196,6 +178,51 @@ function createEmptyGrid(cols, rows) {
   // set the grid template style
   grid_template = "repeat(" + rows*2 + ", " + (100 / (rows*2)) + "%) / repeat(" + cols*2 + ", " + (100 / (cols*2)) + "%)";
   grid.style["grid-template"] = grid_template;
+
+  // set the grid title
+  document.title = puzzle.title;
+  title_input = document.getElementById("title")
+  title_input.value = puzzle.title;
+
+  // create the grid elements
+  createGridElements(rows, cols);
+
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      // Draw answer
+      if (puzzle.solutions[row][col]) {
+        drawAnswer(row, col, puzzle.solutions[row][col]);
+      }
+      // Draw bars
+      if (puzzle.across_bars[row].includes(col)) {
+        drawAcrossBar(row, col)
+      }
+      if (puzzle.down_bars[row].includes(col)) {
+        drawDownBar(row, col)
+      }
+      // Draw index
+      if (puzzle.indexes[row][col]) {
+        drawIndex(row, col, puzzle.indexes[row][col]);
+      }
+      // Draw shade square
+      if (puzzle.shade_squares[row].includes(col)) {
+        drawShadeSquare(row, col)
+      }
+      // Draw shade circle
+      if (puzzle.shade_circles[row].includes(col)) {
+        drawShadeCircle(row, col)
+      }
+      // Draw circle
+      if (puzzle.circles[row].includes(col)) {
+        drawCircle(row, col)
+      }
+
+    }
+  }
+
+}
+
+function createGridElements(rows, cols) {
 
   // Add basic squares
   grid.appendChild(document.createComment("Grid Squares"))
@@ -266,20 +293,105 @@ function createEmptyGrid(cols, rows) {
   }
 }
 
+function createEmptyGrid(cols, rows) {
+  puzzle.cols = cols;
+  puzzle.rows = rows;
+
+  puzzle.solutions = [];
+  puzzle.indexes = [];
+  puzzle.across_bars = [];
+  puzzle.down_bars = [];
+  puzzle.circles = [];
+  puzzle.shade_circles = [];
+  puzzle.shade_squares = [];
+
+  for (let row = 0; row < rows; row++) {
+    var solution_row = [];
+    var index_row = [];
+    for (let col = 0; col < cols; col++) {
+      solution_row.push("");
+      index_row.push("");
+    }
+    puzzle.solutions.push(solution_row);
+    puzzle.indexes.push(index_row);
+    puzzle.across_bars.push([]);
+    puzzle.across_bars.push([]);
+    puzzle.down_bars.push([]);
+    puzzle.circles.push([]);
+    puzzle.shade_circles.push([]);
+    puzzle.shade_squares.push([]);
+  }
+  console.log(puzzle);
+
+  grid = document.getElementById("grid");
+
+  // remove all elements from the grid
+  while (grid.firstChild) {
+    grid.removeChild(grid.firstChild);
+  }
+
+  // set the grid size style
+  grid.style.width = (50 * cols) + "px";
+  grid.style.height = (50 * rows) + "px";
+
+  // set the grid template style
+  grid_template = "repeat(" + rows*2 + ", " + (100 / (rows*2)) + "%) / repeat(" + cols*2 + ", " + (100 / (cols*2)) + "%)";
+  grid.style["grid-template"] = grid_template;
+
+  createGridElements(rows, cols);
+
+}
+
+function drawAnswer(row, col, value) {
+  var answer_square = "answer-" + row + "-" + col;
+  document.getElementById(answer_square).value = value;
+}
+
+function drawAcrossBar(row, col) {
+  var barsquare_left = "barsquare-" + row + "-" + col;
+  var barsquare_right = "barsquare-" + row + "-" + (col+1);
+  console.log("Setting Across Bar: " + barsquare_left + " / " + barsquare_right)
+  document.getElementById(barsquare_left).classList.toggle("grid__bar--right");
+  document.getElementById(barsquare_right).classList.toggle("grid__bar--left");
+}
+
+function drawDownBar(row, col) {
+  var barsquare_top = "barsquare-" + row + "-" + col;
+  var barsquare_bottom = "barsquare-" + (row+1) + "-" + col;
+  console.log("Drawing Down Bar: " + barsquare_top + " / " + barsquare_bottom)
+  document.getElementById(barsquare_top).classList.toggle("grid__bar--bottom");
+  document.getElementById(barsquare_bottom).classList.toggle("grid__bar--top");
+}
+
+function drawIndex(row, col, value) {
+  var index_square = "index-" + row + "-" + col;
+  document.getElementById(index_square).value = value;
+}
+
+function drawCircle(row, col) {
+  var circle = "circle-" + row + "-" + col;
+  document.getElementById(circle).classList.toggle('grid__circle__button--selected');
+}
+
+function drawShadeSquare(row, col) {
+  var shade_square = "shadesquare-" + row + "-" + col;
+  console.log("Drawing Shade Square: " + shade_square);
+  document.getElementById(shade_square).classList.toggle('grid__shadesquare__button--selected');
+}
+
+function drawShadeCircle(row, col) {
+  var shade_circle = "shadecircle-" + row + "-" + col;
+  document.getElementById(shade_circle).classList.toggle('grid__shadecircle__button--selected');
+}
+
 function setAcrossBar(div) {
   var id = div.id.split("-");
   var row = parseInt(id[2]);
   var col = parseInt(id[3]);
-  var barsquare1 = "barsquare-" + row + "-" + col;
-  var barsquare2 = "barsquare-" + row + "-" + (col+1);
-  console.log("Setting Across Bar: " + barsquare1 + " / " + barsquare2)
-  var div1 = document.getElementById(barsquare1);
-  var div2 = document.getElementById(barsquare2);
-  div1.classList.toggle("grid__bar--right");
-  div2.classList.toggle("grid__bar--left");
+  drawAcrossBar(row, col);
 
   if (puzzle.across_bars[row].includes(col)) {
-    console.log("Disabling Across Bar: " + circle);
+    console.log("Disabling Across Bar: " + id);
     // div.classList.remove("grid__bar--right");
     // div.classList.remove("grid__bar--left");
     n = puzzle.across_bars[row].indexOf(col)
@@ -287,7 +399,7 @@ function setAcrossBar(div) {
       puzzle.across_bars[row].splice(n, 1);
     }
   } else {
-    console.log("Enabling Across Bar: " + circle);
+    console.log("Enabling Across Bar: " + id);
     // div.classList.add("grid__bar--right");
     // div.classList.add("grid__bar--left");
     puzzle.across_bars[row].push(col);
@@ -298,13 +410,8 @@ function setDownBar(div) {
   var id = div.id.split("-");
   var row = parseInt(id[2]);
   var col = parseInt(id[3]);
-  var barsquare1 = "barsquare-" + row + "-" + col;
-  var barsquare2 = "barsquare-" + (row+1) + "-" + col;
-  console.log("Setting Down Bar: " + barsquare1 + " / " + barsquare2)
-  var div1 = document.getElementById(barsquare1);
-  var div2 = document.getElementById(barsquare2);
-  div1.classList.toggle("grid__bar--bottom");
-  div2.classList.toggle("grid__bar--top");
+  drawDownBar(row, col);
+
   if (puzzle.down_bars[row].includes(col)) {
     console.log("Disabling Across Bar: " + circle);
     // div.classList.remove("grid__bar--bottom");
@@ -407,6 +514,7 @@ function hideGridSizeControls() {
   document.getElementById("grid-toolbar").classList.remove("hidden");
   document.getElementById("layers-tool").classList.remove("hidden");
   document.getElementById("downloads-tool").classList.remove("hidden");
+  document.getElementById("uploads-tool").classList.add("hidden");
 }
 
 function toggleTool(div) {
@@ -779,12 +887,35 @@ function updateTitle(title) {
   puzzle.title = title;
   console.log(puzzle);
   console.log(JSON.stringify(puzzle));
-  updateJsonDownloadLink();
 }
 
 function updateJsonDownloadLink() {
   var string = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(puzzle));
-  var button = document.getElementById("download-button");
-  button.setAttribute("href", string);
-  button.setAttribute("download", puzzle.title + ".json");
+  var iframe = document.getElementById("download-iframe");
+  iframe.setAttribute("href", string);
+  iframe.setAttribute("download", puzzle.title + ".json");
+  iframe.click();
+}
+
+function uploadFile(input) {
+  var file = input.files[0];
+  var filename = file.name;
+  console.log("File Name: " + filename);
+
+  var reader = new FileReader();
+  reader.readAsText(file, "UTF-8");
+  reader.onload = function (event) {
+    puzzle = JSON.parse(event.target.result);
+    console.log(puzzle);
+    createGrid();
+    hideGridSizeControls();
+  }
+  reader.onerror = function (event) {
+      alert("Error reading file: " + filename);
+  }
+}
+
+function uploadFileButton() {
+  var input = document.getElementById("upload-button");
+  input.click();
 }

@@ -9,10 +9,10 @@
   <body onload="createEmptyGrid(8, 8);">
 
     <!-- Puzzle Title -->
-    <input type=text class="title" value="Puzzle Title" onfocusout="updateTitle(this.value);">
+    <input id="title" type=text class="title" value="Puzzle Title" onfocusout="updateTitle(this.value);">
 
     <!-- BarGrid Container -->
-    <div class="bargrid-container">
+    <div id="bargrid-container" class="bargrid-container">
 
       <!-- Grid -->
       <div id="grid" class="grid"></div>
@@ -102,11 +102,19 @@
         <label for="view-circles" class="controls__layers--checkbox">Circles</label><br>
       </div>
 
-      <!-- Download Tool -->
+      <!-- Downloads Tool -->
       <div id="downloads-tool" class="control-container controls__layers hidden">
-        <a id="download-button" class="download-button"><button class="download-button">Download JSON</button></a>
+        <button id="download-button" class="download-button" onclick="updateJsonDownloadLink();">Save JSON</button>
+        <a id="download-iframe" style="display:none;"></a>
+      </div>
+
+      <!-- Uploads Tool -->
+      <div id="uploads-tool"class="control-container controls__layers">
+        <input type="file" id="upload-button" class="hidden" onchange="uploadFile(this);">
+        <button class="upload-button" onclick="uploadFileButton();">Load JSON</button>
       </div>
 
     </div>
+
   </body>
 </html>

@@ -30,6 +30,9 @@
   text-transform: uppercase;
   z-index: 70;
 }
+.grid__answer__input:disabled {
+  color: fieldtext;
+}
 .grid__bar__square {
   z-index: 50;
 }
@@ -60,6 +63,9 @@
   vertical-align: top;
   width: 24px;
   z-index: 75;
+}
+.grid__index__input:disabled {
+  color: fieldtext;
 }
 .grid__index__input:hover:enabled {
   background: #999999;
@@ -235,7 +241,11 @@
 }
 .download-button {
   margin: 2px;
-  width: 136px;
+  width: 140px;
+}
+.upload-button {
+  margin: 2px;
+  width: 120px;
 }
 .hidden {
   display: none;
