@@ -109,9 +109,23 @@
       </div>
 
       <!-- Uploads Tool -->
-      <div id="uploads-tool"class="control-container controls__layers">
+      <div id="upload-tool"class="control-container controls__layers">
         <input type="file" id="upload-button" class="hidden" onchange="uploadFile(this);">
         <button class="upload-button" onclick="uploadFileButton();">Load JSON</button>
+      </div>
+
+      <div id="upload-eps-tool"class="control-container controls__layers">
+        <input type="file" id="upload-eps-button" class="hidden" onchange="uploadEPSFile(this);">
+        <button class="upload-button" onclick="uploadEPSFileButton();">Load EPS</button>
+      </div>
+
+      <!-- Create SVG -->
+      <div id="svg-tool"class="control-container controls__layers hidden">
+        <button class="download-button" onclick="createSVG();">Save SVG</button>
+        <div class="hidden">
+            <svg id="svg" class="hidden"></svg>
+            <a id="svg-download" class="hidden">Save SVG</a>
+        </div>
       </div>
 
     </div>

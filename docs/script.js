@@ -370,18 +370,18 @@ function drawIndex(row, col, value) {
 
 function drawCircle(row, col) {
   var circle = "circle-" + row + "-" + col;
-  document.getElementById(circle).classList.toggle('grid__circle__button--selected');
+  document.getElementById(circle).classList.toggle("grid__circle__button--selected");
 }
 
 function drawShadeSquare(row, col) {
   var shade_square = "shadesquare-" + row + "-" + col;
   console.log("Drawing Shade Square: " + shade_square);
-  document.getElementById(shade_square).classList.toggle('grid__shadesquare__button--selected');
+  document.getElementById(shade_square).classList.toggle("grid__shadesquare__button--selected");
 }
 
 function drawShadeCircle(row, col) {
   var shade_circle = "shadecircle-" + row + "-" + col;
-  document.getElementById(shade_circle).classList.toggle('grid__shadecircle__button--selected');
+  document.getElementById(shade_circle).classList.toggle("grid__shadecircle__button--selected");
 }
 
 function setAcrossBar(div) {
@@ -510,11 +510,13 @@ function setGridSize(select) {
 function hideGridSizeControls() {
   console.log("Hiding Grid Size controls")
   document.getElementById("grid-size-control-container").classList.add("hidden");
+  document.getElementById("upload-tool").classList.add("hidden");
+  document.getElementById("upload-eps-tool").classList.add("hidden");
   console.log("Displaying Grid Toolbar and Layers Tool")
   document.getElementById("grid-toolbar").classList.remove("hidden");
   document.getElementById("layers-tool").classList.remove("hidden");
   document.getElementById("downloads-tool").classList.remove("hidden");
-  document.getElementById("uploads-tool").classList.add("hidden");
+  document.getElementById("svg-tool").classList.remove("hidden");
 }
 
 function toggleTool(div) {
@@ -849,13 +851,26 @@ function nextInput(event) {
   var key = event.keyCode || event.charCode;
   var input = event.target;
   var id = input.id.split("-");
-  if ([8, 37, 38].includes(key)) {
+  var name = id[0];
+  var row = parseInt(id[1]);
+  var col = parseInt(id[2]);
+  if ([8, 37].includes(key)) {
     if (input.previousSibling.focus) {
       input.previousSibling.focus();
     }
-  } else if ([39, 40].includes(key)) {
+  } else if (key == 38) {
+    div = document.getElementById(name + "-" + (row - 1) + "-" + col);
+    if (div && div.focus) {
+      div.focus();
+    }
+  } else if (key == 39) {
     if (input.nextSibling.focus) {
       input.nextSibling.focus();
+    }
+  } else if (key == 40) {
+    div = document.getElementById(name + "-" + (row + 1) + "-" + col);
+    if (div && div.focus) {
+      div.focus();
     }
   } else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
     if (input.nextSibling.focus) {
@@ -919,4 +934,341 @@ function uploadFile(input) {
 function uploadFileButton() {
   var input = document.getElementById("upload-button");
   input.click();
+}
+
+function uploadEPSFile(input) {
+  var file = input.files[0];
+  var filename = file.name;
+  console.log("File Name: " + filename);
+
+  var reader = new FileReader();
+  reader.readAsText(file, "UTF-8");
+  reader.onload = function (event) {
+    parseEPS(event.target.result);
+  }
+  reader.onerror = function (event) {
+      alert("Error reading file: " + filename);
+  }
+}
+
+function uploadEPSFileButton() {
+  var input = document.getElementById("upload-eps-button");
+  input.click();
+}
+
+function createSVG() {
+  const size = 50;
+  const cols = puzzle.cols;
+  const rows = puzzle.rows;
+
+  var elem = document.getElementById("svg")
+
+  var ns = "http://www.w3.org/2000/svg"
+
+  var svg = document.createElementNS(ns, "svg");
+  svg.id = "svg";
+  svg.setAttribute("style", "border: 3px solid black");
+  svg.setAttribute("fill", "white");
+  svg.setAttribute("width", cols*size);
+  svg.setAttribute("height", rows*size);
+  svg.setAttributeNS(
+    "http://www.w3.org/2000/xmlns/",
+    "xmlns:xlink",
+    "http://www.w3.org/1999/xlink"
+  );
+
+  // create rectangles
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      let rect = document.createElementNS(ns, "rect");
+      rect.setAttribute("x", col * size);
+      rect.setAttribute("y", row * size);
+      rect.setAttribute("width", size);
+      rect.setAttribute("height", size);
+      rect.setAttribute("fill", "white");
+      rect.setAttribute("stroke", "black");
+      rect.setAttribute("stroke-width", "1px");
+      svg.appendChild(rect);
+    }
+  }
+
+  // create shade squares
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.shade_squares[row].includes(col)) {
+        let rect = document.createElementNS(ns, "rect");
+        rect.setAttribute("x", col*(size));
+        rect.setAttribute("y", row*(size));
+        rect.setAttribute("width", (size));
+        rect.setAttribute("height", (size));
+        rect.setAttribute("fill", "#cccccc");
+        rect.setAttribute("stroke", "black");
+        rect.setAttribute("stroke-width", "1px");
+        svg.appendChild(rect);
+      }
+    }
+  }
+
+  // create shade circles
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.shade_circles[row].includes(col)) {
+        let circle = document.createElementNS(ns, "circle");
+        circle.setAttribute("cx", col*(size) + size/2);
+        circle.setAttribute("cy", row*(size) + size/2);
+        circle.setAttribute("r", size/2 - 3);
+        circle.setAttribute("fill", "#cccccc");
+        // circle.setAttribute("stroke", "black");
+        // circle.setAttribute("stroke-width", "1px");
+        circle.innerHTML = puzzle.indexes[row][col];
+        svg.appendChild(circle);
+      }
+    }
+  }
+
+  // create circles
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.circles[row].includes(col)) {
+        let circle = document.createElementNS(ns, "circle");
+        circle.setAttribute("cx", col*(size) + size/2);
+        circle.setAttribute("cy", row*(size) + size/2);
+        circle.setAttribute("r", size/2 - 3);
+        circle.setAttribute("fill", "transparent");
+        circle.setAttribute("stroke", "black");
+        circle.setAttribute("stroke-width", "1px");
+        circle.innerHTML = puzzle.indexes[row][col];
+        svg.appendChild(circle);
+      }
+    }
+  }
+
+  // create bars
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.across_bars[row].includes(col)) {
+        let line = document.createElementNS(ns, "line");
+        line.setAttribute("x1", col*(size) + size);
+        line.setAttribute("y1", row*(size));
+        line.setAttribute("x2", col*(size) + size);
+        line.setAttribute("y2", row*(size) + size);
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "5px");
+        line.classList.add("svg-bar");
+        svg.appendChild(line);
+      }
+      if (puzzle.down_bars[row].includes(col)) {
+        let line = document.createElementNS(ns, "line");
+        line.setAttribute("x1", col*(size));
+        line.setAttribute("y1", row*(size) + size);
+        line.setAttribute("x2", col*(size) + size);
+        line.setAttribute("y2", row*(size) + size);
+        line.setAttribute("stroke", "black");
+        line.setAttribute("stroke-width", "5px");
+        line.classList.add("svg-bar");
+        svg.appendChild(line);
+      }
+    }
+  }
+
+  // create indexes
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.indexes[row][col]) {
+        let text = document.createElementNS(ns, "text");
+        text.setAttribute("x", col*(size) + 4);
+        text.setAttribute("y", row*(size) + 15);
+        text.setAttribute("fill", "black");
+        text.setAttribute("font-family", "helvetica");
+        text.setAttribute("font-size", "14px");
+        text.innerHTML = puzzle.indexes[row][col];
+        svg.appendChild(text);
+      }
+    }
+  }
+
+  // create answers
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      if (puzzle.solutions[row][col]) {
+        let text = document.createElementNS(ns, "text");
+        text.setAttribute("x", col*(size) + size/2);
+        text.setAttribute("y", row*(size) + size/2);
+        text.setAttribute("fill", "black");
+        text.setAttribute("dominant-baseline", "central");
+        text.setAttribute("font-family", "helvetica");
+        text.setAttribute("font-size", "24px");
+        text.setAttribute("text-anchor", "middle");
+        text.innerHTML = puzzle.solutions[row][col];
+        svg.appendChild(text);
+      }
+    }
+  }
+
+  elem.parentNode.replaceChild(svg, elem);
+
+  // create the SVG download link
+
+  // get svg source.
+  var serializer = new XMLSerializer();
+  var source = serializer.serializeToString(svg);
+
+  // add name spaces.
+  if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+      source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+  }
+  if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+      source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+  }
+
+  // add xml declaration
+  source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+  // convert svg source to URI data scheme.
+  var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+
+  // set url value to a element's href attribute.
+  var link = document.getElementById("svg-download");
+  link.href = url;
+  link.download = puzzle.title + ".svg";
+  link.click();
+
+}
+
+function parseEPS(eps) {
+  solution = false;
+  indexes = false;
+  bars = false;
+  shades = false;
+
+  for (line of eps.split(/\r|\r\n|\n/)) {
+    // title
+    if ("%%Title" == line.split(":")[0]) {
+      puzzle.title = line.split(":")[1].trim();
+    }
+
+    // size
+    if ("%%BoundingBox" == line.split(":")[0]) {
+      var box = line.split(":")[1].split(" ");
+      var llx = parseInt(box[1]);
+      var lly = parseInt(box[2]);
+      var urx = parseInt(box[3]);
+      var ury = parseInt(box[4]);
+      x = urx - llx;
+      y = ury - lly;
+      cols = (x - 2)/20;
+      rows = (y - 2)/20;
+      console.log("Rows: " + rows + ", Cols: " + cols);
+
+      puzzle.across_bars = [];
+      puzzle.circles = [];
+      puzzle.down_bars = [];
+      puzzle.indexes = [];
+      puzzle.shade_circles = [];
+      puzzle.shade_squares = [];
+      for (row=0; row<rows; row++) {
+        puzzle.across_bars[row] = [];
+        puzzle.circles[row] = [];
+        puzzle.down_bars[row] = [];
+        puzzle.indexes[row] = [];
+        puzzle.shade_circles[row] = [];
+        puzzle.shade_squares[row] = [];
+        for (col=0; col<cols; col++) {
+          puzzle.indexes[row][col] = "";
+        }
+      }
+
+      puzzle.cols = cols;
+      puzzle.rows = rows;
+    }
+
+    // Solutions
+    if (line == "%Grid Array") {
+      row = 0;
+      solution = true;
+      continue;
+    }
+    if (line == "] def") {
+      solution = false;
+      continue;
+    }
+    if (solution == true) {
+      if (line == "/grid [") {
+        continue;
+      }
+      puzzle.solutions[row] = line.split("").slice(1,-1);
+      row++;
+    }
+
+    // Indexes
+    if (line == "% Begin Numbers") {
+      indexes = true;
+      continue;
+    }
+    if (line == "% End Numbers") {
+      indexes = false;
+      continue;
+    }
+    if (indexes == true) {
+      var num = line.split(" ");
+      row = parseInt(num[0].replace("%", "")) - 1;
+      col = parseInt(num[1]) - 1;
+      val = num[2].slice(1, -1);
+      console.log(num);
+      console.log("index-" + row + "-" + col + " = " + val);
+      puzzle.indexes[row][col] = val;
+    }
+
+    // Bars
+    if (line == "% Begin Bars") {
+      bars = true;
+      continue;
+    }
+    if (line == "% End Bars") {
+      bars = false;
+      continue;
+    }
+    if (bars == true) {
+      var num = line.split(" ");
+      if (num[2] == "vbar") {
+        row = parseInt(num[0]);
+        col = parseInt(num[1] - 1);
+        console.log(num[2] + " " + row + "-" + col);
+        puzzle.across_bars[row].push(col);
+      } else if (num[2] == "hbar") {
+        row = parseInt(num[0] - 1);
+        col = parseInt(num[1]);
+        console.log(num[2] + " " + row + "-" + col);
+        puzzle.down_bars[row].push(col);
+      }
+    }
+
+    // Shades
+    if (line == "% Begin Shades") {
+      shades = true;
+      continue;
+    }
+    if (line == "% End Shades") {
+      shades = false;
+      continue;
+    }
+    if (shades == true) {
+      var num = line.split(" ");
+      if (num[3] == "sb") {
+        row = parseInt(num[0] - 1);
+        col = parseInt(num[1] - 1);
+        console.log(num[2] + " " + row + "-" + col);
+        puzzle.shade_squares[row].push(col);
+      // } else if (num[2] == "hbar") {
+      //   row = parseInt(num[0] - 1);
+      //   col = parseInt(num[1]);
+      //   console.log(num[2] + " " + row + "-" + col);
+      //   puzzle.down_shades[row].push(col);
+      }
+    }
+
+  }
+  console.log(puzzle.solutions);
+  createGrid();
+  hideGridSizeControls();
 }

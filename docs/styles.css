@@ -18,12 +18,12 @@
   display: grid;
 }
 .grid__square {
-  border: 1px solid #999999;
+  border: 1px solid #000000;
   z-index: 10;
 }
 .grid__answer__input {
   background: transparent;
-  border: none;
+  border: 1px solid #000000;
   font-size: 20px;
   font-weight: bold;
   text-align: center;
@@ -82,7 +82,7 @@
   background: #aaaaaa;
 }
 .grid__shadesquare__square {
-  margin: 2px;
+  /* margin: 2px; */
   z-index: 20;
 }
 .grid__shadecircle__button {
@@ -258,3 +258,4 @@
   -ms-user-select: none;
   user-select: none;
 }
+
