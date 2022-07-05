@@ -31,7 +31,7 @@ let puzzle = {
     puzzle.title = "For Beginners";
     puzzle.cols = 13;
     puzzle.rows = 13;
-    puzzle.join_caps = true;
+    puzzle.bar_join_caps = true;
     puzzle.answers = [
       ["E", "A", "G", "E", "R", "A", "R", "P", "A", "U", "L", "I", "N"],
       ["B", "R", "E", "N", "T", "M", "A", "I", "L", "B", "O", "A", "T"],
@@ -888,6 +888,7 @@ let puzzle = {
     document.getElementById("grid-toolbar").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-settings").classList.remove("hidden");
     document.getElementById("layers-tool").classList.remove("hidden");
+    document.getElementById("bar-join-caps-tool").classList.remove("hidden");
     document.getElementById("save-json-tool").classList.remove("hidden");
     document.getElementById("save-svg-tool").classList.remove("hidden");
   }
@@ -1078,7 +1079,7 @@ let puzzle = {
           puzzle.down_bars[row][col] = true;
         } else if (num[2] == "cap" && !puzzle.bar_join_caps) {
           console.log("Bar join caps enabled.");
-          puzzle.join_caps = true;
+          puzzle.bar_join_caps = true;
         }
       }
 
@@ -1114,6 +1115,8 @@ let puzzle = {
     }
     createGrid();
     hideGridSizeControls();
+    console.log("Bar Join Caps: " + puzzle.bar_join_caps);
+    document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
   }
 
   // remove all children from an element by ID
@@ -1260,6 +1263,18 @@ let puzzle = {
       console.log("Disabling Layer: Answers");
       hideAnswers();
     }
+  }
+
+  // toggle bar join caps
+  function toggleBarJoinCaps(input) {
+    if (input.checked) {
+      console.log("Enabling Bar Join Caps");
+      puzzle.bar_join_caps = true;
+    } else {
+      console.log("Disabling Bar Join Caps");
+      puzzle.bar_join_caps = false;
+    }
+    createGrid();
   }
 
   // toggle svg bars layer
@@ -1520,6 +1535,7 @@ let puzzle = {
       console.log(puzzle);
       createGrid();
       hideGridSizeControls();
+      document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
     }
     reader.onerror = function (event) {
         alert("Error reading file: " + filename);
