@@ -796,6 +796,40 @@ let puzzle = {
     return "#" + hex + hex + hex;
   }
 
+  // hide all layers
+  function hideAllLayers() {
+    var answers = document.getElementById("view-answers");
+    if (answers.checked) {
+      answers.checked = false;
+      hideAnswers();
+    }
+    var bars = document.getElementById("view-bars");
+    if (bars.checked) {
+      bars.checked = false;
+      hideBars();
+    }
+    var numbers = document.getElementById("view-numbers");
+    if (numbers.checked) {
+      numbers.checked = false;
+      hideNumbers();
+    }
+    var shadesquares = document.getElementById("view-shade-squares");
+    if (shadesquares.checked) {
+      shadesquares.checked = false;
+      hideShadeSquares();
+    }
+    var shadecircles = document.getElementById("view-shade-circles");
+    if (shadecircles.checked) {
+      shadecircles.checked = false;
+      hideShadeCircles();
+    }
+    var circles = document.getElementById("view-circles");
+    if (circles.checked) {
+      circles.checked = false;
+      hideCircles();
+    }
+  }
+
   // hide the answers from the svg
   function hideAnswers() {
     console.log("Hiding all Answers");
@@ -1106,6 +1140,40 @@ let puzzle = {
     puzzle.cols = parseInt(value);
     initPuzzle();
     createGrid();
+  }
+
+  // show all svg layers
+  function showAllLayers() {
+    var answers = document.getElementById("view-answers");
+    if (!answers.checked) {
+      answers.checked = true;
+      showAnswers();
+    }
+    var bars = document.getElementById("view-bars");
+    if (!bars.checked) {
+      bars.checked = true;
+      showBars();
+    }
+    var numbers = document.getElementById("view-numbers");
+    if (!numbers.checked) {
+      numbers.checked = true;
+      showNumbers();
+    }
+    var shadesquares = document.getElementById("view-shade-squares");
+    if (!shadesquares.checked) {
+      shadesquares.checked = true;
+      showShadeSquares();
+    }
+    var shadecircles = document.getElementById("view-shade-circles");
+    if (!shadecircles.checked) {
+      shadecircles.checked = true;
+      showShadeCircles();
+    }
+    var circles = document.getElementById("view-circles");
+    if (!circles.checked) {
+      circles.checked = true;
+      showCircles();
+    }
   }
 
   // show svg answers layer

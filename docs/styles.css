@@ -283,6 +283,16 @@
   margin: 2px;
   width: 142px;
 }
+.layers-link {
+  color: blue;
+  display: block;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+.layers-link:hover {
+  color: purple;
+  cursor: default;
+}
 .shade-slider {
   width: 142px;
 }
