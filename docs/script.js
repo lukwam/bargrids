@@ -223,9 +223,28 @@ let puzzle = {
     createGrid();
   }
 
+  // clear all answers
+  function clearAnswers() {
+    puzzle.answers = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all bars
+  function clearBars() {
+    puzzle.across_bars = createArray(puzzle.rows, puzzle.cols);
+    puzzle.down_bars = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
   // clear all circles
   function clearCircles() {
     puzzle.circles = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all numbers
+  function clearNumbers() {
+    puzzle.numbers = createArray(puzzle.rows, puzzle.cols);
     createGrid();
   }
 
@@ -735,6 +754,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-answers-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Answers";
+    document.getElementById("grid-answer-settings").classList.remove("hidden");
   }
 
   // enable the bar tool and layer
@@ -743,6 +763,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-bars-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Bars";
+    document.getElementById("grid-bar-settings").classList.remove("hidden");
   }
 
   // enable the circles tool and layer
@@ -760,7 +781,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-numbers-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Numbers";
-    document.getElementById("grid-autonumber-button").classList.remove("hidden");
+    document.getElementById("grid-number-settings").classList.remove("hidden");
   }
 
   // enable the shade circles tool and layer
@@ -1307,10 +1328,13 @@ let puzzle = {
           disableTool(item);
         }
       }
-      document.getElementById("grid-autonumber-button").classList.add("hidden");
+      document.getElementById("grid-answer-settings").classList.add("hidden");
+      document.getElementById("grid-bar-settings").classList.add("hidden");
       document.getElementById("grid-circle-settings").classList.add("hidden");
+      document.getElementById("grid-number-settings").classList.add("hidden");
       document.getElementById("grid-shadecircle-settings").classList.add("hidden");
       document.getElementById("grid-shadesquare-settings").classList.add("hidden");
+      document.getElementById("grid-circle-settings").classList.add("hidden");
       enableTool(div);
     }
   }

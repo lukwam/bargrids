@@ -115,12 +115,25 @@
       <div id="grid-toolbar-item-settings" class="grid__toolbar__item--settings hidden">
         <div id="grid-toolbar-item-name" class="controls__layers--header">No tool selected</div>
 
-        <!-- Autonumber Button for Number Tool -->
-        <button id="grid-autonumber-button" class="download-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
+        <!-- Settings for Answer Tool -->
+        <div id="grid-answer-settings" class="hidden">
+          <button id="grid-answer-button" class="download-button" onclick="clearAnswers();">Clear Answers</button>
+        </div>
+
+        <!-- Settings for Bar Tool -->
+        <div id="grid-bar-settings" class="hidden">
+          <button id="grid-bar-button" class="download-button" onclick="clearBars();">Clear Bars</button>
+        </div>
 
         <!-- Settings for Circle Tool -->
         <div id="grid-circle-settings" class="hidden">
           <button id="grid-circle-button" class="download-button" onclick="clearCircles();">Clear Circles</button>
+        </div>
+
+        <!-- Settings for Number Tool -->
+        <div id="grid-number-settings" class="hidden">
+          <button id="grid-autonumber-button" class="download-button" onclick="autoNumberPuzzle();">Autonumber</button>
+          <button id="grid-number-button" class="download-button" onclick="clearNumbers();">Clear Numbers</button>
         </div>
 
         <!-- Settings for Shade Circle Tool -->
