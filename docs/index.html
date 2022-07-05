@@ -116,23 +116,29 @@
         <div id="grid-toolbar-item-name" class="controls__layers--header">No tool selected</div>
 
         <!-- Autonumber Button for Number Tool -->
-        <button id="grid-autonumber-button" class="upload-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
+        <button id="grid-autonumber-button" class="download-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
 
-        <!-- Slider for Shade Circle Tool -->
-        <div id="grid-shadecircle-slider" class="hidden">
+        <!-- Settings for Circle Tool -->
+        <div id="grid-circle-settings" class="hidden">
+          <button id="grid-circle-button" class="download-button" onclick="clearCircles();">Clear Circles</button>
+        </div>
+
+        <!-- Settings for Shade Circle Tool -->
+        <div id="grid-shadecircle-settings" class="hidden">
           <input id="grid-shadecircle-slider-input" class="shade-slider" oninput="updateShadeCircleSlider();"
             type="range" min="1" max="100" value="50">
           <label id="grid-shadecircle-slider-label" for="grid-shadecircle-slider" class="shade-slider-label">50%</label>
+          <button id="grid-shadecircle-button" class="download-button" onclick="clearShadeCircles();">Clear Circles</button>
         </div>
 
-        <!-- Slider for Shade Square Tool -->
-        <div id="grid-shadesquare-slider" class="hidden">
+        <!-- Settings for Shade Square Tool -->
+        <div id="grid-shadesquare-settings" class="hidden">
           <input id="grid-shadesquare-slider-input" class="shade-slider"oninput="updateShadeSquareSlider();"
             type="range" min="1" max="100" value="50">
           <label id="grid-shadesquare-slider-label" for="grid-shadesquare-slider" class="shade-slider-label">50%</label>
+          <button id="grid-shadesquare-button" class="download-button" onclick="clearShadeSquares();">Clear Squares</button>
         </div>
       </div>
-
 
       <!-- Layers Tool -->
       <div id="layers-tool" class="control-container controls__layers hidden">

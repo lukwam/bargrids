@@ -223,6 +223,25 @@ let puzzle = {
     createGrid();
   }
 
+  // clear all circles
+  function clearCircles() {
+    puzzle.circles = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all shade circles
+  function clearShadeCircles() {
+    puzzle.shade_circles = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all shade squares
+  function clearShadeSquares() {
+    puzzle.shade_squares = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+
   // create a multi-dimensional array of rows x cols
   function createArray(rows, cols) {
     return Array.from(Array(rows), () => new Array(cols));
@@ -732,6 +751,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-circles-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Circles";
+    document.getElementById("grid-circle-settings").classList.remove("hidden");
   }
 
   // enable the number tool and layer
@@ -749,7 +769,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-shadecircles-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Shade Circles";
-    document.getElementById("grid-shadecircle-slider").classList.remove("hidden");
+    document.getElementById("grid-shadecircle-settings").classList.remove("hidden");
   }
 
   // enable the shade squares tool and layer
@@ -758,7 +778,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-shadesquares-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Shade Squares";
-    document.getElementById("grid-shadesquare-slider").classList.remove("hidden");
+    document.getElementById("grid-shadesquare-settings").classList.remove("hidden");
   }
 
   // select input on focus
@@ -1220,8 +1240,9 @@ let puzzle = {
         }
       }
       document.getElementById("grid-autonumber-button").classList.add("hidden");
-      document.getElementById("grid-shadecircle-slider").classList.add("hidden");
-      document.getElementById("grid-shadesquare-slider").classList.add("hidden");
+      document.getElementById("grid-circle-settings").classList.add("hidden");
+      document.getElementById("grid-shadecircle-settings").classList.add("hidden");
+      document.getElementById("grid-shadesquare-settings").classList.add("hidden");
       enableTool(div);
     }
   }

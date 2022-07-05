@@ -279,13 +279,14 @@
   font-size: 14px;
 }
 .download-button {
+  display: block;
   margin: 2px;
   width: 142px;
 }
 .shade-slider {
   width: 142px;
 }
-.shade-slider {
+.shade-slider-label {
   display: block;
 }
 .shade-slider-label {
