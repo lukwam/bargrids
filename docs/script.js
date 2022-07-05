@@ -597,12 +597,13 @@ let puzzle = {
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.shade_circles[row][col]) {
+          var shade = getShade(puzzle.shade_circles[row][col]);
           let circle = document.createElementNS(ns, "circle");
           circle.id = "svg-shadecircle-" + row + "-" + col;
           circle.setAttribute("cx", col * puzzle.size + puzzle.size/2);
           circle.setAttribute("cy", row * puzzle.size + puzzle.size/2);
           circle.setAttribute("r", puzzle.size/2 - 3);
-          circle.setAttribute("fill", "#cccccc");
+          circle.setAttribute("fill", shade);
           circle.classList.add("grid__shadecircle");
           svg.appendChild(circle);
         }
@@ -616,6 +617,7 @@ let puzzle = {
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.shade_squares[row][col]) {
+          var shade = getShade(puzzle.shade_squares[row][col]);
           let rect = document.createElementNS(ns, "rect");
           rect.id = "svg-shadesquare-" + row + "-" + col;
           rect.setAttribute("x", col * puzzle.size);
@@ -624,7 +626,7 @@ let puzzle = {
           rect.setAttribute("width", puzzle.size);
           rect.setAttribute("stroke", "black");
           rect.setAttribute("stroke-width", "1px");
-          rect.setAttribute("fill", "#cccccc");
+          rect.setAttribute("fill", shade);
           rect.classList.add("grid__shadesquare");
           svg.appendChild(rect);
         }
@@ -738,7 +740,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-numbers-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Numbers";
-    document.getElementById("grid-toolbar-autonumber").classList.remove("hidden");
+    document.getElementById("grid-autonumber-button").classList.remove("hidden");
   }
 
   // enable the shade circles tool and layer
@@ -747,6 +749,7 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-shadecircles-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Shade Circles";
+    document.getElementById("grid-shadecircle-slider").classList.remove("hidden");
   }
 
   // enable the shade squares tool and layer
@@ -755,12 +758,22 @@ let puzzle = {
     div.classList.add("grid__toolbar__item--selected");
     document.getElementById("grid-shadesquares-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Shade Squares";
+    document.getElementById("grid-shadesquare-slider").classList.remove("hidden");
   }
 
   // select input on focus
   function focusInput(input) {
     console.log("Focus Input: " + input.id);
     input.select();
+  }
+
+  // return a shade based on a percentage
+  function getShade(percentage) {
+    var hex = Math.round((100-percentage)/100 * 255).toString(16);
+    if (hex.length == 1) {
+      hex = "0" + hex;
+    }
+    return "#" + hex + hex + hex;
   }
 
   // hide the answers from the svg
@@ -1009,12 +1022,12 @@ let puzzle = {
           row = parseInt(num[0] - 1);
           col = parseInt(num[1] - 1);
           console.log(num[2] + " " + row + "-" + col);
-          puzzle.shade_squares[row][col] = true;
+          puzzle.shade_squares[row][col] = parseInt(num[2]);
         } else if (num[3] == "sc") {
           row = parseInt(num[0] - 1);
           col = parseInt(num[1] - 1);
           console.log(num[2] + " " + row + "-" + col);
-          puzzle.shade_circles[row][col] = true;
+          puzzle.shade_circles[row][col] = parseInt(num[2]);
         } else if (num[3] == "oc") {
           row = parseInt(num[0] - 1);
           col = parseInt(num[1] - 1);
@@ -1206,7 +1219,9 @@ let puzzle = {
           disableTool(item);
         }
       }
-      document.getElementById("grid-toolbar-autonumber").classList.add("hidden");
+      document.getElementById("grid-autonumber-button").classList.add("hidden");
+      document.getElementById("grid-shadecircle-slider").classList.add("hidden");
+      document.getElementById("grid-shadesquare-slider").classList.add("hidden");
       enableTool(div);
     }
   }
@@ -1308,14 +1323,22 @@ let puzzle = {
     var id = div.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
+    var value = document.getElementById("grid-shadecircle-slider-input").value;
     if (puzzle.shade_circles[row][col]) {
       console.log("Disabling Shade Circle: " + id);
-      puzzle.shade_circles[row][col] = false;
+      puzzle.shade_circles[row][col] = 0;
     } else {
       console.log("Enabling Shade Circle: " + id);
-      puzzle.shade_circles[row][col] = true;
+      puzzle.shade_circles[row][col] = parseInt(value);
     }
     createGrid();
+  }
+
+  // update the shade circle slider label
+  function updateShadeCircleSlider() {
+    var value = document.getElementById("grid-shadecircle-slider-input").value;
+    document.getElementById("grid-shadecircle-slider-label").innerHTML = value + "%";
+    document.getElementById("grid-shadecircle-toolbar-item").style.background = getShade(value);
   }
 
   // update a shade square
@@ -1323,14 +1346,23 @@ let puzzle = {
     var id = div.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
+    var value = document.getElementById("grid-shadesquare-slider-input").value;
+    console.log(value);
     if (puzzle.shade_squares[row][col]) {
       console.log("Disabling Shade Square: " + id);
-      puzzle.shade_squares[row][col] = false;
+      puzzle.shade_squares[row][col] = 0;
     } else {
       console.log("Enabling Shade Square: " + id);
-      puzzle.shade_squares[row][col] = true;
+      puzzle.shade_squares[row][col] = parseInt(value);
     }
     createGrid();
+  }
+
+  // update the shade square slider label
+  function updateShadeSquareSlider() {
+    var value = document.getElementById("grid-shadesquare-slider-input").value;
+    document.getElementById("grid-shadesquare-slider-label").innerHTML = value + "%";
+    document.getElementById("grid-shadesquare-toolbar-item").style.background = getShade(value);
   }
 
   // update the title

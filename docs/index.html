@@ -79,26 +79,32 @@
 
       <!-- Grid Toolbar -->
       <div id="grid-toolbar" class="grid__toolbar hidden">
+
         <!-- Answer Text Toolbar Item -->
         <div id="answer-tool" class="grid__toolbar__item__wrapper" title="Answer Text" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--answers unselectable">A</div>
         </div>
+
         <!-- Grid Bars Toolbar Item -->
         <div id="bar-tool" class="grid__toolbar__item__wrapper" title="Grid Bars" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--bars unselectable">⌎</div>
         </div>
+
         <!-- Numbers Toolbar Item -->
         <div id="number-tool" class="grid__toolbar__item__wrapper" title="Numbers" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--numbers unselectable">12</div>
         </div>
+
         <!-- Shade Squares Toolbar Item -->
         <div id="shade-square-tool" class="grid__toolbar__item__wrapper" title="Shade Squares" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--shadesquares"></div>
+          <div id="grid-shadesquare-toolbar-item"  class="grid__toolbar__item grid__toolbar__item--shadesquares"></div>
         </div>
+
         <!-- Shade Circles Toolbar Item -->
         <div id="shade-circle-tool" class="grid__toolbar__item__wrapper" title="Shade Circles" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--shadecircles"></div>
+          <div id="grid-shadecircle-toolbar-item" class="grid__toolbar__item grid__toolbar__item--shadecircles"></div>
         </div>
+
         <!-- Circles Toolbar Item -->
         <div id="circle-tool" class="grid__toolbar__item__wrapper" title="Circles" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--circles"></div>
@@ -108,7 +114,23 @@
       <!-- Grid Toolbar Item Settings -->
       <div id="grid-toolbar-item-settings" class="grid__toolbar__item--settings hidden">
         <div id="grid-toolbar-item-name" class="controls__layers--header">No tool selected</div>
-        <button id="grid-toolbar-autonumber" class="upload-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
+
+        <!-- Autonumber Button for Number Tool -->
+        <button id="grid-autonumber-button" class="upload-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
+
+        <!-- Slider for Shade Circle Tool -->
+        <div id="grid-shadecircle-slider" class="hidden">
+          <input id="grid-shadecircle-slider-input" class="shade-slider" oninput="updateShadeCircleSlider();"
+            type="range" min="1" max="100" value="50">
+          <label id="grid-shadecircle-slider-label" for="grid-shadecircle-slider" class="shade-slider-label">50%</label>
+        </div>
+
+        <!-- Slider for Shade Square Tool -->
+        <div id="grid-shadesquare-slider" class="hidden">
+          <input id="grid-shadesquare-slider-input" class="shade-slider"oninput="updateShadeSquareSlider();"
+            type="range" min="1" max="100" value="50">
+          <label id="grid-shadesquare-slider-label" for="grid-shadesquare-slider" class="shade-slider-label">50%</label>
+        </div>
       </div>
 
 

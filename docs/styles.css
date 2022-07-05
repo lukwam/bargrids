@@ -232,14 +232,14 @@
   font-weight: bold;
 }
 .grid__toolbar__item--shadesquares {
-  background: #bbbbbb;
+  background: #808080;
   /* border: 1px solid #000000; */
   padding: 1px;
   height: 34px;
   width: 34px;
 }
 .grid__toolbar__item--shadecircles {
-  background: #bbbbbb;
+  background: #808080;
   /* border: 1px solid #000000; */
   padding: 1px;
   border-radius: 50%;
@@ -281,6 +281,15 @@
 .download-button {
   margin: 2px;
   width: 142px;
+}
+.shade-slider {
+  width: 142px;
+}
+.shade-slider {
+  display: block;
+}
+.shade-slider-label {
+  margin: 2px;
 }
 .upload-button {
   margin: 2px;
