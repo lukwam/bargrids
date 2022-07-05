@@ -2,20 +2,38 @@
   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
-    <title>New Puzzle</title>
+    <title></title>
     <link rel="stylesheet" href="/bargrids/styles.css">
     <script type="text/javascript" src="/bargrids/script.js"></script>
   </head>
-  <body onload="createEmptyGrid(8, 8);">
+  <body onload="initPuzzle(); createGrid();">
 
     <!-- Puzzle Title -->
-    <input id="title" type=text class="title" value="Puzzle Title" onfocusout="updateTitle(this.value);">
+    <input id="title" type=text class="title" value="" onfocusout="updateTitle(this.value);">
 
     <!-- BarGrid Container -->
-    <div id="bargrid-container" class="bargrid-container">
+    <div id="grid-container" class="grid-container">
 
-      <!-- Grid -->
-      <div id="grid" class="grid"></div>
+      <!-- Puzzle Grid (SVG) -->
+      <svg id="grid" class="grid"></svg>
+
+      <!-- Grid Answers Layer -->
+      <div id="grid-answers-layer" class="grid__answers__layer hidden"></div>
+
+      <!-- Grid Bars Layer -->
+      <div id="grid-bars-layer" class="grid__bars__layer hidden"></div>
+
+      <!-- Grid Numbers Layer -->
+      <div id="grid-numbers-layer" class="grid__numbers__layer hidden"></div>
+
+      <!-- Grid Shade Squares Layer -->
+      <div id="grid-shadesquares-layer" class="grid__shadesquares__layer hidden"></div>
+
+      <!-- Grid Shade Circles Layer -->
+      <div id="grid-shadecircles-layer" class="grid__shadecircles__layer hidden"></div>
+
+      <!-- Grid Circles Layer -->
+      <div id="grid-circles-layer" class="grid__circles__layer hidden"></div>
 
     </div>
 
@@ -24,7 +42,7 @@
       <!-- Grid Size Control -->
       <div id="grid-size-control-container" class="control-container">
         <div id="grid-size-control" class="controls controls__grid-size">
-          <select class="controls__grid-size--select" name="grid_size" onchange="if (this.selectedIndex) setGridSize(this)">
+          <select class="controls__grid-size--select" name="grid_size" onchange="if (this.selectedIndex) updateGridSize(this)">
             <option>Set Grid Size</option>
             <option id="8x8">8 by 8</option>
             <option id="9x9">9 by 9</option>
@@ -37,18 +55,26 @@
           </select>
           <div class="controls__grid-size controls__grid-size--width">
             Width:
-            <input type="text" id="width" name="width" size="5" value="8"
-              onchange="createEmptyGrid(this.value, document.getElementById('depth').value);">
+            <input type="text" id="width" name="width" size="5" value="8" onchange="setWidth(this.value);">
           </div>
           <div class="controls__grid-size controls__grid-size--depth">
             Depth:
-            <input type="text" id="depth" name="depth" size="5" value="8"
-              onchange="createEmptyGrid(document.getElementById('width').value, this.value);">
+            <input type="text" id="depth" name="depth" size="5" value="8" onchange="setDepth(this.value);">
           </div>
-          <input class="controls__grid-size controls__grid-size--button"
-            onclick="hideGridSizeControls();"
+          <input class="controls__grid-size controls__grid-size--button" onclick="hideGridSizeControls();"
             type="submit" name="create" value="Set This Size">
         </div>
+      </div>
+
+      <!-- Upload Tools -->
+      <div id="upload-json-tool"class="control-container controls__layers">
+        <input type="file" id="upload-json-button" class="hidden" onchange="uploadJSONFile(this);">
+        <button class="upload-button" onclick="uploadJSONFileButton();">Load JSON</button>
+      </div>
+
+      <div id="upload-eps-tool"class="control-container controls__layers">
+        <input type="file" id="upload-eps-button" class="hidden" onchange="uploadEPSFile(this);">
+        <button class="upload-button" onclick="uploadEPSFileButton();">Load EPS</button>
       </div>
 
       <!-- Grid Toolbar -->
@@ -61,23 +87,30 @@
         <div id="bar-tool" class="grid__toolbar__item__wrapper" title="Grid Bars" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--bars unselectable">⌎</div>
         </div>
-        <!-- Indexes Toolbar Item -->
-        <div id="index-tool" class="grid__toolbar__item__wrapper" title="Indexes" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--indexes unselectable">12</div>
+        <!-- Numbers Toolbar Item -->
+        <div id="number-tool" class="grid__toolbar__item__wrapper" title="Numbers" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--numbers unselectable">12</div>
         </div>
         <!-- Shade Squares Toolbar Item -->
         <div id="shade-square-tool" class="grid__toolbar__item__wrapper" title="Shade Squares" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--shade-squares"></div>
+          <div class="grid__toolbar__item grid__toolbar__item--shadesquares"></div>
         </div>
         <!-- Shade Circles Toolbar Item -->
         <div id="shade-circle-tool" class="grid__toolbar__item__wrapper" title="Shade Circles" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--shade-circles"></div>
+          <div class="grid__toolbar__item grid__toolbar__item--shadecircles"></div>
         </div>
         <!-- Circles Toolbar Item -->
         <div id="circle-tool" class="grid__toolbar__item__wrapper" title="Circles" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--circles"></div>
         </div>
       </div>
+
+      <!-- Grid Toolbar Item Settings -->
+      <div id="grid-toolbar-item-settings" class="grid__toolbar__item--settings hidden">
+        <div id="grid-toolbar-item-name" class="controls__layers--header">No tool selected</div>
+        <button id="grid-toolbar-autonumber" class="upload-button hidden" onclick="autoNumberPuzzle();">Autonumber</button>
+      </div>
+
 
       <!-- Layers Tool -->
       <div id="layers-tool" class="control-container controls__layers hidden">
@@ -89,8 +122,8 @@
         <input type="checkbox" id="view-bars" onchange="toggleBarLayer(this);" checked>
         <label for="view-bars" class="controls__layers--checkbox">Bars</label><br>
 
-        <input type="checkbox" id="view-indexes" onchange="toggleIndexLayer(this);" checked>
-        <label for="view-indexes" class="controls__layers--checkbox">Indexes</label><br>
+        <input type="checkbox" id="view-numbers" onchange="toggleNumberLayer(this);" checked>
+        <label for="view-numbers" class="controls__layers--checkbox">Numbers</label><br>
 
         <input type="checkbox" id="view-shade-squares" onchange="toggleShadeSquareLayer(this);" checked>
         <label for="view-shade-squares" class="controls__layers--checkbox">Shade Squares</label><br>
@@ -102,33 +135,17 @@
         <label for="view-circles" class="controls__layers--checkbox">Circles</label><br>
       </div>
 
-      <!-- Downloads Tool -->
-      <div id="downloads-tool" class="control-container controls__layers hidden">
-        <button id="download-button" class="download-button" onclick="updateJsonDownloadLink();">Save JSON</button>
-        <a id="download-iframe" style="display:none;"></a>
+      <!-- Save Tools -->
+      <div id="save-json-tool" class="control-container controls__layers hidden">
+        <button id="save-json-button" class="download-button" onclick="saveJSON();">Save JSON</button>
+        <a id="json-download" class="hidden"></a>
       </div>
 
-      <!-- Uploads Tool -->
-      <div id="upload-tool"class="control-container controls__layers">
-        <input type="file" id="upload-button" class="hidden" onchange="uploadFile(this);">
-        <button class="upload-button" onclick="uploadFileButton();">Load JSON</button>
-      </div>
-
-      <div id="upload-eps-tool"class="control-container controls__layers">
-        <input type="file" id="upload-eps-button" class="hidden" onchange="uploadEPSFile(this);">
-        <button class="upload-button" onclick="uploadEPSFileButton();">Load EPS</button>
-      </div>
-
-      <!-- Create SVG -->
-      <div id="svg-tool"class="control-container controls__layers hidden">
-        <button class="download-button" onclick="createSVG();">Save SVG</button>
-        <div class="hidden">
-            <svg id="svg" class="hidden"></svg>
-            <a id="svg-download" class="hidden">Save SVG</a>
-        </div>
+      <div id="save-svg-tool"class="control-container controls__layers hidden">
+        <button id="save-svg-button" class="download-button" onclick="saveSVG();">Save SVG</button>
+        <a id="svg-download" class="hidden"></a>
       </div>
 
     </div>
-
   </body>
 </html>

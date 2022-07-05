@@ -1,195 +1,167 @@
 .title {
-    border: none;
-    display: block;
-    font-family: sans-serif;
-    font-weight: bold;
-    font-size: 42px;
-    margin-bottom: 8px;
-    margin-top: 8px;
-    width: 100%;
+  border: none;
+  display: block;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 42px;
+  margin-bottom: 8px;
+  margin-top: 8px;
+  width: 100%;
 }
-.bargrid-container {
-  border: 3px solid #000000;
+.grid-container {
+  border: none;
   float: left;
   margin-bottom: 5px;
   margin-right: 5px;
+  position: relative;
 }
 .grid {
-  display: grid;
+  position: relative;
 }
-.grid__square {
-  border: 1px solid #000000;
-  z-index: 10;
+.grid__answers__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__bars__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__numbers__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__shadesquares__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__shadecircles__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__circles__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
 }
 .grid__answer__input {
   background: transparent;
-  border: 1px solid #000000;
-  font-size: 20px;
-  font-weight: bold;
+  border: none;
+  box-sizing: border-box;
+  color: transparent;
+  font-family: helvetica;
+  font-size: 24px;
+  height: 46px;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
   text-align: center;
   text-transform: uppercase;
-  z-index: 70;
+  width: 46px;
 }
-.grid__answer__input:disabled {
-  color: fieldtext;
+.grid__answer__input:focus {
+  background: yellow;
+  color: black;
 }
-.grid__bar__square {
-  z-index: 50;
+.grid__answer__input:hover {
+  background: lightblue;
+  color: black;
 }
-.grid__bar__button {
-  background: transparent;
-  text-align: center;
-  z-index: 110;
-}
-.grid__bar__button--across {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-.grid__bar__button--down {
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-.grid__bar__button:hover {
-  background: #999999;
-}
-.grid__index__input {
+.grid__bar {
   background: transparent;
   border: none;
-  font-size: 12px;
-  height: 12px;
-  margin: 3px;
-  padding: 1px;
-  text-align: left;
-  vertical-align: top;
-  width: 24px;
-  z-index: 75;
-}
-.grid__index__input:disabled {
-  color: fieldtext;
-}
-.grid__index__input:hover:enabled {
-  background: #999999;
-}
-.grid__shadesquare__button {
-  background: transparent;
-  margin: 2px;
-  z-index: 80;
-}
-.grid__shadesquare__button:hover {
-  background: #999999;
-}
-.grid__shadesquare__button--selected {
-  background: #aaaaaa;
-}
-.grid__shadesquare__square {
-  /* margin: 2px; */
-  z-index: 20;
-}
-.grid__shadecircle__button {
-  z-index: 90;
-  margin: 3px;
-}
-.grid__shadecircle__button:hover {
-  background: #999999;
-  border-radius: 50%;
-}
-.grid__shadecircle__button--selected {
-  background: #aaaaaa;
-  border-radius: 50%;
-}
-.grid__shadecircle__square {
-  z-index: 30;
-  margin: 3px;
-}
-.grid__circle__button {
-  margin: 3px;
-  z-index: 100;
-}
-.grid__circle__button:hover {
-  background: transparent;
-  border: 1px solid #aaaaaa;
-  border-radius: 50%;
-}
-.grid__circle__button--selected {
-  border: 1px solid #000000;
-  border-radius: 50%;
-}
-.grid__circle__square {
-  margin: 3px;
-  z-index: 40;
-}
-.grid__toolbar {
-  display: grid;
-  grid-template: repeat(2, 50%) / repeat(3, 33.333333%);
-  height: 100px;
-  width: 150px;
-  margin: 2px;
-}
-.grid__toolbar__item {
-  margin: 6px;
-  z-index: 95;
-}
-.grid__toolbar__item__wrapper {
-  border: 1px solid #000000;
-  background: transparent;
-  z-index: 100;
-}
-.grid__toolbar__item--answers {
-  font-family: sans-serif;
+  box-sizing: border-box;
+  font-family: helvetica;
   font-size: 24px;
-  font-weight: bold;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
   text-align: center;
-  padding: 5px;
+  text-transform: uppercase;
 }
-.grid__toolbar__item--bars {
-  font-family: sans-serif;
-  font-size: 44px;
-  font-weight: bold;
-  text-align: center;
-  padding-right: 9px;
+.grid__bar:hover {
+  background: lightblue;
 }
-.grid__toolbar__item--indexes {
-  font-family: sans-serif;
-  font-size: 12px;
-  font-weight: bold;
-}
-.grid__toolbar__item--shade-squares {
-  background: #bbbbbb;
-  /* border: 1px solid #000000; */
-  padding: 1px;
-  height: 34px;
-  width: 34px;
-}
-.grid__toolbar__item--shade-circles {
-  background: #bbbbbb;
-  /* border: 1px solid #000000; */
-  padding: 1px;
-  border-radius: 50%;
-  height: 34px;
-  width: 34px;
-}
-.grid__toolbar__item--circles {
+.grid__number__input {
   background: transparent;
-  border: 2px solid #000000;
+  border: none;
+  color: transparent;
+  box-sizing: border-box;
+  font-family: helvetica;
+  font-size: 14px;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
+  text-align: left;
+  text-transform: uppercase;
+  vertical-align: top;
+}
+.grid__number__input:focus {
+  background: yellow;
+  color: black;
+}
+.grid__number__input:hover {
+  background: lightblue;
+  color: black;
+}
+.grid__shadecircle {
+  background: transparent;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
+}
+.grid__shadecircle:hover {
+  background: lightblue;
   border-radius: 50%;
-  height: 32px;
-  width: 32px;
 }
-.grid__toolbar__item--selected {
-  background: #ffff00;
+.grid__shadesquare {
+  background: transparent;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
 }
-.grid__bar--bottom {
-  border-bottom: 2px solid #000000;
+.grid__shadesquare:hover {
+  background: lightblue;
 }
-.grid__bar--left {
-  border-left: 2px solid #000000;
+.grid__circle {
+  background: transparent;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
 }
-.grid__bar--right {
-  border-right: 2px solid #000000;
+.grid__circle:hover {
+  border: 2px solid lightblue;
+  border-radius: 50%;
 }
-.grid__bar--top {
-  border-top: 2px solid #000000;
-}
+
 .controls-container {
   border: 1px solid #cccccc;
   float: left;
@@ -223,6 +195,73 @@
   margin: 2px;
   width: 120px;
 }
+.grid__toolbar {
+  border: 1px solid black;
+  display: grid;
+  grid-template: repeat(2, 50%) / repeat(3, 33.333333%);
+  height: 100px;
+  width: 150px;
+  margin: 2px;
+}
+.grid__toolbar__item {
+  margin: 6px;
+  z-index: 95;
+}
+.grid__toolbar__item__wrapper {
+  border: 1px solid #000000;
+  background: transparent;
+  z-index: 100;
+}
+.grid__toolbar__item--answers {
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+}
+.grid__toolbar__item--bars {
+  font-family: sans-serif;
+  font-size: 44px;
+  font-weight: bold;
+  text-align: center;
+  padding-right: 9px;
+}
+.grid__toolbar__item--numbers {
+  font-family: sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+}
+.grid__toolbar__item--shadesquares {
+  background: #bbbbbb;
+  /* border: 1px solid #000000; */
+  padding: 1px;
+  height: 34px;
+  width: 34px;
+}
+.grid__toolbar__item--shadecircles {
+  background: #bbbbbb;
+  /* border: 1px solid #000000; */
+  padding: 1px;
+  border-radius: 50%;
+  height: 34px;
+  width: 34px;
+}
+.grid__toolbar__item--circles {
+  background: transparent;
+  border: 2px solid #000000;
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+}
+.grid__toolbar__item--selected {
+  background: #ffff00;
+}
+.grid__toolbar__item--settings {
+  border: 1px solid black;
+  margin: 2px;
+  padding: 2px;
+  font-family: sans-serif;
+}
 .controls__layers {
   margin: 2px;
 }
@@ -241,7 +280,7 @@
 }
 .download-button {
   margin: 2px;
-  width: 140px;
+  width: 142px;
 }
 .upload-button {
   margin: 2px;
@@ -258,4 +297,3 @@
   -ms-user-select: none;
   user-select: none;
 }
-

@@ -22,7 +22,7 @@ def get_puzzle_data(slug):
     return None
 
 
-@app.route("/")
+@app.route("/index")
 def index():
     puzzles = [
         {"name": "For Beginners", "slug": "for_beginners"},
@@ -30,7 +30,7 @@ def index():
     return render_template("index.html", puzzles=puzzles)
 
 
-@app.route("/new", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def new_bargrid():
     """Create a new BarGrid."""
     # if request.method == "POST":
