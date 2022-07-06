@@ -122,6 +122,40 @@
 
         <!-- Settings for Bar Tool -->
         <div id="grid-bar-settings" class="hidden">
+          <div id="bar-symmetry-settings">
+            <div class="symmetry-header">Symmetry</div>
+
+            <input type="radio" id="symmetry-none" name="symmetry" checked>
+            <label for="symmetry-none" class="controls__layers--checkbox">None</label><br>
+
+            <input type="radio" id="symmetry-rotate-180" name="symmetry">
+            <label for="symmetry-rotate-180" class="controls__layers--checkbox">Rotational (180°)</label><br>
+
+            <input type="radio" id="symmetry-rotate-90" name="symmetry">
+            <label for="symmetry-rotate-90" class="controls__layers--checkbox">Rotational (90°)</label><br>
+
+            <input type="radio" id="symmetry-mirror-h" name="symmetry">
+            <label for="symmetry-mirror-h" class="controls__layers--checkbox">Horizontal ( | )</label><br>
+
+            <input type="radio" id="symmetry-mirror-v" name="symmetry">
+            <label for="symmetry-mirror-v" class="controls__layers--checkbox">Vertical (—)</label><br>
+
+            <input type="radio" id="symmetry-mirror-d" name="symmetry">
+            <label for="symmetry-mirror-d" class="controls__layers--checkbox">Diagonal ( \ )</label><br>
+
+            <input type="radio" id="symmetry-mirror-u" name="symmetry">
+            <label for="symmetry-mirror-u" class="controls__layers--checkbox">Diagonal ( / )</label><br>
+
+            <input type="radio" id="symmetry-mirror-4h" name="symmetry">
+            <label for="symmetry-mirror-4h" class="controls__layers--checkbox">Crisscross ( + )</label><br>
+
+            <input type="radio" id="symmetry-mirror-4d" name="symmetry">
+            <label for="symmetry-mirror-4d" class="controls__layers--checkbox">Crisscross ( x )</label><br>
+
+            <input type="radio" id="symmetry-mirror-8" name="symmetry">
+            <label for="symmetry-mirror-8" class="controls__layers--checkbox">Eightway ( ✵ )</label><br>
+
+          </div>
           <button id="grid-bar-button" class="download-button" onclick="clearBars();">Clear Bars</button>
         </div>
 

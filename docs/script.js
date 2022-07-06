@@ -143,70 +143,61 @@ let puzzle = {
   function autoNumberPuzzle() {
     var locations = createArray(puzzle.rows, puzzle.cols);
     var word = "";
-    var word_length = 0;
 
     // identify across entries
-    for (let row = 0; row < puzzle.rows; row++) {
+    for (let row=0; row<puzzle.rows; row++) {
       word = "";
-      word_length = 0;
-      for (let col = 0; col < puzzle.cols; col++) {
-        word_length += 1;
+      for (let col=0; col<puzzle.cols; col++) {
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
         } else {
           word += " ";
         }
-        if (puzzle.across_bars[row][col]) {
-          if (word_length > 1) {
-            x = col - word_length + 1;
+        if (puzzle.across_bars[row][col+1]) {
+          if (word.length > 1) {
+            x = col - word.length + 1;
             y = row;
             locations[y][x] = true;
-            console.log("Across Word: '" + word + "' (" + word_length + " @ " + y + "-" + x + ")");
+            console.log("Across Word: '" + word + "' (" + word.length + " @ " + y + "-" + x + ")");
           }
           word = "";
-          word_length = 0;
         }
       }
-      if (word_length > 1) {
-        x = puzzle.cols - word_length;
+      if (word.length > 1) {
+        x = puzzle.cols - word.length;
         y = row;
         locations[y][x] = true;
-        console.log("Across Word: '" + word + "' (" + word_length + " @ " + y + "-" + x + ")");
+        console.log("Across Word [eol]: '" + word + "' (" + word.length + " @ " + y + "-" + x + ")");
       }
       word = "";
-      word_length = 0;
     }
 
     // identify down entries
-    for (let col = 0; col < puzzle.cols; col++) {
+    for (let col=0; col<puzzle.cols; col++) {
       word = "";
-      word_length = 0;
-      for (let row = 0; row < puzzle.rows; row++) {
-        word_length += 1;
+      for (let row=0; row<puzzle.rows; row++) {
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
         } else {
           word += " ";
         }
-        if (puzzle.down_bars[row][col]) {
-          if (word_length > 1) {
+         if (puzzle.down_bars[row+1] && puzzle.down_bars[row+1][col]) {
+          if (word.length > 1) {
             x = col;
-            y = row - word_length + 1;
+            y = row - word.length + 1;
             locations[y][x] = true;
-            console.log("Down Word: '" + word + "' (" + word_length + " @ " + y + "-" + x + ")");
+            console.log("Down Word: '" + word + "' (" + word.length + " @ " + y + "-" + x + ")");
           }
           word = "";
-          word_length = 0;
         }
       }
-      if (word_length > 1) {
+      if (word.length > 1) {
         x = col;
-        y = puzzle.rows - word_length;
+        y = puzzle.rows - word.length;
         locations[y][x] = true;
-        console.log("Down Word: '" + word + "' (" + word_length + " @ " + y + "-" + x + ")");
+        console.log("Down Word [eol]: '" + word + "' (" + word.length + " @ " + y + "-" + x + ")");
       }
       word = "";
-      word_length = 0;
     }
 
     // number puzzle
@@ -284,6 +275,19 @@ let puzzle = {
     createShadeSquares();
     createShadeCircles();
     createCircles();
+
+    // toggle symmetry controls
+    if (puzzle.cols == puzzle.rows) {
+      document.getElementById("symmetry-mirror-d").disabled = false;
+      document.getElementById("symmetry-mirror-u").disabled = false;
+      document.getElementById("symmetry-mirror-4d").disabled = false;
+      document.getElementById("symmetry-mirror-8").disabled = false;
+    } else {
+      document.getElementById("symmetry-mirror-d").disabled = true;
+      document.getElementById("symmetry-mirror-u").disabled = true;
+      document.getElementById("symmetry-mirror-4d").disabled = true;
+      document.getElementById("symmetry-mirror-8").disabled = true;
+    }
   }
 
   // create answers interface layer
@@ -316,26 +320,26 @@ let puzzle = {
     var bars = document.getElementById("grid-bars-layer");
     removeChildren(bars);
     for (let row = 0; row < puzzle.rows; row++) {
-      for (let col = 0; col < puzzle.cols - 1; col++) {
+      for (let col = 1; col < puzzle.cols; col++) {
         acrossbar = document.createElement("div");
         acrossbar.id = "acrossbar-" + row + "-" + col;
         acrossbar.classList.add("grid__bar");
-        acrossbar.addEventListener("click", (event) => {updateAcrossBar(event.target);});
-        acrossbar.style["left"] = (50 * col + 45) + "px";
+        acrossbar.addEventListener("click", (event) => {updateAcrossBars(event.target);});
+        acrossbar.style["left"] = (50 * col - 5) + "px";
         acrossbar.style["top"] = (50 * row) + "px";
         acrossbar.style["height"] = "50px";
         acrossbar.style["width"] = "10px";
         bars.append(acrossbar);
       }
     }
-    for (let row = 0; row < puzzle.rows - 1; row++) {
-      for (let col = 0; col < puzzle.cols; col++) {
+    for (let col = 0; col < puzzle.cols; col++) {
+      for (let row = 1; row < puzzle.rows; row++) {
         downbar = document.createElement("div");
         downbar.id = "downbar-" + row + "-" + col;
         downbar.classList.add("grid__bar");
-        downbar.addEventListener("click", (event) => {updateDownBar(event.target);});
+        downbar.addEventListener("click", (event) => {updateDownBars(event.target);});
         downbar.style["left"] = (50 * col) + "px";
-        downbar.style["top"] = (50 * row + 45) + "px";
+        downbar.style["top"] = (50 * row - 5) + "px";
         downbar.style["height"] = "10px";
         downbar.style["width"] = "50px";
         bars.append(downbar);
@@ -467,22 +471,16 @@ let puzzle = {
   // create the bar join caps for the SVG
   function createSVGBarJoinCaps(svg) {
     const ns = svg.namespaceURI;
-    for (let row = 0; row < puzzle.rows - 1; row++) {
-      for (let col = 0; col < puzzle.cols - 1; col++) {
+    for (let row = 1; row < puzzle.rows - 1; row++) {
+      for (let col = 1; col < puzzle.cols - 1; col++) {
         if (
-            (
-              puzzle.across_bars[row+1][col] && puzzle.down_bars[row][col+1]
-            ) || (
-              puzzle.across_bars[row][col] && puzzle.down_bars[row][col+1]
-            ) || (
-              puzzle.across_bars[row+1][col] && puzzle.down_bars[row][col]
-            ) || (
-              puzzle.across_bars[row][col] && puzzle.down_bars[row][col]
-            )
+            (puzzle.across_bars[row-1][col] || puzzle.across_bars[row][col])
+            &&
+            (puzzle.down_bars[row][col-1] || puzzle.down_bars[row][col])
           ) {
           let rect = document.createElementNS(ns, "rect");
-          rect.setAttribute("x", col * puzzle.size + puzzle.size - 2);
-          rect.setAttribute("y", row * puzzle.size + puzzle.size - 2);
+          rect.setAttribute("x", col * puzzle.size - 2);
+          rect.setAttribute("y", row * puzzle.size - 2);
           rect.setAttribute("height", 4);
           rect.setAttribute("width", 4);
           rect.setAttribute("fill", "black");
@@ -497,15 +495,16 @@ let puzzle = {
   // create the bars for the svg
   function createSVGBars(svg) {
     const ns = svg.namespaceURI;
+
+    // create bars for across clues
     for (let row = 0; row < puzzle.rows; row++) {
-      for (let col = 0; col < puzzle.cols; col++) {
-        // create bars for across clues
+      for (let col = 1; col < puzzle.cols; col++) {
         if (puzzle.across_bars[row][col]) {
           let line = document.createElementNS(ns, "line");
           line.id = "svg-acrossbar-" + row + "-" + col;
-          line.setAttribute("x1", col * puzzle.size + puzzle.size);
+          line.setAttribute("x1", col * puzzle.size);
           line.setAttribute("y1", row * puzzle.size);
-          line.setAttribute("x2", col * puzzle.size + puzzle.size);
+          line.setAttribute("x2", col * puzzle.size);
           line.setAttribute("y2", row * puzzle.size + puzzle.size);
           line.setAttribute("stroke", "black");
           line.setAttribute("stroke-width", "4px");
@@ -513,14 +512,19 @@ let puzzle = {
           line.classList.add("grid__bar--across");
           svg.appendChild(line);
         }
-        // create bars for down clues
+      }
+    }
+
+    // create bars for down clues
+    for (let col = 0; col < puzzle.cols; col++) {
+      for (let row = 1; row < puzzle.rows; row++) {
         if (puzzle.down_bars[row][col]) {
           let line = document.createElementNS(ns, "line");
           line.id = "svg-downbar-" + row + "-" + col;
           line.setAttribute("x1", col * puzzle.size);
-          line.setAttribute("y1", row * puzzle.size + puzzle.size);
+          line.setAttribute("y1", row * puzzle.size);
           line.setAttribute("x2", col * puzzle.size + puzzle.size);
-          line.setAttribute("y2", row * puzzle.size + puzzle.size);
+          line.setAttribute("y2", row * puzzle.size);
           line.setAttribute("stroke", "black");
           line.setAttribute("stroke-width", "4px");
           line.classList.add("grid__bar");
@@ -694,6 +698,7 @@ let puzzle = {
     console.log("Disabling Answer Tool");
     div.classList.remove("grid__toolbar__item--selected");
     document.getElementById("grid-answers-layer").classList.add("hidden");
+    document.getElementById("grid-answer-settings").classList.add("hidden");
   }
 
   // disable the bars toolbar item and layer
@@ -701,27 +706,7 @@ let puzzle = {
     console.log("Disabling Bar Tool");
     div.classList.remove("grid__toolbar__item--selected");
     document.getElementById("grid-bars-layer").classList.add("hidden");
-  }
-
-  // disable the numbers toolbar item and layer
-  function disableNumberTool(div) {
-    console.log("Disabling Number Tool");
-    div.classList.remove("grid__toolbar__item--selected");
-    document.getElementById("grid-numbers-layer").classList.add("hidden");
-  }
-
-  // disable the shade squares toolbar item and layer
-  function disableShadeSquareTool(div) {
-    console.log("Disabling Shade Square Tool");
-    div.classList.remove("grid__toolbar__item--selected");
-    document.getElementById("grid-shadesquares-layer").classList.add("hidden");
-  }
-
-  // disable the shade circles toolbar item and layer
-  function disableShadeCircleTool(div) {
-    console.log("Disabling Shade Circle Tool");
-    div.classList.remove("grid__toolbar__item--selected");
-    document.getElementById("grid-shadecircles-layer").classList.add("hidden");
+    document.getElementById("grid-bar-settings").classList.add("hidden");
   }
 
   // disable the circles toolbar item and layer
@@ -729,6 +714,31 @@ let puzzle = {
     console.log("Disabling Circle Tool");
     div.classList.remove("grid__toolbar__item--selected");
     document.getElementById("grid-circles-layer").classList.add("hidden");
+    document.getElementById("grid-circle-settings").classList.add("hidden");
+  }
+
+  // disable the numbers toolbar item and layer
+  function disableNumberTool(div) {
+    console.log("Disabling Number Tool");
+    div.classList.remove("grid__toolbar__item--selected");
+    document.getElementById("grid-numbers-layer").classList.add("hidden");
+    document.getElementById("grid-number-settings").classList.add("hidden");
+  }
+
+  // disable the shade squares toolbar item and layer
+  function disableShadeSquareTool(div) {
+    console.log("Disabling Shade Square Tool");
+    div.classList.remove("grid__toolbar__item--selected");
+    document.getElementById("grid-shadesquares-layer").classList.add("hidden");
+    document.getElementById("grid-shadesquare-settings").classList.add("hidden");
+  }
+
+  // disable the shade circles toolbar item and layer
+  function disableShadeCircleTool(div) {
+    console.log("Disabling Shade Circle Tool");
+    div.classList.remove("grid__toolbar__item--selected");
+    document.getElementById("grid-shadecircles-layer").classList.add("hidden");
+    document.getElementById("grid-shadecircle-settings").classList.add("hidden");
   }
 
   // enable a tool based on the div
@@ -815,6 +825,75 @@ let puzzle = {
       hex = "0" + hex;
     }
     return "#" + hex + hex + hex;
+  }
+
+  // return the opposite direction (across/down) of the given direction
+  function getOpposite(dir) {
+    if (dir == "across") {
+      return "down"
+    } else if (dir == "down") {
+      return "across"
+    } else {
+      return null;
+    }
+  }
+
+  // return a list of bars (including the given one) based on symmetry
+  function getSymmetricalBars(dir, row, col) {
+    var bar = [dir, row, col];
+    var symmetry = getSymmetry();
+
+    var across_cols = puzzle.cols;
+    var across_rows = puzzle.rows - 1;
+
+    var down_cols = puzzle.cols - 1;
+    var down_rows = puzzle.rows;
+
+    if (dir == "across") {
+      var diag_down = ["down", col, row];
+      var diag_up = ["down", across_cols - col, across_rows - row];
+      var horizontal = ["across", row, across_cols - col];
+      var rotate90 = ["down", col, across_rows - row];
+      var rotate180 = ["across", across_rows - row, across_cols - col];
+      var rotate270 = ["down", across_cols - col, row];
+      var vertical = ["across", across_rows - row, col];
+
+    } else if (dir == "down") {
+      var diag_down = ["across", col, row];
+      var diag_up = ["across", down_cols - col, down_rows - row];
+      var horizontal = ["down", row, down_cols - col];
+      var rotate90 = ["across", down_cols - col, row];
+      var rotate180 = ["down", down_rows - row, down_cols - col];
+      var rotate270 = ["across", col, down_rows - row];
+      var vertical = ["down", down_rows - row, col];
+    }
+
+    if (symmetry == "symmetry-none") {
+      return [bar];
+    } else if (symmetry == "symmetry-rotate-180") {
+      return [bar, rotate180];
+    } else if (symmetry == "symmetry-rotate-90") {
+      return [bar, rotate90, rotate180, rotate270];
+    } else if (symmetry == "symmetry-mirror-h") {
+      return [bar, horizontal];
+    } else if (symmetry == "symmetry-mirror-v") {
+      return [bar, vertical];
+    } else if (symmetry == "symmetry-mirror-d") {
+      return [bar, diag_down];
+    } else if (symmetry == "symmetry-mirror-u") {
+      return [bar, diag_up];
+    } else if (symmetry == "symmetry-mirror-4h") {
+      return [bar, horizontal, rotate180, vertical];
+    } else if (symmetry == "symmetry-mirror-4d") {
+      return [bar, diag_down, rotate180, diag_up];
+    } else if (symmetry == "symmetry-mirror-8") {
+      return [bar, diag_down, rotate90, horizontal, rotate180, diag_up, rotate270, vertical];
+    }
+  }
+
+  // get symmetry setting for creating bars
+  function getSymmetry() {
+    return document.querySelector("input[type=radio][name=symmetry]:checked").id;
   }
 
   // hide all layers
@@ -1069,11 +1148,11 @@ let puzzle = {
         var num = line.split(" ");
         if (num[2] == "vbar") {
           row = parseInt(num[0]);
-          col = parseInt(num[1] - 1);
+          col = parseInt(num[1]);
           console.log("acrossbar-" + " " + row + "-" + col);
           puzzle.across_bars[row][col] = true;
         } else if (num[2] == "hbar") {
-          row = parseInt(num[0] - 1);
+          row = parseInt(num[0]);
           col = parseInt(num[1]);
           console.log("downbar-" + " " + row + "-" + col);
           puzzle.down_bars[row][col] = true;
@@ -1343,30 +1422,35 @@ let puzzle = {
           disableTool(item);
         }
       }
-      document.getElementById("grid-answer-settings").classList.add("hidden");
-      document.getElementById("grid-bar-settings").classList.add("hidden");
-      document.getElementById("grid-circle-settings").classList.add("hidden");
-      document.getElementById("grid-number-settings").classList.add("hidden");
-      document.getElementById("grid-shadecircle-settings").classList.add("hidden");
-      document.getElementById("grid-shadesquare-settings").classList.add("hidden");
-      document.getElementById("grid-circle-settings").classList.add("hidden");
       enableTool(div);
     }
   }
 
   // update an across bar
-  function updateAcrossBar(div) {
-    var id = div.id.split("-");
-    var row = parseInt(id[1]);
-    var col = parseInt(id[2]);
+  function updateAcrossBar(row, col) {
     if (puzzle.across_bars[row][col]) {
-      console.log("Disabling Across Bar: " + id);
+      console.log("Disabling Across Bar: " + row + "-" + col);
       puzzle.across_bars[row][col] = false;
     } else {
-      console.log("Enabling Across Bar: " + id);
+      console.log("Enabling Across Bar: " + row + "-" + col);
       puzzle.across_bars[row][col] = true;
     }
     createGrid();
+  }
+
+  // update one or more across bars based on symmetry settings
+  function updateAcrossBars(div) {
+    var id = div.id.split("-");
+    var row = parseInt(id[1]);
+    var col = parseInt(id[2]);
+    var bars = getSymmetricalBars("across", row, col);
+    for (bar of bars) {
+      if (bar[0] == "across") {
+        updateAcrossBar(bar[1], bar[2]);
+      } else if (bar[0] == "down") {
+        updateDownBar(bar[1], bar[2]);
+      }
+    }
   }
 
   // update an individual answer
@@ -1397,20 +1481,31 @@ let puzzle = {
   }
 
   // update a down bar
-  function updateDownBar(div) {
-    var id = div.id.split("-");
-    var row = parseInt(id[1]);
-    var col = parseInt(id[2]);
+  function updateDownBar(row, col) {
     if (puzzle.down_bars[row][col]) {
-      console.log("Disabling Down Bar: " + id);
+      console.log("Disabling Down Bar: " + row + "-" + col);
       puzzle.down_bars[row][col] = false;
     } else {
-      console.log("Enabling Down Bar: " + id);
+      console.log("Enabling Down Bar: " + row + "-" + col);
       puzzle.down_bars[row][col] = true;
     }
     createGrid();
   }
 
+  // update one or more down bars based on symmetry settings
+  function updateDownBars(div) {
+    var id = div.id.split("-");
+    var row = parseInt(id[1]);
+    var col = parseInt(id[2]);
+    var bars = getSymmetricalBars("down", row, col);
+    for (bar of bars) {
+      if (bar[0] == "across") {
+        updateAcrossBar(bar[1], bar[2]);
+      } else if (bar[0] == "down") {
+        updateDownBar(bar[1], bar[2]);
+      }
+    }
+  }
 
   // update the size of the grid after changing the dimensions
   function updateGridSize(select) {
@@ -1547,4 +1642,3 @@ let puzzle = {
     var input = document.getElementById("upload-json-button");
     input.click();
   }
-
