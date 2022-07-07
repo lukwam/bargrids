@@ -2,7 +2,7 @@
   "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
-    <title></title>
+    <title>BarGrids</title>
     <link rel="stylesheet" href="/bargrids/styles.css">
     <script type="text/javascript" src="/bargrids/script.js"></script>
   </head>
@@ -67,14 +67,19 @@
       </div>
 
       <!-- Upload Tools -->
-      <div id="upload-json-tool"class="control-container controls__layers">
-        <input type="file" id="upload-json-button" class="hidden" onchange="uploadJSONFile(this);">
-        <button class="upload-button" onclick="uploadJSONFileButton();">Load JSON</button>
-      </div>
-
       <div id="upload-eps-tool"class="control-container controls__layers">
         <input type="file" id="upload-eps-button" class="hidden" onchange="uploadEPSFile(this);">
         <button class="upload-button" onclick="uploadEPSFileButton();">Load EPS</button>
+      </div>
+
+      <!-- <div id="upload-json-tool"class="control-container controls__layers">
+        <input type="file" id="upload-json-button" class="hidden" onchange="uploadJSONFile(this);">
+        <button class="upload-button" onclick="uploadJSONFileButton();">Load JSON</button>
+      </div> -->
+
+      <div id="upload-svg-tool"class="control-container controls__layers">
+        <input type="file" id="upload-svg-button" class="hidden" onchange="uploadSVGFile(this);">
+        <button class="upload-button" onclick="uploadSVGFileButton();">Load SVG</button>
       </div>
 
       <!-- Grid Toolbar -->
@@ -221,10 +226,10 @@
       </div>
 
       <!-- Save Tools -->
-      <div id="save-json-tool" class="control-container controls__layers hidden">
+      <!-- <div id="save-json-tool" class="control-container controls__layers hidden">
         <button id="save-json-button" class="download-button" onclick="saveJSON();">Save JSON</button>
         <a id="json-download" class="hidden"></a>
-      </div>
+      </div> -->
 
       <div id="save-svg-tool"class="control-container controls__layers hidden">
         <button id="save-svg-button" class="download-button" onclick="saveSVG();">Save SVG</button>

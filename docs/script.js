@@ -1,3 +1,10 @@
+// Javascript file for Bargrids
+
+// set xml namespaces
+const svgns = "http://www.w3.org/2000/svg"
+const xlinkns = "http://www.w3.org/1999/xlink";
+const xmlns = "http://www.w3.org/2000/xmlns/";
+
 // define a basic puzzle
 let puzzle = {
     //title
@@ -436,7 +443,8 @@ let puzzle = {
     createSVGShadeSquares(svg);
     createSVGShadeCircles(svg);
     createSVGCircles(svg);
-    createSVGBars(svg);
+    createSVGAcrossBars(svg);
+    createSVGDownBars(svg);
     if (puzzle.bar_join_caps) {
       createSVGBarJoinCaps(svg);
     }
@@ -447,30 +455,36 @@ let puzzle = {
 
   // create the answers for the SVG
   function createSVGAnswers(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-answers";
+    group.setAttribute("fill", "black");
+    group.setAttribute("font-family", "helvetica");
+    group.setAttribute("font-size", "24px");
+    group.setAttribute("text-anchor", "middle");
+
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.answers[row][col]) {
-          let text = document.createElementNS(ns, "text");
+          let text = document.createElementNS(svgns, "text");
           text.id = "svg-answer-" + row + "-" + col;
+          text.setAttribute("data-col", col);
+          text.setAttribute("data-row", row);
           text.setAttribute("x", col * puzzle.size + puzzle.size/2);
           text.setAttribute("y", row * puzzle.size + puzzle.size/2);
+          // not currently inherited in all browsers
           text.setAttribute("dominant-baseline", "central");
-          text.setAttribute("fill", "black");
-          text.setAttribute("font-family", "helvetica");
-          text.setAttribute("font-size", "24px");
-          text.setAttribute("text-anchor", "middle");
-          text.classList.add("grid__answer");
           text.innerHTML = puzzle.answers[row][col];
-          svg.appendChild(text);
+          group.appendChild(text);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   // create the bar join caps for the SVG
   function createSVGBarJoinCaps(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-barjoincaps";
     for (let row = 1; row < puzzle.rows - 1; row++) {
       for (let col = 1; col < puzzle.cols - 1; col++) {
         if (
@@ -478,120 +492,147 @@ let puzzle = {
             &&
             (puzzle.down_bars[row][col-1] || puzzle.down_bars[row][col])
           ) {
-          let rect = document.createElementNS(ns, "rect");
+          let rect = document.createElementNS(svgns, "use");
+          rect.id = "svg-barjoincap-" + row + "-" + col;
+          rect.setAttributeNS(xlinkns, "href", "#svg-barjoincap");
+          rect.setAttribute("data-col", col);
+          rect.setAttribute("data-row", row);
           rect.setAttribute("x", col * puzzle.size - 2);
           rect.setAttribute("y", row * puzzle.size - 2);
-          rect.setAttribute("height", 4);
-          rect.setAttribute("width", 4);
-          rect.setAttribute("fill", "black");
-          rect.classList.add("grid__bar");
-          rect.classList.add("grid__bar--joincap");
-          svg.appendChild(rect);
+          group.appendChild(rect);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   // create the bars for the svg
-  function createSVGBars(svg) {
-    const ns = svg.namespaceURI;
-
-    // create bars for across clues
+  function createSVGAcrossBars(svg) {
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-acrossbars";
+    group.setAttribute("stroke", "black");
+    group.setAttribute("stroke-width", "4px");
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 1; col < puzzle.cols; col++) {
         if (puzzle.across_bars[row][col]) {
-          let line = document.createElementNS(ns, "line");
+          let line = document.createElementNS(svgns, "line");
           line.id = "svg-acrossbar-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
           line.setAttribute("x1", col * puzzle.size);
           line.setAttribute("y1", row * puzzle.size);
           line.setAttribute("x2", col * puzzle.size);
           line.setAttribute("y2", row * puzzle.size + puzzle.size);
-          line.setAttribute("stroke", "black");
-          line.setAttribute("stroke-width", "4px");
-          line.classList.add("grid__bar");
-          line.classList.add("grid__bar--across");
-          svg.appendChild(line);
+          group.appendChild(line);
         }
       }
     }
+    svg.appendChild(group);
+  }
 
-    // create bars for down clues
+  function createSVGDownBars(svg) {
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-downbars";
+    group.setAttribute("stroke", "black");
+    group.setAttribute("stroke-width", "4px");
     for (let col = 0; col < puzzle.cols; col++) {
-      for (let row = 1; row < puzzle.rows; row++) {
+      for (let row = 0; row < puzzle.rows; row++) {
         if (puzzle.down_bars[row][col]) {
-          let line = document.createElementNS(ns, "line");
+          let line = document.createElementNS(svgns, "line");
           line.id = "svg-downbar-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
           line.setAttribute("x1", col * puzzle.size);
           line.setAttribute("y1", row * puzzle.size);
           line.setAttribute("x2", col * puzzle.size + puzzle.size);
           line.setAttribute("y2", row * puzzle.size);
-          line.setAttribute("stroke", "black");
-          line.setAttribute("stroke-width", "4px");
-          line.classList.add("grid__bar");
-          line.classList.add("grid__bar--down");
-          svg.appendChild(line);
+          group.appendChild(line);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   // create the circles for the SVG
   function createSVGCircles(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-circles";
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.circles[row][col]) {
-          let circle = document.createElementNS(ns, "circle");
+          let circle = document.createElementNS(svgns, "use");
           circle.id = "svg-circle-" + col + "-" + row;
-          circle.setAttribute("cx", col * puzzle.size + puzzle.size/2);
-          circle.setAttribute("cy", row * puzzle.size + puzzle.size/2);
-          circle.setAttribute("r", puzzle.size/2 - 3);
-          circle.setAttribute("stroke", "black");
-          circle.setAttribute("stroke-width", "1px");
-          circle.setAttribute("fill", "transparent");
-          circle.classList.add("grid__circle");
-          svg.appendChild(circle);
+          circle.setAttributeNS(xlinkns, "href", "#svg-circle");
+          circle.setAttribute("data-col", col);
+          circle.setAttribute("data-row", row);
+          circle.setAttribute("x", col * puzzle.size + puzzle.size/2);
+          circle.setAttribute("y", row * puzzle.size + puzzle.size/2);
+          group.appendChild(circle);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   // create the basic SVG element that contains the other elements
   function createSVGElement() {
-    const ns = "http://www.w3.org/2000/svg"
-    var svg = document.createElementNS(ns, "svg");
+    var svg = document.createElementNS(svgns, "svg");
     svg.id = "grid";
-    svg.setAttribute("style", "border: 4px solid black");
-    svg.setAttribute("fill", "white");
+
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+
+    // set data attributes with puzzle info
+    svg.setAttribute("data-title", puzzle.title);
+    svg.setAttribute("data-rows", puzzle.rows);
+    svg.setAttribute("data-cols", puzzle.cols);
+    svg.setAttribute("data-size", puzzle.size);
+    svg.setAttribute("data-creator", "BarGrids");
+
+    // set visual attributes
     svg.setAttribute("height", puzzle.rows * puzzle.size);
     svg.setAttribute("width", puzzle.cols * puzzle.size);
-    svg.setAttributeNS(
-      "http://www.w3.org/2000/xmlns/",
-      "xmlns:xlink",
-      "http://www.w3.org/1999/xlink"
-    );
+    svg.setAttribute("fill", "white");
+    svg.setAttribute("style", "border: 4px solid black");
+
+    // set the title
+    var title = document.createElementNS(svgns, "title");
+    title.innerHTML = puzzle.title;
+    svg.appendChild(title);
+
+    // set the description
+    var desc = document.createElementNS(svgns, "desc");
+    desc.innerHTML = "Created by BarGrids - https://github.com/lukwam/bargrids";
+    svg.appendChild(desc);
+
+    // create defs of re-usable objects
+    defineGridObjects(svg);
+
     return svg;
   }
 
   // create the numbers for the SVG
   function createSVGNumbers(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-numbers";
+    group.setAttribute("fill", "black");
+    group.setAttribute("font-family", "helvetica");
+    group.setAttribute("font-size", "14px");
+
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.numbers[row][col]) {
-          let text = document.createElementNS(ns, "text");
+          let text = document.createElementNS(svgns, "text");
           text.id = "svg-number-" + row + "-" + col;
+          text.setAttribute("data-col", col);
+          text.setAttribute("data-row", row);
           text.setAttribute("x", col * puzzle.size + 4);
           text.setAttribute("y", row * puzzle.size + 15);
-          text.setAttribute("fill", "black");
-          text.setAttribute("font-family", "helvetica");
-          text.setAttribute("font-size", "14px");
-          text.classList.add("grid__number");
           text.innerHTML = puzzle.numbers[row][col];
-          svg.appendChild(text);
+          group.appendChild(text);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   function createSVGSource(svg) {
@@ -615,65 +656,183 @@ let puzzle = {
 
   // create the basic squares for the SVG
   function createSVGSquares(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-squares";
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
-        let rect = document.createElementNS(ns, "rect");
-        rect.id = "square-" + row + "-" + col;
+        let rect = document.createElementNS(svgns, "use");
+        rect.id = "svg-square-" + row + "-" + col;
+        rect.setAttributeNS(xlinkns, "href", "#svg-square");
+        rect.setAttribute("data-col", col);
+        rect.setAttribute("data-row", col);
         rect.setAttribute("x", col * puzzle.size);
         rect.setAttribute("y", row * puzzle.size);
-        rect.setAttribute("height", puzzle.size);
-        rect.setAttribute("width", puzzle.size);
-        rect.setAttribute("stroke", "black");
-        rect.setAttribute("stroke-width", "1px");
-        rect.setAttribute("fill", "white");
-        rect.classList.add("grid__square");
-        svg.appendChild(rect);
+        group.appendChild(rect);
       }
     }
+    svg.appendChild(group);
   }
 
   // create the shade cirlces for the SVG
   function createSVGShadeCircles(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-shadecircles";
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.shade_circles[row][col]) {
           var shade = getShade(puzzle.shade_circles[row][col]);
-          let circle = document.createElementNS(ns, "circle");
+          let circle = document.createElementNS(svgns, "use");
           circle.id = "svg-shadecircle-" + row + "-" + col;
-          circle.setAttribute("cx", col * puzzle.size + puzzle.size/2);
-          circle.setAttribute("cy", row * puzzle.size + puzzle.size/2);
-          circle.setAttribute("r", puzzle.size/2 - 3);
+          circle.setAttributeNS(xlinkns, "href", "#svg-shadecircle");
+          circle.setAttribute("data-col", col);
+          circle.setAttribute("data-row", row);
+          circle.setAttribute("data-value", puzzle.shade_circles[row][col]);
+          circle.setAttribute("x", col * puzzle.size + puzzle.size/2);
+          circle.setAttribute("y", row * puzzle.size + puzzle.size/2);
           circle.setAttribute("fill", shade);
-          circle.classList.add("grid__shadecircle");
-          svg.appendChild(circle);
+          group.appendChild(circle);
         }
       }
     }
+    svg.appendChild(group);
   }
 
   // create the shade squares for the SVG
   function createSVGShadeSquares(svg) {
-    const ns = svg.namespaceURI;
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-shadesquares";
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
         if (puzzle.shade_squares[row][col]) {
           var shade = getShade(puzzle.shade_squares[row][col]);
-          let rect = document.createElementNS(ns, "rect");
+          let rect = document.createElementNS(svgns, "use");
           rect.id = "svg-shadesquare-" + row + "-" + col;
+          rect.setAttributeNS(xlinkns, "href", "#svg-shadesquare");
+          rect.setAttribute("data-col", col);
+          rect.setAttribute("data-row", row);
+          rect.setAttribute("data-value", puzzle.shade_squares[row][col]);
           rect.setAttribute("x", col * puzzle.size);
           rect.setAttribute("y", row * puzzle.size);
-          rect.setAttribute("height", puzzle.size);
-          rect.setAttribute("width", puzzle.size);
-          rect.setAttribute("stroke", "black");
-          rect.setAttribute("stroke-width", "1px");
           rect.setAttribute("fill", shade);
-          rect.classList.add("grid__shadesquare");
-          svg.appendChild(rect);
+          group.appendChild(rect);
         }
       }
     }
+    svg.appendChild(group);
+  }
+
+  // define an individual grid answer for the SVG
+  // function defineGridAnswer(defs) {
+  //   let text = document.createElementNS(svgns, "text");
+  //   text.id = "svg-answer";
+  //   text.setAttribute("dominant-baseline", "central");
+  //   text.setAttribute("fill", "black");
+  //   text.setAttribute("font-family", "helvetica");
+  //   text.setAttribute("font-size", "24px");
+  //   text.setAttribute("text-anchor", "middle");
+  //   text.setAttribute("x", 0);
+  //   text.setAttribute("y", 0);
+  //   defs.appendChild(text);
+  // }
+
+  // define an individual grid bar for the svg
+  // function defineGridBar(defs) {
+  //   let line = document.createElementNS(svgns, "line");
+  //   line.id = "svg-bar";
+  //   line.setAttribute("stroke", "black");
+  //   line.setAttribute("stroke-width", "4px");
+  //   line.setAttribute("x", 0);
+  //   line.setAttribute("y", 0);
+  //   defs.appendChild(line);
+  // }
+
+  // define an individual grid bar join cap for the svg
+  function defineGridBarJoinCap(defs) {
+    let rect = document.createElementNS(svgns, "rect");
+    rect.id = "svg-barjoincap";
+    rect.setAttribute("fill", "black");
+    rect.setAttribute("height", 4);
+    rect.setAttribute("width", 4);
+    rect.setAttribute("x", 0);
+    rect.setAttribute("y", 0);
+    defs.appendChild(rect);
+  }
+
+  // define an individual grid circle for the SVG
+  function defineGridCircle(defs) {
+    let circle = document.createElementNS(svgns, "circle");
+    circle.id = "svg-circle";
+    circle.setAttribute("r", puzzle.size/2 - 3);
+    circle.setAttribute("fill", "transparent");
+    circle.setAttribute("stroke", "black");
+    circle.setAttribute("stroke-width", "1px");
+    defs.appendChild(circle);
+  }
+
+  // define an individual grid number for the SVG
+  // function defineGridNumber(defs) {
+  //   let text = document.createElementNS(svgns, "text");
+  //   text.id = "svg-number";
+  //   text.setAttribute("fill", "black");
+  //   text.setAttribute("font-family", "helvetica");
+  //   text.setAttribute("font-size", "14px");
+  //   text.setAttribute("x", 0);
+  //   text.setAttribute("y", 0);
+  //   defs.appendChild(text);
+  // }
+
+  // define a set of objects for the grid SVG
+  function defineGridObjects(svg) {
+    var defs = document.createElementNS(svgns, "defs");
+
+    // circle elements
+    defineGridCircle(defs);
+    defineGridShadeCircle(defs);
+
+    // line elements
+    // defineGridBar(defs);
+
+    // rectangle elements
+    defineGridBarJoinCap(defs);
+    defineGridShadeSquare(defs);
+    defineGridSquare(defs);
+
+    // text elements
+    // defineGridAnswer(defs);
+    // defineGridNumber(defs);
+
+    svg.appendChild(defs);
+  }
+
+  // define an individual grid square for the SVG
+  function defineGridSquare(defs) {
+    let rect = document.createElementNS(svgns, "rect");
+    rect.id = "svg-square";
+    rect.setAttribute("fill", "white");
+    rect.setAttribute("height", puzzle.size);
+    rect.setAttribute("width", puzzle.size);
+    rect.setAttribute("stroke", "black");
+    rect.setAttribute("stroke-width", "1px");
+    defs.appendChild(rect);
+  }
+
+   // define an individual grid shade circle for the SVG
+   function defineGridShadeCircle(defs) {
+    let circle = document.createElementNS(svgns, "circle");
+    circle.id = "svg-shadecircle";
+    circle.setAttribute("r", puzzle.size/2 - 3);
+    defs.appendChild(circle);
+  }
+
+  // define an individual grid shade square for the SVG
+  function defineGridShadeSquare(defs) {
+    let rect = document.createElementNS(svgns, "rect");
+    rect.id = "svg-shadesquare";
+    rect.setAttribute("height", puzzle.size);
+    rect.setAttribute("width", puzzle.size);
+    rect.setAttribute("stroke", "black");
+    rect.setAttribute("stroke-width", "1px");
+    defs.appendChild(rect);
   }
 
   // disable a tool and layer by div
@@ -933,70 +1092,55 @@ let puzzle = {
   // hide the answers from the svg
   function hideAnswers() {
     console.log("Hiding all Answers");
-    var inputs = document.getElementsByClassName("grid__answer");
-    for (input of inputs) {
-      input.classList.add("hidden");
-    }
+    document.getElementById("svg-answers").classList.add("hidden");
   }
 
   // hide the bars and bar join caps from the svg
   function hideBars() {
     console.log("Hiding all Bars");
-    var bar_squares = document.getElementsByClassName("grid__bar");
-    for (square of bar_squares) {
-      square.classList.add("hidden");
-    }
+    document.getElementById("svg-acrossbars").classList.add("hidden");
+    document.getElementById("svg-downbars").classList.add("hidden");
+    document.getElementById("svg-barjoincaps").classList.add("hidden");
   }
 
   // hid the circles from the svg
   function hideCircles() {
     console.log("Hiding all Circles");
-    var circle_squares = document.getElementsByClassName("grid__circle");
-    for (square of circle_squares) {
-      square.classList.add("hidden");
-    }
+    document.getElementById("svg-circles").classList.add("hidden");
   }
 
   // hide the grid size conntrols and enable the other tools
   function hideGridSizeControls() {
     console.log("Hiding Grid Size controls")
     document.getElementById("grid-size-control-container").classList.add("hidden");
-    document.getElementById("upload-json-tool").classList.add("hidden");
     document.getElementById("upload-eps-tool").classList.add("hidden");
+    // document.getElementById("upload-json-tool").classList.add("hidden");
+    document.getElementById("upload-svg-tool").classList.add("hidden");
     console.log("Displaying Grid Toolbar, Layers Tool, Downloads Tool, and SVG Tool")
     document.getElementById("grid-toolbar").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-settings").classList.remove("hidden");
     document.getElementById("layers-tool").classList.remove("hidden");
     document.getElementById("bar-join-caps-tool").classList.remove("hidden");
-    document.getElementById("save-json-tool").classList.remove("hidden");
+    // document.getElementById("save-json-tool").classList.remove("hidden");
     document.getElementById("save-svg-tool").classList.remove("hidden");
   }
 
   // hide the numbers from the svg
   function hideNumbers() {
     console.log("Hiding all Numbers");
-    var inputs = document.getElementsByClassName("grid__number");
-    for (input of inputs) {
-      input.classList.add("hidden");
-    }
+    document.getElementById("svg-numbers").classList.add("hidden");
   }
 
   // hide the shade circles from the svg
   function hideShadeCircles() {
     console.log("Hiding all Shade Circles");
-    var shadecirecle_squares = document.getElementsByClassName("grid__shadecircle");
-    for (square of shadecirecle_squares) {
-      square.classList.add("hidden");
-    }
+    document.getElementById("svg-shadecircles").classList.add("hidden");
   }
 
   // hide the shide squares from the svg
   function hideShadeSquares() {
     console.log("Hiding all Shade Squares");
-    var shadesquare_squares = document.getElementsByClassName("grid__shadesquare");
-    for (square of shadesquare_squares) {
-      square.classList.add("hidden");
-    }
+    document.getElementById("svg-shadesquares").classList.add("hidden");
   }
 
   // initialize a new puzzle based on the dimensions
@@ -1194,8 +1338,84 @@ let puzzle = {
     }
     createGrid();
     hideGridSizeControls();
-    console.log("Bar Join Caps: " + puzzle.bar_join_caps);
     document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
+  }
+
+  // parse an SVG file
+  function parseSVG(string) {
+    var parser = new DOMParser();
+    var svg = parser.parseFromString(string, "image/svg+xml").documentElement;
+
+    // import basic data
+    puzzle.cols = parseInt(svg.getAttribute("data-cols"));
+    puzzle.rows = parseInt(svg.getAttribute("data-rows"));
+    puzzle.title = svg.getAttribute("data-title");
+
+    // initialize the puzzle data
+    initPuzzle();
+
+    // import answers
+    var answers = svg.getElementById("svg-answers");
+    for (answer of answers.children) {
+      var col = parseInt(answer.getAttribute("data-col"));
+      var row = parseInt(answer.getAttribute("data-row"));
+      puzzle.answers[row][col] = answer.innerHTML;
+    }
+
+    // import numbers
+    var numbers = svg.getElementById("svg-numbers");
+    for (number of numbers.children) {
+      var col = parseInt(number.getAttribute("data-col"));
+      var row = parseInt(number.getAttribute("data-row"));
+      puzzle.numbers[row][col] = number.innerHTML;
+    }
+
+    var across_bars = svg.getElementById("svg-acrossbars");
+    for (across_bar of across_bars.children) {
+      var col = parseInt(across_bar.getAttribute("data-col"));
+      var row = parseInt(across_bar.getAttribute("data-row"));
+      puzzle.across_bars[row][col] = true;
+    }
+
+    var down_bars = svg.getElementById("svg-downbars");
+    for (down_bar of down_bars.children) {
+      var col = parseInt(down_bar.getAttribute("data-col"));
+      var row = parseInt(down_bar.getAttribute("data-row"));
+      puzzle.down_bars[row][col] = true;
+    }
+
+    var barjoincaps = svg.getElementById("svg-barjoincaps");
+    if (!barjoincaps.children) {
+      puzzle.bar_join_caps = false;
+    }
+
+    var circles = svg.getElementById("svg-circles");
+    for (circle of circles.children) {
+      var col = parseInt(circle.getAttribute("data-col"));
+      var row = parseInt(circle.getAttribute("data-row"));
+      puzzle.circles[row][col] = true;
+    }
+
+    var shade_squares = svg.getElementById("svg-shadesquares");
+    console.log(shade_squares);
+    for (shade_square of shade_squares.children) {
+      var col = parseInt(shade_square.getAttribute("data-col"));
+      var row = parseInt(shade_square.getAttribute("data-row"));
+      puzzle.shade_squares[row][col] = parseInt(shade_square.getAttribute("data-value"));;
+    }
+
+    var shade_circles = svg.getElementById("svg-shadecircles");
+    for (shade_circle of shade_circles.children) {
+      var col = parseInt(shade_circle.getAttribute("data-col"));
+      var row = parseInt(shade_circle.getAttribute("data-row"));
+      puzzle.shade_circles[row][col] = parseInt(shade_circle.getAttribute("data-value"));
+    }
+
+    createGrid();
+    hideGridSizeControls();
+    document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
+
+
   }
 
   // remove all children from an element by ID
@@ -1282,55 +1502,63 @@ let puzzle = {
   // show svg answers layer
   function showAnswers() {
     console.log("Showing all Answers");
-    var inputs = document.getElementsByClassName("grid__answer");
-    for (input of inputs) {
-      input.classList.remove("hidden");
-    }
+    document.getElementById("svg-answers").classList.remove("hidden");
+    // var inputs = document.getElementsByClassName("grid__answer");
+    // for (input of inputs) {
+    //   input.classList.remove("hidden");
+    // }
   }
 
   // show svg bars layer
   function showBars() {
     console.log("Showing all Bars");
-    var bar_squares = document.getElementsByClassName("grid__bar");
-    for (square of bar_squares) {
-      square.classList.remove("hidden");
-    }
+    document.getElementById("svg-acrossbars").classList.remove("hidden");
+    document.getElementById("svg-downbars").classList.remove("hidden");
+    document.getElementById("svg-barjoincaps").classList.remove("hidden");
+    // var bar_squares = document.getElementsByClassName("grid__bar");
+    // for (square of bar_squares) {
+    //   square.classList.remove("hidden");
+    // }
   }
 
   // show svg circles layer
   function showCircles() {
     console.log("Showing all Circles");
-    var circle_squares = document.getElementsByClassName("grid__circle");
-    for (square of circle_squares) {
-      square.classList.remove("hidden");
-    }
+    document.getElementById("svg-circles").classList.remove("hidden");
+    // var circle_squares = document.getElementsByClassName("grid__circle");
+    // for (square of circle_squares) {
+    //   square.classList.remove("hidden");
+    // }
   }
 
   // show svg numbers layer
   function showNumbers() {
     console.log("Showing all Numbers");
-    var inputs = document.getElementsByClassName("grid__number");
-    for (input of inputs) {
-      input.classList.remove("hidden");
-    }
+    document.getElementById("svg-numbers").classList.remove("hidden");
+    // var inputs = document.getElementsByClassName("grid__number");
+    // for (input of inputs) {
+    //   input.classList.remove("hidden");
+    // }
   }
 
   // show svg shade circles layer
   function showShadeCircles() {
     console.log("Showing all Shade Circles");
-    var shadecirecle_squares = document.getElementsByClassName("grid__shadecircle");
-    for (square of shadecirecle_squares) {
-      square.classList.remove("hidden");
-    }
+    document.getElementById("svg-shadecircles").classList.remove("hidden");
+    // var shadecirecle_squares = document.getElementsByClassName("grid__shadecircle");
+    // for (square of shadecirecle_squares) {
+    //   square.classList.remove("hidden");
+    // }
   }
 
   // show svg shade squares layer
   function showShadeSquares() {
     console.log("Showing all Shade Squares");
-    var shadesquare_squares = document.getElementsByClassName("grid__shadesquare");
-    for (square of shadesquare_squares) {
-      square.classList.remove("hidden");
-    }
+    document.getElementById("svg-shadesquares").classList.remove("hidden");
+    // var shadesquare_squares = document.getElementsByClassName("grid__shadesquare");
+    // for (square of shadesquare_squares) {
+    //   square.classList.remove("hidden");
+    // }
   }
 
   // toggle svg answers layer
@@ -1593,6 +1821,7 @@ let puzzle = {
     console.log("Updating Title: " + title);
     puzzle.title = title;
     document.title = title;
+    createGrid();
   }
 
   // upload an eps file
@@ -1640,5 +1869,27 @@ let puzzle = {
   // click the json upload button
   function uploadJSONFileButton() {
     var input = document.getElementById("upload-json-button");
+    input.click();
+  }
+
+  // upload an svg file
+  function uploadSVGFile(input) {
+    var file = input.files[0];
+    var filename = file.name;
+    console.log("File Name: " + filename);
+
+    var reader = new FileReader();
+    reader.readAsText(file, "UTF-8");
+    reader.onload = function (event) {
+      parseSVG(event.target.result);
+    }
+    reader.onerror = function (event) {
+        alert("Error reading file: " + filename);
+    }
+  }
+
+  // click the upload svg button
+  function uploadSVGFileButton() {
+    var input = document.getElementById("upload-svg-button");
     input.click();
   }
