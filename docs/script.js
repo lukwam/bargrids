@@ -308,8 +308,9 @@ let puzzle = {
         if (puzzle.answers[row][col]) {
           answer.value = puzzle.answers[row][col];
         }
-        answer.addEventListener("focusin", (event) => {focusInput(event.target);});
-        answer.addEventListener("keyup", (event) => {updateAnswer(event)});
+        answer.addEventListener("change", (event) => {updateAnswer(event)});
+        answer.addEventListener("focusin", (event) => {event.target.focus()});
+        answer.addEventListener("keyup", (event) => {nextInput(event)});
         answer.classList.add("grid__answer__input");
         answer.style["left"] = (50 * col + 2) + "px";
         answer.style["top"] = (50 * row + 2) + "px";
@@ -384,8 +385,10 @@ let puzzle = {
         if (puzzle.numbers[row][col]) {
           number.value = puzzle.numbers[row][col];
         }
-        number.addEventListener("focusin", (event) => {focusInput(event.target);});
-        number.addEventListener("keyup", (event) => {updateNumber(event)});
+        number.addEventListener("focusin", (event) => {event.target.focus()});
+        number.addEventListener("keyup", (event) => {nextInput(event)});
+        number.addEventListener("change", (event) => {updateNumber(event)});
+
         number.classList.add("grid__number__input");
         number.style["left"] = (50 * col + 2) + "px";
         number.style["top"] = (50 * row + 2) + "px";
