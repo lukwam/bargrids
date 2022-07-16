@@ -488,8 +488,8 @@ let puzzle = {
   function createSVGBarJoinCaps(svg) {
     var group = document.createElementNS(svgns, "g");
     group.id = "svg-barjoincaps";
-    for (let row = 1; row < puzzle.rows - 1; row++) {
-      for (let col = 1; col < puzzle.cols - 1; col++) {
+    for (let row = 1; row < puzzle.rows; row++) {
+      for (let col = 1; col < puzzle.cols; col++) {
         if (
             (puzzle.across_bars[row-1][col] || puzzle.across_bars[row][col])
             &&
