@@ -157,8 +157,9 @@ let puzzle = {
     for (let row=0; row<puzzle.rows; row++) {
       word = "";
       for (let col=0; col<puzzle.cols; col++) {
-        // skip blanks
+        // skip blanks and blocks
         if (puzzle.blanks[row][col]) { continue; }
+        if (puzzle.blocks[row][col]) { continue; }
         // append to word
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
@@ -166,7 +167,7 @@ let puzzle = {
           word += " ";
         }
         // end of answer
-        if (puzzle.across_bars[row][col+1] || puzzle.blanks[row][col+1]) {
+        if (puzzle.across_bars[row][col+1] || puzzle.blanks[row][col+1] || puzzle.blocks[row][col+1]) {
           if (word.length > 1) {
             x = col - word.length + 1;
             y = row;
@@ -190,8 +191,9 @@ let puzzle = {
     for (let col=0; col<puzzle.cols; col++) {
       word = "";
       for (let row=0; row<puzzle.rows; row++) {
-        // skip blanks
+        // skip blanks and blocks
         if (puzzle.blanks[row][col]) { continue; }
+        if (puzzle.blocks[row][col]) { continue; }
         // append to word
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
@@ -199,7 +201,11 @@ let puzzle = {
           word += " ";
         }
         // end of answer
-        if (puzzle.down_bars[row+1] && (puzzle.down_bars[row+1][col] || puzzle.blanks[row+1][col])) {
+        if (
+          (puzzle.down_bars[row+1] && puzzle.down_bars[row+1][col])
+          || (puzzle.blanks[row+1] && puzzle.blanks[row+1][col])
+          || (puzzle.blocks[row+1] && puzzle.blocks[row+1][col])
+        ) {
           if (word.length > 1) {
             x = col;
             y = row - word.length + 1;
