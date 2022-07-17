@@ -100,7 +100,6 @@
   padding: 2px;
   position: absolute;
   text-align: center;
-  text-transform: uppercase;
 }
 .grid__bar:hover {
   background: lightblue;
@@ -117,7 +116,6 @@
   padding: 2px;
   position: absolute;
   text-align: left;
-  text-transform: uppercase;
   vertical-align: top;
 }
 .grid__number__input:focus {

@@ -270,10 +270,7 @@ let puzzle = {
     document.title = puzzle.title;
     document.getElementById("title").value = puzzle.title;
 
-    // create the new grid SVG and replace existing grid
-    var grid = document.getElementById("grid");
-    var svg = createSVG();
-    grid.parentNode.replaceChild(svg, grid);
+    createGridSVG();
 
     // create the interactive layers
     createAnswers();
@@ -297,6 +294,14 @@ let puzzle = {
     }
   }
 
+  // create/update the SVG in the grid
+  function createGridSVG() {
+    // create the new grid SVG and replace existing grid
+    var grid = document.getElementById("grid");
+    var svg = createSVG();
+    grid.parentNode.replaceChild(svg, grid);
+  }
+
   // create answers interface layer
   function createAnswers() {
     var answers = document.getElementById("grid-answers-layer");
@@ -309,7 +314,7 @@ let puzzle = {
           answer.value = puzzle.answers[row][col];
         }
         answer.addEventListener("change", (event) => {updateAnswer(event)});
-        answer.addEventListener("focusin", (event) => {event.target.focus()});
+        answer.addEventListener("focus", (event) => {event.target.select()});
         answer.addEventListener("keyup", (event) => {nextInput(event)});
         answer.classList.add("grid__answer__input");
         answer.style["left"] = (50 * col + 2) + "px";
@@ -385,10 +390,9 @@ let puzzle = {
         if (puzzle.numbers[row][col]) {
           number.value = puzzle.numbers[row][col];
         }
-        number.addEventListener("focusin", (event) => {event.target.focus()});
-        number.addEventListener("keyup", (event) => {nextInput(event)});
         number.addEventListener("change", (event) => {updateNumber(event)});
-
+        number.addEventListener("focus", (event) => {event.target.select()});
+        number.addEventListener("keyup", (event) => {nextInput(event)});
         number.classList.add("grid__number__input");
         number.style["left"] = (50 * col + 2) + "px";
         number.style["top"] = (50 * row + 2) + "px";
@@ -1165,38 +1169,64 @@ let puzzle = {
     var name = id[0];
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
-    input.focus();
+
+    // input.focus();
+
     console.log("Key Pressed: " + key);
-    if (key == 9) {
-      // do nothing for tab
-    } else if ([8, 37].includes(key)) {
-      // previous input for delete and left arrow
+
+    // do nothing for special keys
+    if ([9, 16, 17, 18, 20, 32, 91, 93].includes(key)) {}
+
+    // left-arrow = previous sibling (if exists)
+    else if (key == 37) {
       if (input.previousSibling && input.previousSibling.focus) {
         input.previousSibling.focus();
+        input.previousSibling.select();
       }
-    } else if (key == 38) {
-      // move to previous row for up-arrow
+    }
+
+    // up-arrow = previous row (if exists)
+    else if (key == 38) {
       div = document.getElementById(name + "-" + (row - 1) + "-" + col);
       if (div && div.focus) {
         div.focus();
+        div.select();
       }
-    } else if (key == 39) {
-      // move to next row for down-arrow
+    }
+
+    // right-arrow = next sibling (if exists)
+    else if (key == 39) {
       if (input.nextSibling && input.nextSibling.focus) {
         input.nextSibling.focus();
+        input.nextSibling.select();
       }
-    } else if (key == 40) {
-      // next input for right-arrow
+    }
+
+    // down-arrow = next row (if exists)
+    else if (key == 40) {
       div = document.getElementById(name + "-" + (row + 1) + "-" + col);
       if (div && div.focus) {
         div.focus();
-      }
-    } else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
-      // next input for everything else
-      if (input.nextSibling && input.nextSibling.focus) {
-        input.nextSibling.focus();
+        div.select()
       }
     }
+
+    // delete = previous input (if current input is empty and previous input exists)
+    else if (key == 8 && input.value.length == 0) {
+      if (input.previousSibling && input.previousSibling.focus) {
+        input.previousSibling.focus();
+        input.previousSibling.select();
+      }
+    }
+
+    // otherwise, if input is full, move to next input
+    else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
+      if (input.nextSibling && input.nextSibling.focus) {
+        input.nextSibling.focus();
+        input.nextSibling.select();
+      }
+    }
+
   }
 
   // parse an EPS file created by BarGrids 2
@@ -1692,8 +1722,8 @@ let puzzle = {
     var col = parseInt(id[2]);
     console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
     puzzle.answers[row][col] = answer;
-    createGrid();
-    nextInput(event);
+    createGridSVG();
+    // nextInput(event);
   }
 
   // update a circle
@@ -1768,8 +1798,8 @@ let puzzle = {
     var col = parseInt(id[2]);
     console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
     puzzle.numbers[row][col] = number;
-    createGrid();
-    nextInput(event);
+    createGridSVG();
+    // nextInput(event);
   }
 
   // update a shade circle
