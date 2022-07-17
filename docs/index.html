@@ -35,6 +35,12 @@
       <!-- Grid Circles Layer -->
       <div id="grid-circles-layer" class="grid__circles__layer hidden"></div>
 
+      <!-- Grid Blocks Layer -->
+      <div id="grid-blocks-layer" class="grid__blocks__layer hidden"></div>
+
+      <!-- Grid Blanks Layer -->
+      <div id="grid-blanks-layer" class="grid__blanks__layer hidden"></div>
+
     </div>
 
     <div class="controls-container">
@@ -110,6 +116,17 @@
         <div id="circle-tool" class="grid__toolbar__item__wrapper" title="Circles" onclick="toggleTool(this);">
           <div class="grid__toolbar__item grid__toolbar__item--circles"></div>
         </div>
+
+        <!-- Blocks Toolbar Item -->
+        <div id="block-tool" class="grid__toolbar__item__wrapper" title="Blocks" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--blocks"></div>
+        </div>
+
+        <!-- Blanks Toolbar Item -->
+        <div id="blank-tool" class="grid__toolbar__item__wrapper" title="Blanks" onclick="toggleTool(this);">
+          <div class="grid__toolbar__item grid__toolbar__item--blanks">&#10006;</div>
+        </div>
+
       </div>
 
       <!-- Grid Toolbar Item Settings -->
@@ -160,6 +177,16 @@
           <button id="grid-bar-button" class="download-button" onclick="clearBars();">Clear Bars</button>
         </div>
 
+        <!-- Settings for Blank Tool -->
+        <div id="grid-blank-settings" class="hidden">
+          <button id="grid-blank-button" class="download-button" onclick="clearBlanks();">Clear Blanks</button>
+        </div>
+
+        <!-- Settings for Block Tool -->
+        <div id="grid-block-settings" class="hidden">
+          <button id="grid-block-button" class="download-button" onclick="clearBlocks();">Clear Blocks</button>
+        </div>
+
         <!-- Settings for Circle Tool -->
         <div id="grid-circle-settings" class="hidden">
           <button id="grid-circle-button" class="download-button" onclick="clearCircles();">Clear Circles</button>
@@ -174,7 +201,7 @@
         <!-- Settings for Shade Circle Tool -->
         <div id="grid-shadecircle-settings" class="hidden">
           <input id="grid-shadecircle-slider-input" class="shade-slider" oninput="updateShadeCircleSlider();"
-            type="range" min="1" max="100" value="50">
+            type="range" min="1" max="100" value="25">
           <label id="grid-shadecircle-slider-label" for="grid-shadecircle-slider" class="shade-slider-label">50%</label>
           <button id="grid-shadecircle-button" class="download-button" onclick="clearShadeCircles();">Clear Circles</button>
         </div>
@@ -182,7 +209,7 @@
         <!-- Settings for Shade Square Tool -->
         <div id="grid-shadesquare-settings" class="hidden">
           <input id="grid-shadesquare-slider-input" class="shade-slider"oninput="updateShadeSquareSlider();"
-            type="range" min="1" max="100" value="50">
+            type="range" min="1" max="100" value="25">
           <label id="grid-shadesquare-slider-label" for="grid-shadesquare-slider" class="shade-slider-label">50%</label>
           <button id="grid-shadesquare-button" class="download-button" onclick="clearShadeSquares();">Clear Squares</button>
         </div>
@@ -197,6 +224,12 @@
 
         <input type="checkbox" id="view-bars" onchange="toggleBarLayer(this);" checked>
         <label for="view-bars" class="controls__layers--checkbox">Bars</label><br>
+
+        <input type="checkbox" id="view-blocks" onchange="toggleBlockLayer(this);" checked>
+        <label for="view-blocks" class="controls__layers--checkbox">Blocks</label><br>
+
+        <input type="checkbox" id="view-grid-lines" onchange="toggleGridLineLayer(this);" checked>
+        <label for="view-grid-lines" class="controls__layers--checkbox">Grid Lines</label><br>
 
         <input type="checkbox" id="view-numbers" onchange="toggleNumberLayer(this);" checked>
         <label for="view-numbers" class="controls__layers--checkbox">Numbers</label><br>

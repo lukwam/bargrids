@@ -34,6 +34,22 @@
   margin: 0px;
   padding: 0px;
 }
+.grid__blanks__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
+.grid__blocks__layer {
+  position: absolute;
+  border: none;
+  left: 4px;
+  top: 4px;
+  margin: 0px;
+  padding: 0px;
+}
 .grid__numbers__layer {
   position: absolute;
   border: none;
@@ -105,6 +121,30 @@
   background: lightblue;
   opacity: 0.5;
 }
+.grid__blank {
+  background: transparent;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
+}
+.grid__blank:hover {
+  background: lightblue;
+  opacity: 0.5;
+}
+.grid__block {
+  background: transparent;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  margin: 0px;
+  padding: 2px;
+  position: absolute;
+}
+.grid__block:hover {
+  background: lightblue;
+  opacity: 0.5;
+}
 .grid__number__input {
   background: transparent;
   border: none;
@@ -163,7 +203,6 @@
   border: 2px solid lightblue;
   border-radius: 50%;
 }
-
 .controls-container {
   border: 1px solid #cccccc;
   float: left;
@@ -200,8 +239,8 @@
 .grid__toolbar {
   border: 1px solid black;
   display: grid;
-  grid-template: repeat(2, 50%) / repeat(3, 33.333333%);
-  height: 100px;
+  grid-template: repeat(3, 33.333333%) / repeat(3, 33.333333%);
+  height: 150px;
   width: 150px;
   margin: 2px;
 }
@@ -228,20 +267,32 @@
   text-align: center;
   padding-right: 9px;
 }
+.grid__toolbar__item--blanks {
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+}
+.grid__toolbar__item--blocks {
+  background: #000000;
+  padding: 1px;
+  height: 34px;
+  width: 34px;
+}
 .grid__toolbar__item--numbers {
   font-family: sans-serif;
   font-size: 12px;
   font-weight: bold;
 }
 .grid__toolbar__item--shadesquares {
-  background: #808080;
-  /* border: 1px solid #000000; */
+  background: #c0c0c0;
   padding: 1px;
   height: 34px;
   width: 34px;
 }
 .grid__toolbar__item--shadecircles {
-  background: #808080;
+  background: #c0c0c0;
   /* border: 1px solid #000000; */
   padding: 1px;
   border-radius: 50%;

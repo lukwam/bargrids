@@ -27,6 +27,8 @@ let puzzle = {
     bar_join_caps: true,
 
     // additional elements
+    blanks: [],
+    blocks: [],
     circles: [],
     shade_circles: [],
     shade_squares: [],
@@ -155,12 +157,16 @@ let puzzle = {
     for (let row=0; row<puzzle.rows; row++) {
       word = "";
       for (let col=0; col<puzzle.cols; col++) {
+        // skip blanks
+        if (puzzle.blanks[row][col]) { continue; }
+        // append to word
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
         } else {
           word += " ";
         }
-        if (puzzle.across_bars[row][col+1]) {
+        // end of answer
+        if (puzzle.across_bars[row][col+1] || puzzle.blanks[row][col+1]) {
           if (word.length > 1) {
             x = col - word.length + 1;
             y = row;
@@ -170,6 +176,7 @@ let puzzle = {
           word = "";
         }
       }
+      // end of row
       if (word.length > 1) {
         x = puzzle.cols - word.length;
         y = row;
@@ -183,12 +190,16 @@ let puzzle = {
     for (let col=0; col<puzzle.cols; col++) {
       word = "";
       for (let row=0; row<puzzle.rows; row++) {
+        // skip blanks
+        if (puzzle.blanks[row][col]) { continue; }
+        // append to word
         if (puzzle.answers[row][col]) {
           word += puzzle.answers[row][col];
         } else {
           word += " ";
         }
-         if (puzzle.down_bars[row+1] && puzzle.down_bars[row+1][col]) {
+        // end of answer
+        if (puzzle.down_bars[row+1] && (puzzle.down_bars[row+1][col] || puzzle.blanks[row+1][col])) {
           if (word.length > 1) {
             x = col;
             y = row - word.length + 1;
@@ -198,6 +209,7 @@ let puzzle = {
           word = "";
         }
       }
+      // end of column
       if (word.length > 1) {
         x = col;
         y = puzzle.rows - word.length;
@@ -231,6 +243,18 @@ let puzzle = {
   function clearBars() {
     puzzle.across_bars = createArray(puzzle.rows, puzzle.cols);
     puzzle.down_bars = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all blanks
+  function clearBlanks() {
+    puzzle.blanks = createArray(puzzle.rows, puzzle.cols);
+    createGrid();
+  }
+
+  // clear all blocks
+  function clearBlocks() {
+    puzzle.blocks = createArray(puzzle.rows, puzzle.cols);
     createGrid();
   }
 
@@ -330,7 +354,7 @@ let puzzle = {
     hbar.setAttribute("y1", 50);
     hbar.setAttribute("y2", 50);
     hbar.setAttribute("stroke", "black");
-    hbar.setAttribute("stroke-width", "4px");
+    hbar.setAttribute("stroke-width", "8px");
     svg.appendChild(hbar);
 
     // add verticial bar line
@@ -340,7 +364,7 @@ let puzzle = {
     vbar.setAttribute("y1", 50);
     vbar.setAttribute("y2", 70);
     vbar.setAttribute("stroke", "black");
-    vbar.setAttribute("stroke-width", "4px");
+    vbar.setAttribute("stroke-width", "8px");
     svg.appendChild(vbar);
 
     var border = document.createElementNS(svgns, "rect");
@@ -356,11 +380,11 @@ let puzzle = {
     // add cap
     if (puzzle.bar_join_caps) {
       var cap = document.createElementNS(svgns, "rect");
-      cap.setAttribute("x", 48);
-      cap.setAttribute("y", 48);
+      cap.setAttribute("x", 46);
+      cap.setAttribute("y", 46);
       cap.setAttribute("fill", "black");
-      cap.setAttribute("height", "4px");
-      cap.setAttribute("width", "4px");
+      cap.setAttribute("height", "8px");
+      cap.setAttribute("width", "8px");
       svg.appendChild(cap)
     }
 
@@ -386,6 +410,8 @@ let puzzle = {
     createShadeSquares();
     createShadeCircles();
     createCircles();
+    createBlocks();
+    createBlanks();
 
     // create the bar joins button svg
     createBarJoinsSVG();
@@ -402,6 +428,8 @@ let puzzle = {
       document.getElementById("symmetry-mirror-4d").disabled = true;
       document.getElementById("symmetry-mirror-8").disabled = true;
     }
+
+    showAllLayers();
   }
 
   // create/update the SVG in the grid
@@ -466,6 +494,44 @@ let puzzle = {
         downbar.style["height"] = "10px";
         downbar.style["width"] = "50px";
         bars.append(downbar);
+      }
+    }
+  }
+
+  // create blanks interface layer
+  function createBlanks() {
+    var blanks = document.getElementById("grid-blanks-layer");
+    removeChildren(blanks);
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        blank = document.createElement("div");
+        blank.id = "blank-" + row + "-" + col;
+        blank.addEventListener("click", (event) => {updateBlank(event.target);});
+        blank.classList.add("grid__blank");
+        blank.style["left"] = (50 * col + 2) + "px";
+        blank.style["top"] = (50 * row + 2) + "px";
+        blank.style["height"] = "46px";
+        blank.style["width"] = "46px";
+        blanks.append(blank);
+      }
+    }
+  }
+
+  // create blocks interface layer
+  function createBlocks() {
+    var blocks = document.getElementById("grid-blocks-layer");
+    removeChildren(blocks);
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        block = document.createElement("div");
+        block.id = "block-" + row + "-" + col;
+        block.addEventListener("click", (event) => {updateBlock(event.target);});
+        block.classList.add("grid__block");
+        block.style["left"] = (50 * col + 2) + "px";
+        block.style["top"] = (50 * row + 2) + "px";
+        block.style["height"] = "46px";
+        block.style["width"] = "46px";
+        blocks.append(block);
       }
     }
   }
@@ -557,6 +623,7 @@ let puzzle = {
   function createSVG() {
     var svg = createSVGElement();
     createSVGSquares(svg);
+    createSVGBlocks(svg);
     createSVGShadeSquares(svg);
     createSVGShadeCircles(svg);
     createSVGCircles(svg);
@@ -567,6 +634,7 @@ let puzzle = {
     }
     createSVGNumbers(svg);
     createSVGAnswers(svg);
+    createSVGBorder(svg);
     return svg;
   }
 
@@ -586,8 +654,8 @@ let puzzle = {
           text.id = "svg-answer-" + row + "-" + col;
           text.setAttribute("data-col", col);
           text.setAttribute("data-row", row);
-          text.setAttribute("x", col * puzzle.size + puzzle.size/2);
-          text.setAttribute("y", row * puzzle.size + puzzle.size/2);
+          text.setAttribute("x", col * puzzle.size + puzzle.size/2 + 4);
+          text.setAttribute("y", row * puzzle.size + puzzle.size/2 + 4);
           // not currently inherited in all browsers
           text.setAttribute("dominant-baseline", "central");
           text.innerHTML = puzzle.answers[row][col];
@@ -614,8 +682,8 @@ let puzzle = {
           rect.setAttributeNS(xlinkns, "href", "#svg-barjoincap");
           rect.setAttribute("data-col", col);
           rect.setAttribute("data-row", row);
-          rect.setAttribute("x", col * puzzle.size - 2);
-          rect.setAttribute("y", row * puzzle.size - 2);
+          rect.setAttribute("x", col * puzzle.size + 2);
+          rect.setAttribute("y", row * puzzle.size + 2);
           group.appendChild(rect);
         }
       }
@@ -636,10 +704,10 @@ let puzzle = {
           line.id = "svg-acrossbar-" + row + "-" + col;
           line.setAttribute("data-col", col);
           line.setAttribute("data-row", row);
-          line.setAttribute("x1", col * puzzle.size);
-          line.setAttribute("y1", row * puzzle.size);
-          line.setAttribute("x2", col * puzzle.size);
-          line.setAttribute("y2", row * puzzle.size + puzzle.size);
+          line.setAttribute("x1", col * puzzle.size + 4);
+          line.setAttribute("y1", row * puzzle.size + 4);
+          line.setAttribute("x2", col * puzzle.size + 4);
+          line.setAttribute("y2", row * puzzle.size + puzzle.size + 4);
           group.appendChild(line);
         }
       }
@@ -659,12 +727,103 @@ let puzzle = {
           line.id = "svg-downbar-" + row + "-" + col;
           line.setAttribute("data-col", col);
           line.setAttribute("data-row", row);
-          line.setAttribute("x1", col * puzzle.size);
-          line.setAttribute("y1", row * puzzle.size);
-          line.setAttribute("x2", col * puzzle.size + puzzle.size);
-          line.setAttribute("y2", row * puzzle.size);
+          line.setAttribute("x1", col * puzzle.size + 4);
+          line.setAttribute("y1", row * puzzle.size + 4);
+          line.setAttribute("x2", col * puzzle.size + puzzle.size + 4);
+          line.setAttribute("y2", row * puzzle.size + 4);
           group.appendChild(line);
         }
+      }
+    }
+    svg.appendChild(group);
+  }
+
+  // create the blocks for the SVG
+  function createSVGBlocks(svg) {
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-blocks";
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        if (puzzle.blocks[row][col]) {
+          let rect = document.createElementNS(svgns, "use");
+          rect.id = "svg-block-" + row + "-" + col;
+          rect.setAttributeNS(xlinkns, "href", "#svg-shadesquare");
+          rect.setAttribute("data-col", col);
+          rect.setAttribute("data-row", row);
+          rect.setAttribute("x", col * puzzle.size + 4);
+          rect.setAttribute("y", row * puzzle.size + 4);
+          rect.setAttribute("fill", "#000000");
+          group.appendChild(rect);
+        }
+      }
+    }
+    svg.appendChild(group);
+  }
+
+  // create the border for the svg
+  function createSVGBorder(svg) {
+    var group = document.createElementNS(svgns, "g");
+    group.id = "svg-border";
+    group.setAttribute("stroke", "black");
+    group.setAttribute("stroke-width", "4px");
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        if (puzzle.blanks[row][col]) { continue; }
+
+        // across borders
+        // if the left square is blank or null, create a left border line
+        if (col - 1 < 0 || puzzle.blanks[row][col - 1]) {
+          let line = document.createElementNS(svgns, "line");
+          line.id = "svg-acrossborder-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
+          line.setAttribute("x1", col * puzzle.size + 4);
+          line.setAttribute("y1", row * puzzle.size + 2);
+          line.setAttribute("x2", col * puzzle.size + 4);
+          line.setAttribute("y2", row * puzzle.size + puzzle.size + 6);
+          group.appendChild(line);
+        }
+
+        // if the right square is blank or null, create a right border line
+        if (col + 1 >= puzzle.cols || puzzle.blanks[row][col + 1]) {
+          let line = document.createElementNS(svgns, "line");
+          line.id = "svg-acrossborder-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
+          line.setAttribute("x1", (col + 1) * puzzle.size + 4);
+          line.setAttribute("y1", row * puzzle.size + 2);
+          line.setAttribute("x2", (col + 1) * puzzle.size + 4);
+          line.setAttribute("y2", row * puzzle.size + puzzle.size + 6);
+          group.appendChild(line);
+        }
+
+        // down borders
+        // if the top square is blank or null, create a top border line
+        if (row - 1 < 0 || puzzle.blanks[row - 1][col]) {
+          let line = document.createElementNS(svgns, "line");
+          line.id = "svg-downborder-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
+          line.setAttribute("x1", col * puzzle.size + 2);
+          line.setAttribute("y1", row * puzzle.size + 4);
+          line.setAttribute("x2", col * puzzle.size + puzzle.size + 6);
+          line.setAttribute("y2", row * puzzle.size + 4);
+          group.appendChild(line);
+        }
+
+        // if the bottom square is blank or null, create a bottom border line
+        if (row + 1 >= puzzle.rows || puzzle.blanks[row + 1][col]) {
+          let line = document.createElementNS(svgns, "line");
+          line.id = "svg-downborder-" + row + "-" + col;
+          line.setAttribute("data-col", col);
+          line.setAttribute("data-row", row);
+          line.setAttribute("x1", col * puzzle.size + 2);
+          line.setAttribute("y1", (row + 1) * puzzle.size + 4);
+          line.setAttribute("x2", col * puzzle.size + puzzle.size + 6);
+          line.setAttribute("y2", (row + 1) * puzzle.size + 4);
+          group.appendChild(line);
+        }
+
       }
     }
     svg.appendChild(group);
@@ -682,8 +841,8 @@ let puzzle = {
           circle.setAttributeNS(xlinkns, "href", "#svg-circle");
           circle.setAttribute("data-col", col);
           circle.setAttribute("data-row", row);
-          circle.setAttribute("x", col * puzzle.size + puzzle.size/2);
-          circle.setAttribute("y", row * puzzle.size + puzzle.size/2);
+          circle.setAttribute("x", col * puzzle.size + puzzle.size/2 + 4);
+          circle.setAttribute("y", row * puzzle.size + puzzle.size/2 + 4);
           group.appendChild(circle);
         }
       }
@@ -706,10 +865,10 @@ let puzzle = {
     svg.setAttribute("data-creator", "BarGrids");
 
     // set visual attributes
-    svg.setAttribute("height", puzzle.rows * puzzle.size);
-    svg.setAttribute("width", puzzle.cols * puzzle.size);
+    svg.setAttribute("height", puzzle.rows * puzzle.size + 8);
+    svg.setAttribute("width", puzzle.cols * puzzle.size + 8);
     svg.setAttribute("fill", "white");
-    svg.setAttribute("style", "border: 4px solid black");
+    // svg.setAttribute("style", "border: 4px solid black");
 
     // set the title
     var title = document.createElementNS(svgns, "title");
@@ -742,8 +901,8 @@ let puzzle = {
           text.id = "svg-number-" + row + "-" + col;
           text.setAttribute("data-col", col);
           text.setAttribute("data-row", row);
-          text.setAttribute("x", col * puzzle.size + 4);
-          text.setAttribute("y", row * puzzle.size + 15);
+          text.setAttribute("x", col * puzzle.size + 8);
+          text.setAttribute("y", row * puzzle.size + 19);
           text.innerHTML = puzzle.numbers[row][col];
           group.appendChild(text);
         }
@@ -773,20 +932,35 @@ let puzzle = {
 
   // create the basic squares for the SVG
   function createSVGSquares(svg) {
+    var blanksgroup = document.createElementNS(svgns, "g");
+    blanksgroup.id = "svg-blanks";
     var group = document.createElementNS(svgns, "g");
     group.id = "svg-squares";
+
     for (let row = 0; row < puzzle.rows; row++) {
       for (let col = 0; col < puzzle.cols; col++) {
-        let rect = document.createElementNS(svgns, "use");
-        rect.id = "svg-square-" + row + "-" + col;
-        rect.setAttributeNS(xlinkns, "href", "#svg-square");
-        rect.setAttribute("data-col", col);
-        rect.setAttribute("data-row", col);
-        rect.setAttribute("x", col * puzzle.size);
-        rect.setAttribute("y", row * puzzle.size);
-        group.appendChild(rect);
+        if (puzzle.blanks[row][col]) {
+          let rect = document.createElementNS(svgns, "use");
+          rect.id = "svg-blank-" + row + "-" + col;
+          rect.setAttribute("data-col", col);
+          rect.setAttribute("data-row", row);
+          rect.setAttribute("x", col * puzzle.size + 4);
+          rect.setAttribute("y", row * puzzle.size + 4);
+          rect.setAttribute("stroke", "transparent");
+          blanksgroup.appendChild(rect);
+        } else {
+          let rect = document.createElementNS(svgns, "use");
+          rect.id = "svg-square-" + row + "-" + col;
+          rect.setAttributeNS(xlinkns, "href", "#svg-square");
+          rect.setAttribute("data-col", col);
+          rect.setAttribute("data-row", row);
+          rect.setAttribute("x", col * puzzle.size + 4);
+          rect.setAttribute("y", row * puzzle.size + 4);
+          group.appendChild(rect);
+        }
       }
     }
+    svg.appendChild(blanksgroup);
     svg.appendChild(group);
   }
 
@@ -804,8 +978,8 @@ let puzzle = {
           circle.setAttribute("data-col", col);
           circle.setAttribute("data-row", row);
           circle.setAttribute("data-value", puzzle.shade_circles[row][col]);
-          circle.setAttribute("x", col * puzzle.size + puzzle.size/2);
-          circle.setAttribute("y", row * puzzle.size + puzzle.size/2);
+          circle.setAttribute("x", col * puzzle.size + puzzle.size/2 + 4);
+          circle.setAttribute("y", row * puzzle.size + puzzle.size/2 + 4);
           circle.setAttribute("fill", shade);
           group.appendChild(circle);
         }
@@ -828,8 +1002,8 @@ let puzzle = {
           rect.setAttribute("data-col", col);
           rect.setAttribute("data-row", row);
           rect.setAttribute("data-value", puzzle.shade_squares[row][col]);
-          rect.setAttribute("x", col * puzzle.size);
-          rect.setAttribute("y", row * puzzle.size);
+          rect.setAttribute("x", col * puzzle.size + 4);
+          rect.setAttribute("y", row * puzzle.size + 4);
           rect.setAttribute("fill", shade);
           group.appendChild(rect);
         }
@@ -966,6 +1140,10 @@ let puzzle = {
       disableShadeCircleTool(div);
     } else if (div.id == "circle-tool") {
       disableCircleTool(div);
+    } else if (div.id == "block-tool") {
+      disableBlockTool(div);
+    } else if (div.id == "blank-tool") {
+      disableBlankTool(div);
     }
   }
 
@@ -985,6 +1163,21 @@ let puzzle = {
     document.getElementById("grid-bar-settings").classList.add("hidden");
   }
 
+  // disable the blank toolbar item and layer
+  function disableBlankTool(div) {
+    console.log("Disabling Blank Tool");
+    div.classList.remove("grid__toolbar__item--selected");
+    document.getElementById("grid-blanks-layer").classList.add("hidden");
+    document.getElementById("grid-blank-settings").classList.add("hidden");
+  }
+
+  // disable the block toolbar item and layer
+  function disableBlockTool(div) {
+    console.log("Disabling Block Tool");
+    div.classList.remove("grid__toolbar__item--selected");
+    document.getElementById("grid-blocks-layer").classList.add("hidden");
+    document.getElementById("grid-block-settings").classList.add("hidden");
+  }
   // disable the circles toolbar item and layer
   function disableCircleTool(div) {
     console.log("Disabling Circle Tool");
@@ -1031,6 +1224,10 @@ let puzzle = {
       enableShadeCircleTool(div);
     } else if (div.id == "circle-tool") {
       enableCircleTool(div);
+    } else if (div.id == "block-tool") {
+      enableBlockTool(div);
+    } else if (div.id == "blank-tool") {
+      enableBlankTool(div);
     }
   }
 
@@ -1050,6 +1247,24 @@ let puzzle = {
     document.getElementById("grid-bars-layer").classList.remove("hidden");
     document.getElementById("grid-toolbar-item-name").innerHTML = "Bars";
     document.getElementById("grid-bar-settings").classList.remove("hidden");
+  }
+
+  // enable the blank tool and layer
+  function enableBlankTool(div) {
+    console.log("Enabling Blank Tool");
+    div.classList.add("grid__toolbar__item--selected");
+    document.getElementById("grid-blanks-layer").classList.remove("hidden");
+    document.getElementById("grid-toolbar-item-name").innerHTML = "Blanks";
+    document.getElementById("grid-blank-settings").classList.remove("hidden");
+  }
+
+  // enable the block tool and layer
+  function enableBlockTool(div) {
+    console.log("Enabling Block Tool");
+    div.classList.add("grid__toolbar__item--selected");
+    document.getElementById("grid-blocks-layer").classList.remove("hidden");
+    document.getElementById("grid-toolbar-item-name").innerHTML = "Blocks";
+    document.getElementById("grid-block-settings").classList.remove("hidden");
   }
 
   // enable the circles tool and layer
@@ -1184,6 +1399,16 @@ let puzzle = {
       bars.checked = false;
       hideBars();
     }
+    var blocks = document.getElementById("view-blocks");
+    if (blocks.checked) {
+      blocks.checked = false;
+      hideBlocks();
+    }
+    var gridlines = document.getElementById("view-grid-lines");
+    if (gridlines.checked) {
+      gridlines.checked = false;
+      hideGridLines();
+    }
     var numbers = document.getElementById("view-numbers");
     if (numbers.checked) {
       numbers.checked = false;
@@ -1220,10 +1445,22 @@ let puzzle = {
     document.getElementById("svg-barjoincaps").classList.add("hidden");
   }
 
+  // hide the blocks from the svg
+  function hideBlocks() {
+    console.log("Hiding all Blocks");
+    document.getElementById("svg-blocks").classList.add("hidden");
+  }
+
   // hid the circles from the svg
   function hideCircles() {
     console.log("Hiding all Circles");
     document.getElementById("svg-circles").classList.add("hidden");
+  }
+
+  // hide grid lines from the svg
+  function hideGridLines() {
+    console.log("Hiding all Grid Lines");
+    document.getElementById("svg-squares").classList.add("hidden");
   }
 
   // hide the grid size conntrols and enable the other tools
@@ -1266,6 +1503,8 @@ let puzzle = {
     puzzle.numbers = createArray(puzzle.rows, puzzle.cols);
     puzzle.across_bars = createArray(puzzle.rows, puzzle.cols);
     puzzle.down_bars = createArray(puzzle.rows, puzzle.cols);
+    puzzle.blanks = createArray(puzzle.rows, puzzle.cols);
+    puzzle.blocks = createArray(puzzle.rows, puzzle.cols);
     puzzle.circles = createArray(puzzle.rows, puzzle.cols);
     puzzle.shade_circles = createArray(puzzle.rows, puzzle.cols);
     puzzle.shade_squares = createArray(puzzle.rows, puzzle.cols);
@@ -1285,7 +1524,15 @@ let puzzle = {
     console.log("Key Pressed: " + key);
 
     // do nothing for special keys
-    if ([9, 16, 17, 18, 20, 32, 91, 93].includes(key)) {}
+    if ([9, 16, 17, 18, 20, 91, 93].includes(key)) {}
+
+    // space = next sibling (if exists)
+    else if (key == 32) {
+      if (input.nextSibling && input.nextSibling.focus) {
+        input.nextSibling.focus();
+        input.nextSibling.select();
+      }
+    }
 
     // left-arrow = previous sibling (if exists)
     else if (key == 37) {
@@ -1497,7 +1744,6 @@ let puzzle = {
     // initialize the puzzle data
     initPuzzle();
 
-    // import answers
     var answers = svg.getElementById("svg-answers");
     for (answer of answers.children) {
       var col = parseInt(answer.getAttribute("data-col"));
@@ -1505,7 +1751,23 @@ let puzzle = {
       puzzle.answers[row][col] = answer.innerHTML;
     }
 
-    // import numbers
+    var blanks = svg.getElementById("svg-blanks");
+    console.log(blanks);
+    for (blank of blanks.children) {
+      console.log(blank);
+      var col = parseInt(blank.getAttribute("data-col"));
+      var row = parseInt(blank.getAttribute("data-row"));
+      console.log(col, row);
+      puzzle.blanks[row][col] = true;
+    }
+
+    var blocks = svg.getElementById("svg-blocks");
+    for (block of blocks.children) {
+      var col = parseInt(block.getAttribute("data-col"));
+      var row = parseInt(block.getAttribute("data-row"));
+      puzzle.blocks[row][col] = true;
+    }
+
     var numbers = svg.getElementById("svg-numbers");
     for (number of numbers.children) {
       var col = parseInt(number.getAttribute("data-col"));
@@ -1540,7 +1802,6 @@ let puzzle = {
     }
 
     var shade_squares = svg.getElementById("svg-shadesquares");
-    console.log(shade_squares);
     for (shade_square of shade_squares.children) {
       var col = parseInt(shade_square.getAttribute("data-col"));
       var row = parseInt(shade_square.getAttribute("data-row"));
@@ -1556,8 +1817,6 @@ let puzzle = {
 
     createGrid();
     hideGridSizeControls();
-    document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
-
 
   }
 
@@ -1620,6 +1879,16 @@ let puzzle = {
       bars.checked = true;
       showBars();
     }
+    var blocks = document.getElementById("view-blocks");
+    if (!blocks.checked) {
+      blocks.checked = true;
+      showBlocks();
+    }
+    var gridlines = document.getElementById("view-grid-lines");
+    if (!gridlines.checked) {
+      gridlines.checked = true;
+      showGridLines();
+    }
     var numbers = document.getElementById("view-numbers");
     if (!numbers.checked) {
       numbers.checked = true;
@@ -1646,10 +1915,6 @@ let puzzle = {
   function showAnswers() {
     console.log("Showing all Answers");
     document.getElementById("svg-answers").classList.remove("hidden");
-    // var inputs = document.getElementsByClassName("grid__answer");
-    // for (input of inputs) {
-    //   input.classList.remove("hidden");
-    // }
   }
 
   // show svg bars layer
@@ -1658,50 +1923,42 @@ let puzzle = {
     document.getElementById("svg-acrossbars").classList.remove("hidden");
     document.getElementById("svg-downbars").classList.remove("hidden");
     document.getElementById("svg-barjoincaps").classList.remove("hidden");
-    // var bar_squares = document.getElementsByClassName("grid__bar");
-    // for (square of bar_squares) {
-    //   square.classList.remove("hidden");
-    // }
+  }
+
+  // show svg blocks layer
+  function showBlocks() {
+    console.log("Showing all Blocks");
+    document.getElementById("svg-blocks").classList.remove("hidden");
   }
 
   // show svg circles layer
   function showCircles() {
     console.log("Showing all Circles");
     document.getElementById("svg-circles").classList.remove("hidden");
-    // var circle_squares = document.getElementsByClassName("grid__circle");
-    // for (square of circle_squares) {
-    //   square.classList.remove("hidden");
-    // }
+  }
+
+  // show svg grid lines layer
+  function showGridLines() {
+    console.log("Showing all Grid Lines");
+    document.getElementById("svg-squares").classList.remove("hidden");
   }
 
   // show svg numbers layer
   function showNumbers() {
     console.log("Showing all Numbers");
     document.getElementById("svg-numbers").classList.remove("hidden");
-    // var inputs = document.getElementsByClassName("grid__number");
-    // for (input of inputs) {
-    //   input.classList.remove("hidden");
-    // }
   }
 
   // show svg shade circles layer
   function showShadeCircles() {
     console.log("Showing all Shade Circles");
     document.getElementById("svg-shadecircles").classList.remove("hidden");
-    // var shadecirecle_squares = document.getElementsByClassName("grid__shadecircle");
-    // for (square of shadecirecle_squares) {
-    //   square.classList.remove("hidden");
-    // }
   }
 
   // show svg shade squares layer
   function showShadeSquares() {
     console.log("Showing all Shade Squares");
     document.getElementById("svg-shadesquares").classList.remove("hidden");
-    // var shadesquare_squares = document.getElementsByClassName("grid__shadesquare");
-    // for (square of shadesquare_squares) {
-    //   square.classList.remove("hidden");
-    // }
   }
 
   // toggle svg answers layer
@@ -1738,6 +1995,17 @@ let puzzle = {
     }
   }
 
+  // toggle svg blocks layer
+  function toggleBlockLayer(input) {
+    if (input.checked) {
+      console.log("Enabling Layer: Blocks");
+      showBlocks();
+    } else {
+      console.log("Disabling Layer: Blocks");
+      hideBlocks();
+    }
+  }
+
   // toggle svg circles layer
   function toggleCircleLayer(input) {
     if (input.checked) {
@@ -1746,6 +2014,17 @@ let puzzle = {
     } else {
       console.log("Disabling Layer: Circles");
       hideCircles();
+    }
+  }
+
+  // toggle grid line layer
+  function toggleGridLineLayer(input) {
+    if (input.checked) {
+      console.log("Enabling Layer: Grid Lines");
+      showGridLines();
+    } else {
+      console.log("Disabling Layer: Grid Lines");
+      hideGridLines();
     }
   }
 
@@ -1826,14 +2105,45 @@ let puzzle = {
 
   // update an individual answer
   function updateAnswer(event) {
-    var answer = event.target.value.toUpperCase();
+    var answer = event.target.value.replace(/\s/g, "").toUpperCase();
     var id = event.target.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
-    console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
-    puzzle.answers[row][col] = answer;
-    createGridSVG();
-    // nextInput(event);
+    if (answer) {
+      console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
+      puzzle.answers[row][col] = answer;
+      createGridSVG();
+    }
+  }
+
+  // update a blank
+  function updateBlank(div) {
+    var id = div.id.split("-");
+    var row = parseInt(id[1]);
+    var col = parseInt(id[2]);
+    if (puzzle.blanks[row][col]) {
+      console.log("Disabling Blank: " + id);
+      puzzle.blanks[row][col] = false;
+    } else {
+      console.log("Enabling Blank: " + id);
+      puzzle.blanks[row][col] = true;
+    }
+    createGrid();
+  }
+
+  // update a block
+  function updateBlock(div) {
+    var id = div.id.split("-");
+    var row = parseInt(id[1]);
+    var col = parseInt(id[2]);
+    if (puzzle.blocks[row][col]) {
+      console.log("Disabling Block: " + id);
+      puzzle.blocks[row][col] = false;
+    } else {
+      console.log("Enabling Block: " + id);
+      puzzle.blocks[row][col] = true;
+    }
+    createGrid();
   }
 
   // update a circle
@@ -1902,14 +2212,15 @@ let puzzle = {
 
   // update an individual number
   function updateNumber(event) {
-    var number = event.target.value;
+    var number = event.target.value.replace(/\s/g, "");
     var id = event.target.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
-    console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
-    puzzle.numbers[row][col] = number;
-    createGridSVG();
-    // nextInput(event);
+    if (number) {
+      console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
+      puzzle.numbers[row][col] = number;
+      createGridSVG();
+    }
   }
 
   // update a shade circle
