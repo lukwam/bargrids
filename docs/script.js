@@ -1758,20 +1758,21 @@ let puzzle = {
     }
 
     var blanks = svg.getElementById("svg-blanks");
-    console.log(blanks);
-    for (blank of blanks.children) {
-      console.log(blank);
-      var col = parseInt(blank.getAttribute("data-col"));
-      var row = parseInt(blank.getAttribute("data-row"));
-      console.log(col, row);
-      puzzle.blanks[row][col] = true;
+    if (blanks && blanks.children) {
+      for (blank of blanks.children) {
+        var col = parseInt(blank.getAttribute("data-col"));
+        var row = parseInt(blank.getAttribute("data-row"));
+        puzzle.blanks[row][col] = true;
+      }
     }
 
     var blocks = svg.getElementById("svg-blocks");
-    for (block of blocks.children) {
-      var col = parseInt(block.getAttribute("data-col"));
-      var row = parseInt(block.getAttribute("data-row"));
-      puzzle.blocks[row][col] = true;
+    if (blocks && blocks.children) {
+      for (block of blocks.children) {
+        var col = parseInt(block.getAttribute("data-col"));
+        var row = parseInt(block.getAttribute("data-row"));
+        puzzle.blocks[row][col] = true;
+      }
     }
 
     var numbers = svg.getElementById("svg-numbers");
