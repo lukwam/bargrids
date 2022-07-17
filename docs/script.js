@@ -2115,11 +2115,13 @@ let puzzle = {
     var id = event.target.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
+    console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
     if (answer) {
-      console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
       puzzle.answers[row][col] = answer;
-      createGridSVG();
+    } else {
+      puzzle.answers[row][col] = null;
     }
+    createGridSVG();
   }
 
   // update a blank
@@ -2222,11 +2224,13 @@ let puzzle = {
     var id = event.target.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
+    console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
     if (number) {
-      console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
       puzzle.numbers[row][col] = number;
-      createGridSVG();
+    } else {
+      puzzle.numbers[row][col] = null;
     }
+    createGridSVG();
   }
 
   // update a shade circle
