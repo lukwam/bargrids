@@ -264,6 +264,113 @@ let puzzle = {
     return Array.from(Array(rows), () => new Array(cols));
   }
 
+  // create an SVG to represent Bar Joins
+  function createBarJoinsSVG() {
+    // create svg element
+    var svg = document.createElementNS(svgns, "svg");
+    svg.id = "bar-joins-button";
+    svg.setAttributeNS(xmlns, "xmlns:xlink", xlinkns);
+    svg.setAttribute("height", 100);
+    svg.setAttribute("width", 100);
+    svg.setAttribute("fill", "white");
+    svg.setAttribute("style", "border: 1px solid grey");
+    svg.classList.add("bar-joins-button")
+    svg.addEventListener("click", (event) => {toggleBarJoinCaps(event)});
+
+    // create text group
+    var textgroup = document.createElementNS(svgns, "g");
+    textgroup.setAttribute("fill", "black");
+    textgroup.setAttribute("font-family", "helvetica");
+    textgroup.setAttribute("font-weight", "bold");
+    textgroup.setAttribute("font-size", "14px");
+    textgroup.setAttribute("text-anchor", "middle");
+
+    // add header
+    var header = document.createElementNS(svgns, "text");
+    header.setAttribute("x", 50);
+    header.setAttribute("y", 17);
+    header.innerHTML = "Bar Joins";
+    textgroup.appendChild(header);
+
+    // add footer
+    var footer = document.createElementNS(svgns, "text");
+    footer.setAttribute("x", 50);
+    footer.setAttribute("y", 93);
+    if (puzzle.bar_join_caps) {
+      footer.innerHTML = "Caps";
+    } else {
+      footer.innerHTML = "No Caps";
+    }
+    textgroup.appendChild(footer);
+
+    // add horizontal grid line
+    var hline = document.createElementNS(svgns, "line");
+    hline.setAttribute("x1", 30);
+    hline.setAttribute("x2", 50);
+    hline.setAttribute("y1", 50);
+    hline.setAttribute("y2", 50);
+    hline.setAttribute("stroke", "black");
+    hline.setAttribute("stroke-width", "1px");
+    svg.appendChild(hline);
+
+    // add verticial grid line
+    var vline = document.createElementNS(svgns, "line");
+    vline.setAttribute("x1", 50);
+    vline.setAttribute("x2", 50);
+    vline.setAttribute("y1", 30);
+    vline.setAttribute("y2", 50);
+    vline.setAttribute("stroke", "black");
+    vline.setAttribute("stroke-width", "1px");
+    svg.appendChild(vline);
+
+    // add hoizontal bar line
+    var hbar = document.createElementNS(svgns, "line");
+    hbar.setAttribute("x1", 50);
+    hbar.setAttribute("x2", 70);
+    hbar.setAttribute("y1", 50);
+    hbar.setAttribute("y2", 50);
+    hbar.setAttribute("stroke", "black");
+    hbar.setAttribute("stroke-width", "4px");
+    svg.appendChild(hbar);
+
+    // add verticial bar line
+    var vbar = document.createElementNS(svgns, "line");
+    vbar.setAttribute("x1", 50);
+    vbar.setAttribute("x2", 50);
+    vbar.setAttribute("y1", 50);
+    vbar.setAttribute("y2", 70);
+    vbar.setAttribute("stroke", "black");
+    vbar.setAttribute("stroke-width", "4px");
+    svg.appendChild(vbar);
+
+    var border = document.createElementNS(svgns, "rect");
+    border.setAttribute("x", 25);
+    border.setAttribute("y", 25);
+    border.setAttribute("fill", "transparent");
+    border.setAttribute("stroke", "black");
+    border.setAttribute("stroke-width", "1px");
+    border.setAttribute("height", "50px");
+    border.setAttribute("width", "50px");
+    svg.appendChild(border)
+
+    // add cap
+    if (puzzle.bar_join_caps) {
+      var cap = document.createElementNS(svgns, "rect");
+      cap.setAttribute("x", 48);
+      cap.setAttribute("y", 48);
+      cap.setAttribute("fill", "black");
+      cap.setAttribute("height", "4px");
+      cap.setAttribute("width", "4px");
+      svg.appendChild(cap)
+    }
+
+    svg.appendChild(textgroup);
+
+    // create the new bar joins SVG and replace existing button
+    var button = document.getElementById("bar-joins-button");
+    button.parentNode.replaceChild(svg, button);
+  }
+
   // create the grid and all its layers and set the title
   function createGrid() {
     // set the document title and title element
@@ -279,6 +386,9 @@ let puzzle = {
     createShadeSquares();
     createShadeCircles();
     createCircles();
+
+    // create the bar joins button svg
+    createBarJoinsSVG();
 
     // toggle symmetry controls
     if (puzzle.cols == puzzle.rows) {
@@ -1607,7 +1717,7 @@ let puzzle = {
 
   // toggle bar join caps
   function toggleBarJoinCaps(input) {
-    if (input.checked) {
+    if (!puzzle.bar_join_caps) {
       console.log("Enabling Bar Join Caps");
       puzzle.bar_join_caps = true;
     } else {

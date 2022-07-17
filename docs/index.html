@@ -66,17 +66,13 @@
         </div>
       </div>
 
-      <!-- Upload Tools -->
+      <!-- Upload EPS Tool -->
       <div id="upload-eps-tool"class="control-container controls__layers">
         <input type="file" id="upload-eps-button" class="hidden" onchange="uploadEPSFile(this);">
         <button class="upload-button" onclick="uploadEPSFileButton();">Load EPS</button>
       </div>
 
-      <!-- <div id="upload-json-tool"class="control-container controls__layers">
-        <input type="file" id="upload-json-button" class="hidden" onchange="uploadJSONFile(this);">
-        <button class="upload-button" onclick="uploadJSONFileButton();">Load JSON</button>
-      </div> -->
-
+      <!-- Upload SVG Tool -->
       <div id="upload-svg-tool"class="control-container controls__layers">
         <input type="file" id="upload-svg-button" class="hidden" onchange="uploadSVGFile(this);">
         <button class="upload-button" onclick="uploadSVGFileButton();">Load SVG</button>
@@ -221,42 +217,14 @@
 
       <!-- Bar Join Caps Tool -->
       <div id="bar-join-caps-tool" class="control-container hidden">
-        <input type="checkbox" id="bar-join-caps" onchange="toggleBarJoinCaps(this);" checked>
-        <label for="bar-join-caps" class="controls__layers--checkbox">Bar Join Caps</label><br>
+        <svg id="bar-joins-button" class="hidden"></svg>
       </div>
 
-      <!-- Save Tools -->
-      <!-- <div id="save-json-tool" class="control-container controls__layers hidden">
-        <button id="save-json-button" class="download-button" onclick="saveJSON();">Save JSON</button>
-        <a id="json-download" class="hidden"></a>
-      </div> -->
-
+      <!-- Save SVG Tool -->
       <div id="save-svg-tool"class="control-container controls__layers hidden">
         <button id="save-svg-button" class="download-button" onclick="saveSVG();">Save SVG</button>
         <a id="svg-download" class="hidden"></a>
       </div>
-
-      <!-- <svg id="bar-join-caps-svg" height="100" width="100" style="border: 1px solid black;">
-        <g fill="black" font-family="helvetica" font-weight="bold" font-size="14px" text-anchor="middle">
-          <text x="50" y="17">Bar Joins</text>
-          <text x="50" y="93">Caps</text>
-          <rect x="25" y="25" height="50" width="50" fill="white" stroke="black" stroke-width="1px"></rect>
-          <line x1="50" y1="30" x2="50" y2="50" stroke="black" stroke-width="1px"></line>
-          <line x1="30" y1="50" x2="50" y2="50" stroke="black" stroke-width="1px"></line>
-          <line x1="50" y1="50" x2="50" y2="70" stroke="black" stroke-width="4px"></line>
-          <line x1="50" y1="50" x2="70" y2="50" stroke="black" stroke-width="4px"></line>
-          <rect x="48" y="48" height="4px" width="4px"></rect>
-        </g>
-      </svg> -->
-
-      <!-- <svg height="50" width="50" style="border: 1px solid black;">
-        <text x="25" y="24" dominant-baseline="central" fill="black" font-family="helvetica" text-anchor="middle">None</text>
-      </svg> -->
-      <!-- <svg height="50" width="50" style="border: 1px solid black;">
-        <path x="5" y="5" fill="none" stroke="black" stroke-width="1" d="M25,5 a20,20 0 0,1 0,40"></path>
-      </svg> -->
-
-
 
     </div>
   </body>
