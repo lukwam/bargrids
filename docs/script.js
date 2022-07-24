@@ -2101,7 +2101,11 @@ let puzzle = {
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
     var bars = getSymmetricalBars("across", row, col);
+    var names = [];
     for (bar of bars) {
+      name = bar[0] + "-" + bar[1] + "-" + bar[2];
+      if (names.includes(name)) { continue; }
+      else { names.push(name); }
       if (bar[0] == "across") {
         updateAcrossBar(bar[1], bar[2]);
       } else if (bar[0] == "down") {
@@ -2188,7 +2192,11 @@ let puzzle = {
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
     var bars = getSymmetricalBars("down", row, col);
+    var names = [];
     for (bar of bars) {
+      name = bar[0] + "-" + bar[1] + "-" + bar[2];
+      if (names.includes(name)) { continue; }
+      else { names.push(name); }
       if (bar[0] == "across") {
         updateAcrossBar(bar[1], bar[2]);
       } else if (bar[0] == "down") {
