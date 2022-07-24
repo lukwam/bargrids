@@ -34,6 +34,24 @@ let puzzle = {
     shade_squares: [],
   }
 
+  // state data
+  let state = {
+    last_answer_input: null,
+    last_number_input: null,
+    last_number: 0,
+    layers: {
+      answers: true,
+      bars: true,
+      blocks: true,
+      circles: true,
+      gridlines: true,
+      numbers: true,
+      shadecircles: true,
+      shadequares: true,
+    },
+    rebus: false,
+  }
+
   // demo puzzle
 
   function loadDemoPuzzle() {
@@ -150,6 +168,7 @@ let puzzle = {
 
   // auto-number a puzzle based on the bars
   function autoNumberPuzzle() {
+    clearNumbers();
     var locations = createArray(puzzle.rows, puzzle.cols);
     var word = "";
 
@@ -237,6 +256,29 @@ let puzzle = {
     }
 
     createGrid();
+  }
+
+  // select input on focus
+  function blurInput(input) {
+    var id = input.id.split("-");
+    var row = parseInt(id[1]);
+    var col = parseInt(id[2]);
+    if (input.id.startsWith("answer")) {
+      console.log("Blur Answer Input: " + input.id);
+      if (puzzle.answers[row][col]) {
+        input.value = puzzle.answers[row][col];
+      }  else {
+        input.value = "";
+      }
+    } else {
+      console.log("Blur Number Input: " + input.id);
+      if (puzzle.numbers[row][col]) {
+        input.value = puzzle.numbers[row][col];
+      }  else {
+        input.value = "";
+      }
+    }
+    // document.getElementById("grid-answer-rebus-button").classList.add("hidden");
   }
 
   // clear all answers
@@ -457,8 +499,9 @@ let puzzle = {
         if (puzzle.answers[row][col]) {
           answer.value = puzzle.answers[row][col];
         }
-        answer.addEventListener("change", (event) => {updateAnswer(event)});
-        answer.addEventListener("focus", (event) => {event.target.select()});
+        answer.addEventListener("blur", (event) => {blurInput(event.target)});
+        answer.addEventListener("change", (event) => {updateAnswer(event.target)});
+        answer.addEventListener("focus", (event) => {focusInput(event.target)});
         answer.addEventListener("keyup", (event) => {nextInput(event)});
         answer.classList.add("grid__answer__input");
         answer.style["left"] = (50 * col + 2) + "px";
@@ -572,8 +615,9 @@ let puzzle = {
         if (puzzle.numbers[row][col]) {
           number.value = puzzle.numbers[row][col];
         }
-        number.addEventListener("change", (event) => {updateNumber(event)});
-        number.addEventListener("focus", (event) => {event.target.select()});
+        number.addEventListener("blur", (event) => {blurInput(event.target)});
+        number.addEventListener("change", (event) => {updateNumber(event.target)});
+        number.addEventListener("focus", (event) => {focusInput(event.target)});
         number.addEventListener("keyup", (event) => {nextInput(event)});
         number.classList.add("grid__number__input");
         number.style["left"] = (50 * col + 2) + "px";
@@ -665,6 +709,16 @@ let puzzle = {
           // not currently inherited in all browsers
           text.setAttribute("dominant-baseline", "central");
           text.innerHTML = puzzle.answers[row][col];
+          if (text.innerHTML.length > 4) {
+            text.setAttribute("font-size", "10px");
+          } else if (text.innerHTML.length > 3) {
+            text.setAttribute("font-size", "12px");
+          } else if (text.innerHTML.length > 2) {
+            text.setAttribute("font-size", "16px");
+          } else if (text.innerHTML.length > 1) {
+            text.setAttribute("font-size", "20px");
+          }
+
           group.appendChild(text);
         }
       }
@@ -1311,8 +1365,16 @@ let puzzle = {
 
   // select input on focus
   function focusInput(input) {
-    console.log("Focus Input: " + input.id);
+    if (input.id.startsWith("answer")) {
+      console.log("Focus Answer Input: " + input.id);
+      state.last_answer_input = input.id;
+    } else {
+      console.log("Focus Number Input: " + input.id);
+      state.last_number_input = input.id;
+      if (!input.value) { input.value = state.last_number + 1; }
+    }
     input.select();
+    document.getElementById("grid-answer-rebus-button").classList.remove("hidden");
   }
 
   // return a shade based on a percentage
@@ -1525,16 +1587,27 @@ let puzzle = {
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
 
-    // input.focus();
-
     console.log("Key Pressed: " + key);
 
     // do nothing for special keys
     if ([9, 16, 17, 18, 20, 91, 93].includes(key)) {}
 
+    // return = submit change
+    else if (key == 13) {
+      if (event.target.id.startsWith("answer")) {
+        updateAnswer(input);
+      } else {
+        updateNumber(input);
+      }
+      if (input.nextSibling && input.nextSibling.focus) {
+        input.nextSibling.focus();
+        input.nextSibling.select();
+      }
+    }
+
     // space = next sibling (if exists)
     else if (key == 32) {
-      if (input.nextSibling && input.nextSibling.focus) {
+      if (!state.rebus && input.nextSibling && input.nextSibling.focus) {
         input.nextSibling.focus();
         input.nextSibling.select();
       }
@@ -1583,7 +1656,7 @@ let puzzle = {
     }
 
     // otherwise, if input is full, move to next input
-    else if (input.value.length === parseInt(input.attributes["maxlength"].value)) {
+    else if (input.value.length === parseInt(input.attributes["maxLength"].value)) {
       if (input.nextSibling && input.nextSibling.focus) {
         input.nextSibling.focus();
         input.nextSibling.select();
@@ -2046,6 +2119,30 @@ let puzzle = {
     }
   }
 
+  // toggle rebus feature for answer entry
+  function toggleRebus() {
+    var answers = document.getElementById("grid-answers-layer");
+    var rebus = document.getElementById("grid-answer-rebus-button");
+    if (!state.rebus) {
+      console.log("Enabling Rebus feature");
+      state.rebus = true;
+      rebus.innerHTML = "Rebus";
+      for (answer of answers.children) {
+        answer.maxLength = "5";
+      }
+    } else {
+      console.log("Disabling Rebus feature");
+      state.rebus = false;
+      rebus.innerHTML = "Single Character";
+      for (answer of answers.children) {
+        answer.maxLength = "1";
+      }
+    }
+    rebus.classList.remove("hidden");
+    var input = document.getElementById(state.last_answer_input);
+    input.focus();
+  }
+
   // toggle svg shade circles layer
   function toggleShadeCircleLayer(input) {
     if (input.checked) {
@@ -2115,9 +2212,9 @@ let puzzle = {
   }
 
   // update an individual answer
-  function updateAnswer(event) {
-    var answer = event.target.value.replace(/\s/g, "").toUpperCase();
-    var id = event.target.id.split("-");
+  function updateAnswer(input) {
+    var answer = input.value.trim().toUpperCase();
+    var id = input.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
     console.log("Updating Answer: row: " + row + ", col: " + col + ": " + answer);
@@ -2228,14 +2325,15 @@ let puzzle = {
   }
 
   // update an individual number
-  function updateNumber(event) {
-    var number = event.target.value.replace(/\s/g, "");
-    var id = event.target.id.split("-");
+  function updateNumber(input) {
+    var number = input.value.trim();
+    var id = input.id.split("-");
     var row = parseInt(id[1]);
     var col = parseInt(id[2]);
     console.log("Updating Number: row: " + row + ", col: " + col + ": " + number);
     if (number) {
       puzzle.numbers[row][col] = number;
+      state.last_number = parseInt(number);
     } else {
       puzzle.numbers[row][col] = null;
     }

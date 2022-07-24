@@ -97,14 +97,15 @@
   text-transform: uppercase;
   width: 46px;
 }
-.grid__answer__input:focus {
-  background: yellow;
-  color: black;
-}
 .grid__answer__input:hover {
   background: lightblue;
   color: black;
   opacity: 0.5;
+}
+.grid__answer__input:focus {
+  background: yellow;
+  color: black;
+  opacity: 1;
 }
 .grid__bar {
   background: transparent;
@@ -158,12 +159,12 @@
   text-align: left;
   vertical-align: top;
 }
-.grid__number__input:focus {
-  background: yellow;
-  color: black;
-}
 .grid__number__input:hover {
   background: lightblue;
+  color: black;
+}
+.grid__number__input:focus {
+  background: yellow;
   color: black;
 }
 .grid__shadecircle {
