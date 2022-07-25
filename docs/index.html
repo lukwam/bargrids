@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="/bargrids/styles.css">
     <script type="text/javascript" src="/bargrids/script.js"></script>
   </head>
-  <body onload="initPuzzle(); createGrid();">
+  <body onload="initPuzzle(); createGrid(); updateMenus();">
 
     <!-- Puzzle Title -->
     <input id="title" type=text class="title" value="" onfocusout="updateTitle(this.value);">
@@ -135,8 +135,8 @@
 
         <!-- Settings for Answer Tool -->
         <div id="grid-answer-settings" class="hidden">
-          <button id="grid-answer-rebus-button" class="download-button hidden" onclick="toggleRebus();">Single Character</button>
-
+          <select id="answer-font-menu" class="font-select-menu" onchange="updateFont(this);"></select>
+          <button id="grid-answer-rebus-button" class="download-button" onclick="toggleRebus();">Single Character</button>
           <button id="grid-answer-clear-button" class="download-button" onclick="clearAnswers();">Clear Answers</button>
         </div>
 
@@ -196,6 +196,7 @@
 
         <!-- Settings for Number Tool -->
         <div id="grid-number-settings" class="hidden">
+          <select id="number-font-menu" class="font-select-menu" onchange="updateFont(this);"></select>
           <button id="grid-autonumber-button" class="download-button" onclick="autoNumberPuzzle();">Autonumber</button>
           <button id="grid-number-button" class="download-button" onclick="clearNumbers();">Clear Numbers</button>
         </div>

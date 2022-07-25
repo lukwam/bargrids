@@ -17,6 +17,10 @@ let puzzle = {
     // size of an individual square in the grid
     size: 50,
 
+    // fonts
+    answer_font_family: "Helvetica",
+    number_font_family: "Helvetica",
+
     // content
     answers: [],
     numbers: [],
@@ -693,7 +697,7 @@ let puzzle = {
     var group = document.createElementNS(svgns, "g");
     group.id = "svg-answers";
     group.setAttribute("fill", "black");
-    group.setAttribute("font-family", "helvetica");
+    group.setAttribute("font-family", puzzle.answer_font_family);
     group.setAttribute("font-size", "24px");
     group.setAttribute("text-anchor", "middle");
 
@@ -951,7 +955,7 @@ let puzzle = {
     var group = document.createElementNS(svgns, "g");
     group.id = "svg-numbers";
     group.setAttribute("fill", "black");
-    group.setAttribute("font-family", "helvetica");
+    group.setAttribute("font-family", puzzle.number_font_family);
     group.setAttribute("font-size", "14px");
 
     for (let row = 0; row < puzzle.rows; row++) {
@@ -1374,7 +1378,7 @@ let puzzle = {
       if (!input.value) { input.value = state.last_number + 1; }
     }
     input.select();
-    document.getElementById("grid-answer-rebus-button").classList.remove("hidden");
+    // document.getElementById("grid-answer-rebus-button").classList.remove("hidden");
   }
 
   // return a shade based on a percentage
@@ -2138,9 +2142,9 @@ let puzzle = {
         answer.maxLength = "1";
       }
     }
-    rebus.classList.remove("hidden");
-    var input = document.getElementById(state.last_answer_input);
-    input.focus();
+    // rebus.classList.remove("hidden");
+    // var input = document.getElementById(state.last_answer_input);
+    // input.focus();
   }
 
   // toggle svg shade circles layer
@@ -2302,6 +2306,59 @@ let puzzle = {
     }
   }
 
+  // update font
+  function updateFont(select) {
+    var selected = select.options[select.selectedIndex];
+    if (select.id.startsWith("answer")) {
+      console.log("Setting Answer Font to: " + selected.innerHTML);
+      puzzle.answer_font_family = selected.innerHTML;
+    } else {
+      console.log("Setting Number Font to: " + selected.innerHTML);
+      puzzle.number_font_family = selected.innerHTML;
+    }
+    createGrid();
+  }
+
+  // update font menu
+  function updateFontMenu(id) {
+    var select = document.getElementById(id);
+    var fonts = [
+      "American Typewriter",
+      "Andalé Mono",
+      "Arial Black",
+      "Arial",
+      "Bradley Hand",
+      "Brush Script MT",
+      "Comic Sans MS",
+      "Courier",
+      "Didot",
+      "Georgia",
+      "Helvetica",
+      "Impact",
+      "Lucida Console",
+      "Luminari",
+      "Monaco",
+      "Tahoma",
+      "Times New Roman",
+      "Trebuchet MS",
+      "Verdana",
+    ];
+    for (font of fonts) {
+      var opt = document.createElement("option");
+      opt.innerHTML = font;
+      if (id.startsWith("answer")) {
+        if (puzzle.answer_font_family == font) {
+          opt.selected = true;
+        }
+      } else {
+        if (puzzle.number_font_family == font) {
+          opt.selected = true;
+        }
+      }
+      select.appendChild(opt);
+    }
+  }
+
   // update the size of the grid after changing the dimensions
   function updateGridSize(select) {
     // get the grid size from the select selection
@@ -2322,6 +2379,12 @@ let puzzle = {
     // draw a new grid with the new dimensions
     initPuzzle();
     createGrid();
+  }
+
+  // update the dropdown menus
+  function updateMenus() {
+    updateFontMenu("answer-font-menu");
+    updateFontMenu("number-font-menu");
   }
 
   // update an individual number

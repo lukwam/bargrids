@@ -381,3 +381,10 @@
   margin-top: 4px;
   margin-left: 22px;
 }
+.font-select-menu {
+  border-radius: 0%;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 2px;
+  width: 142px;
+}
