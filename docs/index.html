@@ -5,6 +5,7 @@
     <title>BarGrids</title>
     <link rel="stylesheet" href="/bargrids/styles.css">
     <script type="text/javascript" src="/bargrids/script.js"></script>
+    <script src="https://kit.fontawesome.com/5bbed011fe.js" crossorigin="anonymous"></script>
   </head>
   <body onload="initPuzzle(); createGrid(); updateMenus();">
 
@@ -149,28 +150,36 @@
             <label for="symmetry-none" class="controls__layers--checkbox">None</label><br>
 
             <input type="radio" id="symmetry-rotate-180" name="symmetry">
-            <label for="symmetry-rotate-180" class="controls__layers--checkbox">Rotational (180°)</label><br>
+            <label for="symmetry-rotate-180" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-rotate fa-rotate-90 fa-fw"></i> Rotational</label><br>
 
             <input type="radio" id="symmetry-rotate-90" name="symmetry">
-            <label for="symmetry-rotate-90" class="controls__layers--checkbox">Rotational (90°)</label><br>
+            <label for="symmetry-rotate-90" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-spin fa-fw"></i> Rotational</label><br>
 
             <input type="radio" id="symmetry-mirror-h" name="symmetry">
-            <label for="symmetry-mirror-h" class="controls__layers--checkbox">Horizontal ( | )</label><br>
+            <label for="symmetry-mirror-h" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-left-right fa-fw"></i> Horizontal</label><br>
 
             <input type="radio" id="symmetry-mirror-v" name="symmetry">
-            <label for="symmetry-mirror-v" class="controls__layers--checkbox">Vertical (—)</label><br>
+            <label for="symmetry-mirror-v" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-up-down fa-fw"></i> Vertical</label><br>
 
             <input type="radio" id="symmetry-mirror-d" name="symmetry">
-            <label for="symmetry-mirror-d" class="controls__layers--checkbox">Diagonal ( \ )</label><br>
+            <label for="symmetry-mirror-d" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-left-right fa-fw fa-rotate-by" style="--fa-rotate-angle: 45deg;"></i> Diagonal</label><br>
 
             <input type="radio" id="symmetry-mirror-u" name="symmetry">
-            <label for="symmetry-mirror-u" class="controls__layers--checkbox">Diagonal ( / )</label><br>
+            <label for="symmetry-mirror-u" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-up-down fa-fw fa-rotate-by" style="--fa-rotate-angle: 45deg;"></i> Diagonal</label><br>
 
             <input type="radio" id="symmetry-mirror-4h" name="symmetry">
-            <label for="symmetry-mirror-4h" class="controls__layers--checkbox">Crisscross ( + )</label><br>
+            <label for="symmetry-mirror-4h" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-up-down-left-right fa-fw"></i> Crisscross</label><br>
 
             <input type="radio" id="symmetry-mirror-4d" name="symmetry">
-            <label for="symmetry-mirror-4d" class="controls__layers--checkbox">Crisscross ( x )</label><br>
+            <label for="symmetry-mirror-4d" class="controls__layers--checkbox">
+              <i class="fa-solid fa-arrows-up-down-left-right fa-fw fa-rotate-by" style="--fa-rotate-angle: 45deg;"></i> Crisscross ( x )</label><br>
 
             <input type="radio" id="symmetry-mirror-8" name="symmetry">
             <label for="symmetry-mirror-8" class="controls__layers--checkbox">Eightway ( ✵ )</label><br>

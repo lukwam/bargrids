@@ -1675,6 +1675,7 @@ let puzzle = {
     bars = false;
     numbers = false;
     shades = false;
+    console.log(eps);
 
     for (line of eps.split(/\r|\r\n|\n/)) {
       // title
@@ -1694,26 +1695,9 @@ let puzzle = {
         cols = (x - 2)/20;
         rows = (y - 2)/20;
         console.log("Rows: " + rows + ", Cols: " + cols);
-
-        puzzle.across_bars = [];
-        puzzle.circles = [];
-        puzzle.down_bars = [];
-        puzzle.numbers = [];
-        puzzle.shade_circles = [];
-        puzzle.shade_squares = [];
-        for (row=0; row<rows; row++) {
-          puzzle.across_bars[row] = [];
-          puzzle.circles[row] = [];
-          puzzle.down_bars[row] = [];
-          puzzle.numbers[row] = [];
-          puzzle.shade_circles[row] = [];
-          puzzle.shade_squares[row] = [];
-          for (col=0; col<cols; col++) {
-            puzzle.numbers[row][col] = "";
-          }
-        }
         puzzle.cols = cols;
         puzzle.rows = rows;
+        initPuzzle();
       }
 
       // Answers
@@ -1811,7 +1795,6 @@ let puzzle = {
     }
     createGrid();
     hideGridSizeControls();
-    document.getElementById("bar-join-caps").checked = puzzle.bar_join_caps;
   }
 
   // parse an SVG file
@@ -2488,6 +2471,7 @@ let puzzle = {
 
     var reader = new FileReader();
     reader.readAsText(file, "UTF-8");
+    console.log("after read as text");
     reader.onload = function (event) {
       puzzle = JSON.parse(event.target.result);
       console.log(puzzle);
