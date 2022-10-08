@@ -3,9 +3,9 @@
 <html>
   <head>
     <title>BarGrids</title>
-    <link rel="stylesheet" href="/bargrids/styles.css">
-    <script type="text/javascript" src="/bargrids/script.js"></script>
+    <link rel="stylesheet" href="./styles.css">
     <script src="https://kit.fontawesome.com/5bbed011fe.js" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="./script.js"></script>
   </head>
   <body onload="initPuzzle(); createGrid(); updateMenus();">
 
@@ -95,7 +95,7 @@
 
         <!-- Grid Bars Toolbar Item -->
         <div id="bar-tool" class="grid__toolbar__item__wrapper" title="Grid Bars" onclick="toggleTool(this);">
-          <div class="grid__toolbar__item grid__toolbar__item--bars unselectable">⌎</div>
+          <div class="grid__toolbar__item grid__toolbar__item--bars unselectable">&urcrop;</div>
         </div>
 
         <!-- Numbers Toolbar Item -->
@@ -278,6 +278,12 @@
       <div id="save-svg-tool"class="control-container controls__layers hidden">
         <button id="save-svg-button" class="download-button" onclick="saveSVG();">Save SVG</button>
         <a id="svg-download" class="hidden"></a>
+      </div>
+
+      <!-- Save XML Tool -->
+      <div id="save-xml-tool"class="control-container controls__layers hidden">
+        <button id="save-xml-button" class="download-button" onclick="saveXML();">Save XML</button>
+        <a id="xml-download" class="hidden"></a>
       </div>
 
     </div>

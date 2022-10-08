@@ -994,6 +994,108 @@ let puzzle = {
     return source;
   }
 
+  function createXMLSource(xml) {
+    var ccns = "http://crossword.info/xml/crossword-compiler";
+    var rpns = "http://crossword.info/xml/rectangular-puzzle";
+    var xml = document.createElementNS(ccns, "crossword-compiler");
+
+    var puz = document.createElementNS(rpns, "rectangular-puzzle")
+    var metadata = document.createElementNS(rpns, "metadata");
+
+    // set title
+    var title = document.createElementNS(rpns, "title");
+    title.innerHTML = puzzle.title;
+
+    metadata.appendChild(title);
+    puz.appendChild(metadata);
+
+    var crossword = document.createElementNS(rpns, "crossword");
+    var grid = document.createElementNS(rpns, "grid");
+    grid.setAttribute("height", puzzle.rows);
+    grid.setAttribute("width", puzzle.cols);
+
+    var gridlook = document.createElementNS(rpns, "grid-look");
+    gridlook.setAttribute("numbering-scheme", "normal");
+    gridlook.setAttribute("cell-size-in-pixels", "26");
+    gridlook.setAttribute("clue-square-divider-width", "0.7");
+
+    grid.appendChild(gridlook);
+
+    // create cells
+    for (let row = 0; row < puzzle.rows; row++) {
+      for (let col = 0; col < puzzle.cols; col++) {
+        let cell = document.createElementNS(rpns, "cell");
+        cell.setAttribute("x", col + 1);
+        cell.setAttribute("y", row + 1);
+
+        if (puzzle.blanks[row][col]) {
+          cell.setAttribute("type", "void");
+          continue;
+        }
+
+        if (puzzle.blocks[row][col]) {
+          cell.setAttribute("type", "block");
+          continue;
+        }
+
+        if (puzzle.answers[row][col]) {
+          cell.setAttribute("solution", puzzle.answers[row][col]);
+        }
+
+        if (puzzle.numbers[row][col]) {
+          cell.setAttribute("number", puzzle.numbers[row][col]);
+        }
+
+        if (puzzle.across_bars[row][col]) {
+          cell.setAttribute("left-bar", true);
+        }
+
+        if (puzzle.down_bars[row][col]) {
+          cell.setAttribute("top-bar", true);
+        }
+
+        if (puzzle.circles[row][col]) {
+          cell.setAttribute("background-shape", "circle");
+        }
+
+        if (puzzle.shade_squares[row][col]) {
+          cell.setAttribute("background-color", getShade(puzzle.shade_squares[row][col]));
+        }
+
+        // text.id = "svg-number-" + row + "-" + col;
+        // text.setAttribute("data-col", col);
+        // text.setAttribute("data-row", row);
+        // text.setAttribute("x", col * puzzle.size + 8);
+        // text.setAttribute("y", row * puzzle.size + 19);
+        // text.innerHTML = puzzle.numbers[row][col];
+        grid.appendChild(cell);
+      }
+    }
+
+    crossword.appendChild(grid);
+    puz.appendChild(crossword);
+    xml.appendChild(puz);
+    console.log(xml);
+
+    // get xml source.
+    var serializer = new XMLSerializer();
+    var source = serializer.serializeToString(xml);
+
+    // update name spaces.
+    // if(!source.match(/^<crossword-compiler[^>]+xmlns="http\:\/\/crossword\.info\/xml\/crossword-compiler"/)){
+    //     source = source.replace(/^<crossword-compiler/, '<crossword-compiler xmlns="http://crossword.info/xml/crossword-compiler"');
+    // }
+    // if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+    //     source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+    // }
+
+    // add xml declaration
+    // source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+    console.log(source);
+    return source;
+  }
+
   // create the basic squares for the SVG
   function createSVGSquares(svg) {
     var blanksgroup = document.createElementNS(svgns, "g");
@@ -1549,6 +1651,7 @@ let puzzle = {
     document.getElementById("bar-join-caps-tool").classList.remove("hidden");
     // document.getElementById("save-json-tool").classList.remove("hidden");
     document.getElementById("save-svg-tool").classList.remove("hidden");
+    document.getElementById("save-xml-tool").classList.remove("hidden");
   }
 
   // hide the numbers from the svg
@@ -1915,6 +2018,17 @@ let puzzle = {
     var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
     link.href = url;
     link.download = puzzle.title + ".svg";
+    link.click();
+  }
+
+  // save an XML file to the downloads folder
+  function saveXML() {
+    var link = document.getElementById("xml-download");
+    // var xml = document.getElementById("grid");
+    var source = createXMLSource();
+    var url = "data:text/xml;charset=utf-8," + encodeURIComponent(source);
+    link.href = url;
+    link.download = puzzle.title + ".xml";
     link.click();
   }
 
