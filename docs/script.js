@@ -467,17 +467,14 @@ function createGrid() {
   // create the bar joins button svg
   createBarJoinsSVG();
 
-  // toggle symmetry controls
-  if (puzzle.cols == puzzle.rows) {
-    document.getElementById("symmetry-mirror-d").disabled = false;
-    document.getElementById("symmetry-mirror-u").disabled = false;
-    document.getElementById("symmetry-mirror-4d").disabled = false;
-    document.getElementById("symmetry-mirror-8").disabled = false;
-  } else {
-    document.getElementById("symmetry-mirror-d").disabled = true;
-    document.getElementById("symmetry-mirror-u").disabled = true;
-    document.getElementById("symmetry-mirror-4d").disabled = true;
-    document.getElementById("symmetry-mirror-8").disabled = true;
+  // toggle symmetry controls (90 degree rotation and diagonals only work on square grids)
+  var square = puzzle.cols == puzzle.rows;
+  for (id of ["symmetry-rotate-90", "symmetry-mirror-d", "symmetry-mirror-u", "symmetry-mirror-4d", "symmetry-mirror-8"]) {
+    var radio = document.getElementById(id);
+    radio.disabled = !square;
+    if (!square && radio.checked) {
+      document.getElementById("symmetry-none").checked = true;
+    }
   }
 
   showAllLayers();
@@ -1815,12 +1812,14 @@ function parseEPS(eps) {
   bars = false;
   numbers = false;
   shades = false;
+  tint = 100;
   console.log(eps);
 
   for (line of eps.split(/\r|\r\n|\n/)) {
     // title
     if ("%%Title" == line.split(":")[0]) {
-      puzzle.title = line.split(":")[1].trim();
+      // drop the file suffixes BarGrids adds, e.g. "DW.AG.eps" or "DW.NG.DL.eps"
+      puzzle.title = line.split(":")[1].trim().replace(/(\.(AG|NG|JG|G))?(\.DL)?(\.eps)?$/i, "");
     }
 
     // size
@@ -1906,6 +1905,7 @@ function parseEPS(eps) {
     // Shades
     if (line == "% Begin Shades") {
       shades = true;
+      tint = 100;
       continue;
     }
     if (line == "% End Shades") {
@@ -1913,21 +1913,27 @@ function parseEPS(eps) {
       continue;
     }
     if (shades == true) {
+      // BarGridsBig2 sets one tint for all shades: "[tint 1] vc" (spot color) or "[0 0 0 tint] vc" (gray)
+      var vc = line.match(/^\[([\d. ]+)\] vc$/);
+      if (vc) {
+        var values = vc[1].trim().split(" ");
+        tint = Math.round(parseFloat(values.length == 2 ? values[0] : values[3]) * 100);
+        continue;
+      }
+      // BarGrids2 lines are "row col percent op", BarGridsBig2 lines are "row col op"
       var num = line.split(" ");
-      if (num[3] == "sb") {
-        row = parseInt(num[0] - 1);
-        col = parseInt(num[1] - 1);
-        console.log(num[2] + " " + row + "-" + col);
-        puzzle.shade_squares[row][col] = parseInt(num[2]);
-      } else if (num[3] == "sc") {
-        row = parseInt(num[0] - 1);
-        col = parseInt(num[1] - 1);
-        console.log(num[2] + " " + row + "-" + col);
-        puzzle.shade_circles[row][col] = parseInt(num[2]);
-      } else if (num[3] == "oc") {
-        row = parseInt(num[0] - 1);
-        col = parseInt(num[1] - 1);
-        console.log(num[2] + " " + row + "-" + col);
+      var op = num[num.length - 1];
+      var percent = num.length == 4 ? parseInt(num[2]) : tint;
+      row = parseInt(num[0]) - 1;
+      col = parseInt(num[1]) - 1;
+      if (op == "sb") {
+        console.log(percent + " " + row + "-" + col);
+        puzzle.shade_squares[row][col] = percent;
+      } else if (op == "sc") {
+        console.log(percent + " " + row + "-" + col);
+        puzzle.shade_circles[row][col] = percent;
+      } else if (op == "oc") {
+        console.log("circle " + row + "-" + col);
         puzzle.circles[row][col] = true;
       }
     }
@@ -2050,7 +2056,13 @@ function saveJSON() {
 // save an SVG file to the downloads folder
 function saveSVG() {
   var link = document.getElementById("svg-download");
-  var svg = document.getElementById("grid");
+  // empty hidden layers in the file, so turning off numbers or answers saves
+  // an answer grid or a number grid like BarGrids did (parseSVG still finds every layer)
+  var svg = document.getElementById("grid").cloneNode(true);
+  for (hidden of svg.querySelectorAll(".hidden")) {
+    removeChildren(hidden);
+    hidden.classList.remove("hidden");
+  }
   var source = createSVGSource(svg);
   var url = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(source);
   link.href = url;
@@ -2072,6 +2084,10 @@ function saveXML() {
 // set the depth of the puzzle by updating the text input
 function setDepth(value) {
   console.log("Setting Grid Depth: " + value);
+  if (!validGridSize(value)) {
+    document.getElementById("depth").value = puzzle.rows;
+    return;
+  }
   puzzle.rows = parseInt(value);
   initPuzzle();
   createGrid();
@@ -2080,9 +2096,23 @@ function setDepth(value) {
 // set the width of the puzzle by updating the text input
 function setWidth(value) {
   console.log("Setting Grid Width: " + value);
+  if (!validGridSize(value)) {
+    document.getElementById("width").value = puzzle.cols;
+    return;
+  }
   puzzle.cols = parseInt(value);
   initPuzzle();
   createGrid();
+}
+
+// check a width or depth against the limits from BarGridsBig2
+function validGridSize(value) {
+  var size = Number(value);
+  if (!Number.isInteger(size) || size < 2 || size > 25) {
+    alert("Width and depth must be whole numbers between 2 and 25.");
+    return false;
+  }
+  return true;
 }
 
 // show all svg layers
@@ -2336,14 +2366,21 @@ function updateAcrossBars(div) {
   var row = parseInt(id[1]);
   var col = parseInt(id[2]);
   var bars = getSymmetricalBars("across", row, col);
+  // like BarGrids, set every symmetrical bar to the clicked bar's new state
+  setSymmetricalBars(bars, !puzzle.across_bars[row][col]);
+}
+
+// set a list of across and down bars on or off
+function setSymmetricalBars(bars, state) {
   var names = [];
   for (bar of bars) {
     name = bar[0] + "-" + bar[1] + "-" + bar[2];
     if (names.includes(name)) { continue; }
     else { names.push(name); }
-    if (bar[0] == "across") {
+    // bars that were never set are undefined, so compare as booleans
+    if (bar[0] == "across" && Boolean(puzzle.across_bars[bar[1]][bar[2]]) != state) {
       updateAcrossBar(bar[1], bar[2]);
-    } else if (bar[0] == "down") {
+    } else if (bar[0] == "down" && Boolean(puzzle.down_bars[bar[1]][bar[2]]) != state) {
       updateDownBar(bar[1], bar[2]);
     }
   }
@@ -2427,17 +2464,7 @@ function updateDownBars(div) {
   var row = parseInt(id[1]);
   var col = parseInt(id[2]);
   var bars = getSymmetricalBars("down", row, col);
-  var names = [];
-  for (bar of bars) {
-    name = bar[0] + "-" + bar[1] + "-" + bar[2];
-    if (names.includes(name)) { continue; }
-    else { names.push(name); }
-    if (bar[0] == "across") {
-      updateAcrossBar(bar[1], bar[2]);
-    } else if (bar[0] == "down") {
-      updateDownBar(bar[1], bar[2]);
-    }
-  }
+  setSymmetricalBars(bars, !puzzle.down_bars[row][col]);
 }
 
 // update font
