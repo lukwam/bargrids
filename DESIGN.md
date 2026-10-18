@@ -46,8 +46,9 @@ demo/        the GitHub Pages site, built from the library.
 tests/       unit tests per layer, golden tests (symmetry vectors, rendered SVG), the format's fixtures.
 ```
 
-Builds: an ES module with type definitions (`dist/bargrids.js`, `dist/*.d.ts`) for bundlers and the CMS, and a
-single file for a `<script>` tag (`dist/bargrids.min.js`, also served by jsDelivr from each release tag).
+Builds (Vite, library mode): an ES module with type definitions (`dist/bargrids.js`, `dist/*.d.ts`) for bundlers
+and the CMS, and a single file for a `<script>` tag (`dist/bargrids.min.js`, also served by jsDelivr from each
+release tag). Small enough that a publisher's page can embed it without worrying about framework versions.
 
 ## 3. The model
 
@@ -124,6 +125,11 @@ const editor = new Editor(element, { document: hexwordDoc, symmetry: "180", tool
 editor.addEventListener("change", () => save(editor.toHexword()));
 ```
 
+**One schema.** The component reads and writes hexword documents and nothing else of its own. (A suggestion to give
+it a separate cell matrix with bars on all four sides of each square was rejected: two sides per bar can contradict
+each other, which is why the format stores bars only to the right of and below a square, and clue lists in the
+format aren't limited to Across and Down.)
+
 **In the Hex CMS:** the Grid tab gets a Text / Visual switch; Visual mounts the editor on the stored grid and writes
 back to the same fields, so either can be used and the other stays in step. The CMS pins a release.
 
@@ -131,6 +137,11 @@ back to the same fields, so either can be used and the other stays in step. The 
 
 hexword YAML and JSON (read and write); BarGrids 1 JSON saves (read, so old files open); BarGrids EPS (read, as
 version 1 does); SVG (write; read version 1's SVGs); Crossword Compiler XML (write, as version 1).
+
+**ipuz** (read and write), the existing open crossword interchange format, which carries bars as per-square styles.
+It lets any app that already reads ipuz show Hex puzzles at once, and move to hexword for what ipuz can't say (rebus
+squares with different letters across and down, paths, hidden bars, the solver-visibility rules). The conversion
+lives in the hexword libraries (Python and JS, at parity), so the CMS can export ipuz too; BarGrids uses it.
 
 ## 9. Testing and releases
 
@@ -145,9 +156,11 @@ version 1 does); SVG (write; read version 1's SVGs); Crossword Compiler XML (wri
 1. Model + golden symmetry tests + hexword conversion.
 2. Renderer, matching version 1's SVG.
 3. Editor with version 1's tools.
-4. Custom elements; the demo site on the library (version 1 retired).
+4. Custom elements; the demo site on the library (version 1 retired). The demo shows the grid beside its hexword
+   document, both live: edit the grid and watch the document change, or edit the document and watch the grid, so a
+   developer learns the format by using it.
 5. The CMS widget (Text / Visual).
-6. Later: the player (solving), with navigation by what the solver can see.
+6. Later: the player (solving), with navigation by what the solver can see, keyboard and phone input.
 
 ## 11. Open questions
 
