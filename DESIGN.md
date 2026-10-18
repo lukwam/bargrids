@@ -12,7 +12,7 @@ The first BarGrids (docs/script.js) was written to learn JavaScript and SVG by r
 BarGrids (1991-95), which Emily Cox and Henry Rathvon used for decades. It is now the specification: version 2 keeps
 every feature and look, with the original's behaviour recovered by reverse engineering (see "Symmetry").
 
-Status: milestone 1 (the model) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
+Status: milestones 1 (the model) and 2 (the renderer) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
 version 2 matches it.
 
 ---
@@ -124,6 +124,22 @@ caps filling the corners where bars meet, letters 24 (rebus shrinking 20, 16, 12
 corner, shading as grey levels from a percentage. Layers can be shown or hidden one by one (answers, bars, blocks,
 grid lines, numbers, circles, shading), as in version 1. Output is clean SVG with named groups, scalable and
 printable; the CMS and the PDF generator can use it in place of their own renderers once it matches them.
+
+**As built (milestone 2).** `renderSvg(grid, options)` gives SVG text, `renderSvgElement()` DOM elements and
+`renderTree()` the drawing as data, all from one tree. Geometry is version 1's, read from `docs/script.js`: a
+4-unit margin, bars 4 wide on the square's edge, 4x4 join caps where a vertical and a horizontal bar meet, a 4-unit
+border along the edges next to voids or the outside (lengthened so corners close), numbers of 14 at (4, 15) in the
+square, letters of 24 centred and shrinking 20, 16, 12, 10. Grid lines are 1 wide. (The design's "bars 8" was the
+bar-joins button; version 1 draws its grid with 4.) Styles are read as the Hex renderer reads them:
+`background-color` fills the square, `shape: shadesquare` shades it (`fill`, else the background, else light grey),
+`shape: circle` draws a filled circle for `fill` and an outline for `stroke` (or a plain black outline, as version
+1's circles, when neither is given), `shape: x` a grey cross, `opacity` applies to the shape. Labels in letter
+squares go in the corner after the number; labels in voids and blocks (margins, row letters) are centred. Layers:
+squares, shading, blocks, circles, gridLines, bars, barJoinCaps, border, numbers, labels, answers. Their defaults
+follow the document's settings (`show_puzzle_bars` / `show_solution_bars`, `show_grid_lines`, `show_grid_border`,
+`show_grid_labels`); answers show on the solution grid only; `show` overrides any of them. Elements carry
+`data-row`/`data-col` (and bars `data-side`) for the editor; there are no ids, so several grids can share a page.
+Hidden bars aren't drawn yet (the editor will want a faint dashed style for them).
 
 ## 6. The editor
 

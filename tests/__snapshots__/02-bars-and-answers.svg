@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 408 258" width="408" height="258" class="bargrids" data-rows="5" data-cols="8" data-size="50" data-layer="puzzle">
+  <title>Barred Company</title>
+  <g class="bargrids-squares">
+    <rect x="4" y="4" width="50" height="50" fill="white" data-row="0" data-col="0"/>
+    <rect x="54" y="4" width="50" height="50" fill="white" data-row="0" data-col="1"/>
+    <rect x="104" y="4" width="50" height="50" fill="white" data-row="0" data-col="2"/>
+    <rect x="154" y="4" width="50" height="50" fill="white" data-row="0" data-col="3"/>
+    <rect x="204" y="4" width="50" height="50" fill="white" data-row="0" data-col="4"/>
+    <rect x="254" y="4" width="50" height="50" fill="white" data-row="0" data-col="5"/>
+    <rect x="304" y="4" width="50" height="50" fill="white" data-row="0" data-col="6"/>
+    <rect x="354" y="4" width="50" height="50" fill="white" data-row="0" data-col="7"/>
+    <rect x="4" y="54" width="50" height="50" fill="white" data-row="1" data-col="0"/>
+    <rect x="54" y="54" width="50" height="50" fill="white" data-row="1" data-col="1"/>
+    <rect x="104" y="54" width="50" height="50" fill="white" data-row="1" data-col="2"/>
+    <rect x="154" y="54" width="50" height="50" fill="white" data-row="1" data-col="3"/>
+    <rect x="204" y="54" width="50" height="50" fill="white" data-row="1" data-col="4"/>
+    <rect x="254" y="54" width="50" height="50" fill="white" data-row="1" data-col="5"/>
+    <rect x="304" y="54" width="50" height="50" fill="white" data-row="1" data-col="6"/>
+    <rect x="354" y="54" width="50" height="50" fill="white" data-row="1" data-col="7"/>
+    <rect x="4" y="104" width="50" height="50" fill="white" data-row="2" data-col="0"/>
+    <rect x="54" y="104" width="50" height="50" fill="white" data-row="2" data-col="1"/>
+    <rect x="104" y="104" width="50" height="50" fill="white" data-row="2" data-col="2"/>
+    <rect x="154" y="104" width="50" height="50" fill="white" data-row="2" data-col="3"/>
+    <rect x="204" y="104" width="50" height="50" fill="white" data-row="2" data-col="4"/>
+    <rect x="254" y="104" width="50" height="50" fill="white" data-row="2" data-col="5"/>
+    <rect x="304" y="104" width="50" height="50" fill="white" data-row="2" data-col="6"/>
+    <rect x="354" y="104" width="50" height="50" fill="white" data-row="2" data-col="7"/>
+    <rect x="4" y="154" width="50" height="50" fill="white" data-row="3" data-col="0"/>
+    <rect x="54" y="154" width="50" height="50" fill="white" data-row="3" data-col="1"/>
+    <rect x="104" y="154" width="50" height="50" fill="white" data-row="3" data-col="2"/>
+    <rect x="154" y="154" width="50" height="50" fill="white" data-row="3" data-col="3"/>
+    <rect x="204" y="154" width="50" height="50" fill="white" data-row="3" data-col="4"/>
+    <rect x="254" y="154" width="50" height="50" fill="white" data-row="3" data-col="5"/>
+    <rect x="304" y="154" width="50" height="50" fill="white" data-row="3" data-col="6"/>
+    <rect x="354" y="154" width="50" height="50" fill="white" data-row="3" data-col="7"/>
+    <rect x="4" y="204" width="50" height="50" fill="white" data-row="4" data-col="0"/>
+    <rect x="54" y="204" width="50" height="50" fill="white" data-row="4" data-col="1"/>
+    <rect x="104" y="204" width="50" height="50" fill="white" data-row="4" data-col="2"/>
+    <rect x="154" y="204" width="50" height="50" fill="white" data-row="4" data-col="3"/>
+    <rect x="204" y="204" width="50" height="50" fill="white" data-row="4" data-col="4"/>
+    <rect x="254" y="204" width="50" height="50" fill="white" data-row="4" data-col="5"/>
+    <rect x="304" y="204" width="50" height="50" fill="white" data-row="4" data-col="6"/>
+    <rect x="354" y="204" width="50" height="50" fill="white" data-row="4" data-col="7"/>
+  </g>
+  <g class="bargrids-gridLines" stroke="black" stroke-width="1">
+    <line x1="4" y1="4" x2="54" y2="4"/>
+    <line x1="4" y1="4" x2="4" y2="54"/>
+    <line x1="54" y1="4" x2="104" y2="4"/>
+    <line x1="54" y1="4" x2="54" y2="54"/>
+    <line x1="104" y1="4" x2="154" y2="4"/>
+    <line x1="104" y1="4" x2="104" y2="54"/>
+    <line x1="154" y1="4" x2="204" y2="4"/>
+    <line x1="154" y1="4" x2="154" y2="54"/>
+    <line x1="204" y1="4" x2="254" y2="4"/>
+    <line x1="204" y1="4" x2="204" y2="54"/>
+    <line x1="254" y1="4" x2="304" y2="4"/>
+    <line x1="254" y1="4" x2="254" y2="54"/>
+    <line x1="304" y1="4" x2="354" y2="4"/>
+    <line x1="304" y1="4" x2="304" y2="54"/>
+    <line x1="354" y1="4" x2="404" y2="4"/>
+    <line x1="354" y1="4" x2="354" y2="54"/>
+    <line x1="404" y1="4" x2="404" y2="54"/>
+    <line x1="4" y1="54" x2="54" y2="54"/>
+    <line x1="4" y1="54" x2="4" y2="104"/>
+    <line x1="54" y1="54" x2="104" y2="54"/>
+    <line x1="54" y1="54" x2="54" y2="104"/>
+    <line x1="104" y1="54" x2="154" y2="54"/>
+    <line x1="104" y1="54" x2="104" y2="104"/>
+    <line x1="154" y1="54" x2="204" y2="54"/>
+    <line x1="154" y1="54" x2="154" y2="104"/>
+    <line x1="204" y1="54" x2="254" y2="54"/>
+    <line x1="204" y1="54" x2="204" y2="104"/>
+    <line x1="254" y1="54" x2="304" y2="54"/>
+    <line x1="254" y1="54" x2="254" y2="104"/>
+    <line x1="304" y1="54" x2="354" y2="54"/>
+    <line x1="304" y1="54" x2="304" y2="104"/>
+    <line x1="354" y1="54" x2="404" y2="54"/>
+    <line x1="354" y1="54" x2="354" y2="104"/>
+    <line x1="404" y1="54" x2="404" y2="104"/>
+    <line x1="4" y1="104" x2="54" y2="104"/>
+    <line x1="4" y1="104" x2="4" y2="154"/>
+    <line x1="54" y1="104" x2="104" y2="104"/>
+    <line x1="54" y1="104" x2="54" y2="154"/>
+    <line x1="104" y1="104" x2="154" y2="104"/>
+    <line x1="104" y1="104" x2="104" y2="154"/>
+    <line x1="154" y1="104" x2="204" y2="104"/>
+    <line x1="154" y1="104" x2="154" y2="154"/>
+    <line x1="204" y1="104" x2="254" y2="104"/>
+    <line x1="204" y1="104" x2="204" y2="154"/>
+    <line x1="254" y1="104" x2="304" y2="104"/>
+    <line x1="254" y1="104" x2="254" y2="154"/>
+    <line x1="304" y1="104" x2="354" y2="104"/>
+    <line x1="304" y1="104" x2="304" y2="154"/>
+    <line x1="354" y1="104" x2="404" y2="104"/>
+    <line x1="354" y1="104" x2="354" y2="154"/>
+    <line x1="404" y1="104" x2="404" y2="154"/>
+    <line x1="4" y1="154" x2="54" y2="154"/>
+    <line x1="4" y1="154" x2="4" y2="204"/>
+    <line x1="54" y1="154" x2="104" y2="154"/>
+    <line x1="54" y1="154" x2="54" y2="204"/>
+    <line x1="104" y1="154" x2="154" y2="154"/>
+    <line x1="104" y1="154" x2="104" y2="204"/>
+    <line x1="154" y1="154" x2="204" y2="154"/>
+    <line x1="154" y1="154" x2="154" y2="204"/>
+    <line x1="204" y1="154" x2="254" y2="154"/>
+    <line x1="204" y1="154" x2="204" y2="204"/>
+    <line x1="254" y1="154" x2="304" y2="154"/>
+    <line x1="254" y1="154" x2="254" y2="204"/>
+    <line x1="304" y1="154" x2="354" y2="154"/>
+    <line x1="304" y1="154" x2="304" y2="204"/>
+    <line x1="354" y1="154" x2="404" y2="154"/>
+    <line x1="354" y1="154" x2="354" y2="204"/>
+    <line x1="404" y1="154" x2="404" y2="204"/>
+    <line x1="4" y1="204" x2="54" y2="204"/>
+    <line x1="4" y1="204" x2="4" y2="254"/>
+    <line x1="4" y1="254" x2="54" y2="254"/>
+    <line x1="54" y1="204" x2="104" y2="204"/>
+    <line x1="54" y1="204" x2="54" y2="254"/>
+    <line x1="54" y1="254" x2="104" y2="254"/>
+    <line x1="104" y1="204" x2="154" y2="204"/>
+    <line x1="104" y1="204" x2="104" y2="254"/>
+    <line x1="104" y1="254" x2="154" y2="254"/>
+    <line x1="154" y1="204" x2="204" y2="204"/>
+    <line x1="154" y1="204" x2="154" y2="254"/>
+    <line x1="154" y1="254" x2="204" y2="254"/>
+    <line x1="204" y1="204" x2="254" y2="204"/>
+    <line x1="204" y1="204" x2="204" y2="254"/>
+    <line x1="204" y1="254" x2="254" y2="254"/>
+    <line x1="254" y1="204" x2="304" y2="204"/>
+    <line x1="254" y1="204" x2="254" y2="254"/>
+    <line x1="254" y1="254" x2="304" y2="254"/>
+    <line x1="304" y1="204" x2="354" y2="204"/>
+    <line x1="304" y1="204" x2="304" y2="254"/>
+    <line x1="304" y1="254" x2="354" y2="254"/>
+    <line x1="354" y1="204" x2="404" y2="204"/>
+    <line x1="354" y1="204" x2="354" y2="254"/>
+    <line x1="404" y1="204" x2="404" y2="254"/>
+    <line x1="354" y1="254" x2="404" y2="254"/>
+  </g>
+  <g class="bargrids-bars" stroke="black" stroke-width="4">
+    <line x1="54" y1="54" x2="104" y2="54" data-side="below" data-row="0" data-col="1"/>
+    <line x1="104" y1="54" x2="154" y2="54" data-side="below" data-row="0" data-col="2"/>
+    <line x1="154" y1="54" x2="204" y2="54" data-side="below" data-row="0" data-col="3"/>
+    <line x1="204" y1="54" x2="254" y2="54" data-side="below" data-row="0" data-col="4"/>
+    <line x1="304" y1="4" x2="304" y2="54" data-side="right" data-row="0" data-col="5"/>
+    <line x1="254" y1="54" x2="304" y2="54" data-side="below" data-row="0" data-col="5"/>
+    <line x1="304" y1="54" x2="354" y2="54" data-side="below" data-row="0" data-col="6"/>
+    <line x1="354" y1="54" x2="404" y2="54" data-side="below" data-row="0" data-col="7"/>
+    <line x1="54" y1="104" x2="104" y2="104" data-side="below" data-row="1" data-col="1"/>
+    <line x1="104" y1="104" x2="154" y2="104" data-side="below" data-row="1" data-col="2"/>
+    <line x1="154" y1="104" x2="204" y2="104" data-side="below" data-row="1" data-col="3"/>
+    <line x1="204" y1="104" x2="254" y2="104" data-side="below" data-row="1" data-col="4"/>
+    <line x1="304" y1="54" x2="304" y2="104" data-side="right" data-row="1" data-col="5"/>
+    <line x1="254" y1="104" x2="304" y2="104" data-side="below" data-row="1" data-col="5"/>
+    <line x1="304" y1="104" x2="354" y2="104" data-side="below" data-row="1" data-col="6"/>
+    <line x1="354" y1="104" x2="404" y2="104" data-side="below" data-row="1" data-col="7"/>
+    <line x1="54" y1="154" x2="104" y2="154" data-side="below" data-row="2" data-col="1"/>
+    <line x1="104" y1="154" x2="154" y2="154" data-side="below" data-row="2" data-col="2"/>
+    <line x1="154" y1="154" x2="204" y2="154" data-side="below" data-row="2" data-col="3"/>
+    <line x1="204" y1="154" x2="254" y2="154" data-side="below" data-row="2" data-col="4"/>
+    <line x1="254" y1="154" x2="304" y2="154" data-side="below" data-row="2" data-col="5"/>
+    <line x1="304" y1="154" x2="354" y2="154" data-side="below" data-row="2" data-col="6"/>
+    <line x1="354" y1="154" x2="404" y2="154" data-side="below" data-row="2" data-col="7"/>
+    <line x1="54" y1="204" x2="104" y2="204" data-side="below" data-row="3" data-col="1"/>
+    <line x1="104" y1="204" x2="154" y2="204" data-side="below" data-row="3" data-col="2"/>
+    <line x1="204" y1="154" x2="204" y2="204" data-side="right" data-row="3" data-col="3"/>
+    <line x1="154" y1="204" x2="204" y2="204" data-side="below" data-row="3" data-col="3"/>
+    <line x1="204" y1="204" x2="254" y2="204" data-side="below" data-row="3" data-col="4"/>
+    <line x1="254" y1="204" x2="304" y2="204" data-side="below" data-row="3" data-col="5"/>
+    <line x1="304" y1="204" x2="354" y2="204" data-side="below" data-row="3" data-col="6"/>
+    <line x1="354" y1="204" x2="404" y2="204" data-side="below" data-row="3" data-col="7"/>
+    <line x1="354" y1="204" x2="354" y2="254" data-side="right" data-row="4" data-col="6"/>
+  </g>
+  <g class="bargrids-barJoinCaps" fill="black">
+    <rect x="302" y="52" width="4" height="4"/>
+    <rect x="302" y="102" width="4" height="4"/>
+    <rect x="202" y="152" width="4" height="4"/>
+    <rect x="202" y="202" width="4" height="4"/>
+    <rect x="352" y="202" width="4" height="4"/>
+  </g>
+  <g class="bargrids-border" stroke="black" stroke-width="4">
+    <line x1="4" y1="2" x2="4" y2="56"/>
+    <line x1="2" y1="4" x2="56" y2="4"/>
+    <line x1="52" y1="4" x2="106" y2="4"/>
+    <line x1="102" y1="4" x2="156" y2="4"/>
+    <line x1="152" y1="4" x2="206" y2="4"/>
+    <line x1="202" y1="4" x2="256" y2="4"/>
+    <line x1="252" y1="4" x2="306" y2="4"/>
+    <line x1="302" y1="4" x2="356" y2="4"/>
+    <line x1="404" y1="2" x2="404" y2="56"/>
+    <line x1="352" y1="4" x2="406" y2="4"/>
+    <line x1="4" y1="52" x2="4" y2="106"/>
+    <line x1="404" y1="52" x2="404" y2="106"/>
+    <line x1="4" y1="102" x2="4" y2="156"/>
+    <line x1="404" y1="102" x2="404" y2="156"/>
+    <line x1="4" y1="152" x2="4" y2="206"/>
+    <line x1="404" y1="152" x2="404" y2="206"/>
+    <line x1="4" y1="202" x2="4" y2="256"/>
+    <line x1="2" y1="254" x2="56" y2="254"/>
+    <line x1="52" y1="254" x2="106" y2="254"/>
+    <line x1="102" y1="254" x2="156" y2="254"/>
+    <line x1="152" y1="254" x2="206" y2="254"/>
+    <line x1="202" y1="254" x2="256" y2="254"/>
+    <line x1="252" y1="254" x2="306" y2="254"/>
+    <line x1="302" y1="254" x2="356" y2="254"/>
+    <line x1="404" y1="202" x2="404" y2="256"/>
+    <line x1="352" y1="254" x2="406" y2="254"/>
+  </g>
+  <g class="bargrids-numbers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="14">
+    <text x="8" y="19" data-row="0" data-col="0">1</text>
+    <text x="358" y="19" data-row="0" data-col="7">2</text>
+    <text x="8" y="69" data-row="1" data-col="0">3</text>
+    <text x="308" y="69" data-row="1" data-col="6">4</text>
+    <text x="8" y="119" data-row="2" data-col="0">5</text>
+    <text x="8" y="169" data-row="3" data-col="0">6</text>
+    <text x="208" y="169" data-row="3" data-col="4">7</text>
+    <text x="8" y="219" data-row="4" data-col="0">8</text>
+  </g>
+  <g class="bargrids-answers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="24" text-anchor="middle">
+    <text x="29" y="29" dominant-baseline="central" data-row="0" data-col="0">O</text>
+    <text x="79" y="29" dominant-baseline="central" data-row="0" data-col="1">N</text>
+    <text x="129" y="29" dominant-baseline="central" data-row="0" data-col="2">E</text>
+    <text x="179" y="29" dominant-baseline="central" data-row="0" data-col="3">I</text>
+    <text x="229" y="29" dominant-baseline="central" data-row="0" data-col="4">L</text>
+    <text x="279" y="29" dominant-baseline="central" data-row="0" data-col="5">L</text>
+    <text x="329" y="29" dominant-baseline="central" data-row="0" data-col="6">G</text>
+    <text x="379" y="29" dominant-baseline="central" data-row="0" data-col="7">O</text>
+    <text x="29" y="79" dominant-baseline="central" data-row="1" data-col="0">A</text>
+    <text x="79" y="79" dominant-baseline="central" data-row="1" data-col="1">I</text>
+    <text x="129" y="79" dominant-baseline="central" data-row="1" data-col="2">R</text>
+    <text x="179" y="79" dominant-baseline="central" data-row="1" data-col="3">G</text>
+    <text x="229" y="79" dominant-baseline="central" data-row="1" data-col="4">U</text>
+    <text x="279" y="79" dominant-baseline="central" data-row="1" data-col="5">N</text>
+    <text x="329" y="79" dominant-baseline="central" data-row="1" data-col="6">H</text>
+    <text x="379" y="79" dominant-baseline="central" data-row="1" data-col="7">I</text>
+    <text x="29" y="129" dominant-baseline="central" data-row="2" data-col="0">S</text>
+    <text x="79" y="129" dominant-baseline="central" data-row="2" data-col="1">E</text>
+    <text x="129" y="129" dominant-baseline="central" data-row="2" data-col="2">L</text>
+    <text x="179" y="129" dominant-baseline="central" data-row="2" data-col="3">F</text>
+    <text x="229" y="129" dominant-baseline="central" data-row="2" data-col="4">M</text>
+    <text x="279" y="129" dominant-baseline="central" data-row="2" data-col="5">A</text>
+    <text x="329" y="129" dominant-baseline="central" data-row="2" data-col="6">D</text>
+    <text x="379" y="129" dominant-baseline="central" data-row="2" data-col="7">E</text>
+    <text x="29" y="179" dominant-baseline="central" data-row="3" data-col="0">I</text>
+    <text x="79" y="179" dominant-baseline="central" data-row="3" data-col="1">O</text>
+    <text x="129" y="179" dominant-baseline="central" data-row="3" data-col="2">T</text>
+    <text x="179" y="179" dominant-baseline="central" data-row="3" data-col="3">A</text>
+    <text x="229" y="179" dominant-baseline="central" data-row="3" data-col="4">T</text>
+    <text x="279" y="179" dominant-baseline="central" data-row="3" data-col="5">E</text>
+    <text x="329" y="179" dominant-baseline="central" data-row="3" data-col="6">A</text>
+    <text x="379" y="179" dominant-baseline="central" data-row="3" data-col="7">L</text>
+    <text x="29" y="229" dominant-baseline="central" data-row="4" data-col="0">S</text>
+    <text x="79" y="229" dominant-baseline="central" data-row="4" data-col="1">T</text>
+    <text x="129" y="229" dominant-baseline="central" data-row="4" data-col="2">L</text>
+    <text x="179" y="229" dominant-baseline="central" data-row="4" data-col="3">O</text>
+    <text x="229" y="229" dominant-baseline="central" data-row="4" data-col="4">U</text>
+    <text x="279" y="229" dominant-baseline="central" data-row="4" data-col="5">I</text>
+    <text x="329" y="229" dominant-baseline="central" data-row="4" data-col="6">S</text>
+    <text x="379" y="229" dominant-baseline="central" data-row="4" data-col="7">X</text>
+  </g>
+</svg>

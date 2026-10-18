@@ -7,3 +7,6 @@ export { SYMMETRIES, barInside, symmetricBars, symmetryAllowed, toSymmetry } fro
 export type { Symmetry } from "./model/symmetry.js";
 export { contentToken, validContent } from "./model/tokens.js";
 export type { BarPosition, Layer, Square, SquareKind, StyleProperties } from "./model/types.js";
+export { LAYERS, answerFontSize, renderSvg, renderSvgElement, renderTree, shade } from "./render/render.js";
+export type { LayerName, RenderOptions } from "./render/render.js";
+export { toSvgString, type SvgNode } from "./render/svg-tree.js";

@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 258 208" width="258" height="208" class="bargrids" data-rows="4" data-cols="5" data-size="50" data-layer="puzzle">
+  <title>Odd Shapes</title>
+  <g class="bargrids-squares">
+    <rect x="54" y="4" width="50" height="50" fill="white" data-row="0" data-col="1"/>
+    <rect x="104" y="4" width="50" height="50" fill="white" data-row="0" data-col="2"/>
+    <rect x="154" y="4" width="50" height="50" fill="white" data-row="0" data-col="3"/>
+    <rect x="4" y="54" width="50" height="50" fill="lightgrey" data-row="1" data-col="0"/>
+    <rect x="54" y="54" width="50" height="50" fill="white" data-row="1" data-col="1"/>
+    <rect x="154" y="54" width="50" height="50" fill="white" data-row="1" data-col="3"/>
+    <rect x="204" y="54" width="50" height="50" fill="white" data-row="1" data-col="4"/>
+    <rect x="54" y="104" width="50" height="50" fill="white" data-row="2" data-col="1"/>
+    <rect x="104" y="104" width="50" height="50" fill="white" data-row="2" data-col="2"/>
+    <rect x="154" y="104" width="50" height="50" fill="white" data-row="2" data-col="3"/>
+    <rect x="54" y="154" width="50" height="50" fill="white" data-row="3" data-col="1"/>
+    <rect x="104" y="154" width="50" height="50" fill="white" data-row="3" data-col="2"/>
+    <rect x="154" y="154" width="50" height="50" fill="white" data-row="3" data-col="3"/>
+  </g>
+  <g class="bargrids-blocks">
+    <rect x="104" y="54" width="50" height="50" fill="black" data-row="1" data-col="2"/>
+  </g>
+  <g class="bargrids-circles">
+    <circle cx="79" cy="29" r="22" fill="none" stroke="grey" stroke-width="1" data-row="0" data-col="1"/>
+    <circle cx="179" cy="29" r="22" fill="none" stroke="grey" stroke-width="1" data-row="0" data-col="3"/>
+  </g>
+  <g class="bargrids-gridLines" stroke="black" stroke-width="1">
+    <line x1="54" y1="4" x2="104" y2="4"/>
+    <line x1="54" y1="4" x2="54" y2="54"/>
+    <line x1="104" y1="4" x2="154" y2="4"/>
+    <line x1="104" y1="4" x2="104" y2="54"/>
+    <line x1="154" y1="4" x2="204" y2="4"/>
+    <line x1="154" y1="4" x2="154" y2="54"/>
+    <line x1="204" y1="4" x2="204" y2="54"/>
+    <line x1="4" y1="54" x2="54" y2="54"/>
+    <line x1="4" y1="54" x2="4" y2="104"/>
+    <line x1="4" y1="104" x2="54" y2="104"/>
+    <line x1="54" y1="54" x2="104" y2="54"/>
+    <line x1="54" y1="54" x2="54" y2="104"/>
+    <line x1="104" y1="54" x2="154" y2="54"/>
+    <line x1="104" y1="54" x2="104" y2="104"/>
+    <line x1="154" y1="54" x2="204" y2="54"/>
+    <line x1="154" y1="54" x2="154" y2="104"/>
+    <line x1="204" y1="54" x2="254" y2="54"/>
+    <line x1="204" y1="54" x2="204" y2="104"/>
+    <line x1="254" y1="54" x2="254" y2="104"/>
+    <line x1="204" y1="104" x2="254" y2="104"/>
+    <line x1="54" y1="104" x2="104" y2="104"/>
+    <line x1="54" y1="104" x2="54" y2="154"/>
+    <line x1="104" y1="104" x2="154" y2="104"/>
+    <line x1="104" y1="104" x2="104" y2="154"/>
+    <line x1="154" y1="104" x2="204" y2="104"/>
+    <line x1="154" y1="104" x2="154" y2="154"/>
+    <line x1="204" y1="104" x2="204" y2="154"/>
+    <line x1="54" y1="154" x2="104" y2="154"/>
+    <line x1="54" y1="154" x2="54" y2="204"/>
+    <line x1="54" y1="204" x2="104" y2="204"/>
+    <line x1="104" y1="154" x2="154" y2="154"/>
+    <line x1="104" y1="154" x2="104" y2="204"/>
+    <line x1="104" y1="204" x2="154" y2="204"/>
+    <line x1="154" y1="154" x2="204" y2="154"/>
+    <line x1="154" y1="154" x2="154" y2="204"/>
+    <line x1="204" y1="154" x2="204" y2="204"/>
+    <line x1="154" y1="204" x2="204" y2="204"/>
+  </g>
+  <g class="bargrids-bars" stroke="black" stroke-width="4">
+    <line x1="54" y1="54" x2="104" y2="54" data-side="below" data-row="0" data-col="1"/>
+    <line x1="54" y1="104" x2="104" y2="104" data-side="below" data-row="1" data-col="1"/>
+    <line x1="54" y1="154" x2="104" y2="154" data-side="below" data-row="2" data-col="1"/>
+    <line x1="104" y1="154" x2="154" y2="154" data-side="below" data-row="2" data-col="2"/>
+    <line x1="154" y1="154" x2="204" y2="154" data-side="below" data-row="2" data-col="3"/>
+  </g>
+  <g class="bargrids-border" stroke="black" stroke-width="4">
+    <line x1="54" y1="2" x2="54" y2="56"/>
+    <line x1="52" y1="4" x2="106" y2="4"/>
+    <line x1="102" y1="4" x2="156" y2="4"/>
+    <line x1="204" y1="2" x2="204" y2="56"/>
+    <line x1="152" y1="4" x2="206" y2="4"/>
+    <line x1="4" y1="52" x2="4" y2="106"/>
+    <line x1="2" y1="54" x2="56" y2="54"/>
+    <line x1="2" y1="104" x2="56" y2="104"/>
+    <line x1="254" y1="52" x2="254" y2="106"/>
+    <line x1="202" y1="54" x2="256" y2="54"/>
+    <line x1="202" y1="104" x2="256" y2="104"/>
+    <line x1="54" y1="102" x2="54" y2="156"/>
+    <line x1="204" y1="102" x2="204" y2="156"/>
+    <line x1="54" y1="152" x2="54" y2="206"/>
+    <line x1="52" y1="204" x2="106" y2="204"/>
+    <line x1="102" y1="204" x2="156" y2="204"/>
+    <line x1="204" y1="152" x2="204" y2="206"/>
+    <line x1="152" y1="204" x2="206" y2="204"/>
+  </g>
+  <g class="bargrids-numbers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="14">
+    <text x="58" y="19" data-row="0" data-col="1">1</text>
+    <text x="158" y="19" data-row="0" data-col="3">2</text>
+    <text x="8" y="69" data-row="1" data-col="0">3</text>
+    <text x="158" y="69" data-row="1" data-col="3">4</text>
+    <text x="58" y="119" data-row="2" data-col="1">5</text>
+  </g>
+  <g class="bargrids-labels" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="14">
+    <text x="29" y="29" text-anchor="middle" dominant-baseline="central" font-size="20" fill="black" data-row="0" data-col="0">a</text>
+    <text x="29" y="129" text-anchor="middle" dominant-baseline="central" font-size="20" fill="black" data-row="2" data-col="0">b</text>
+    <text x="229" y="179" text-anchor="middle" dominant-baseline="central" font-size="20" fill="black" data-row="3" data-col="4">12</text>
+  </g>
+  <g class="bargrids-answers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="24" text-anchor="middle">
+    <text x="79" y="29" dominant-baseline="central" data-row="0" data-col="1">C</text>
+    <text x="129" y="29" dominant-baseline="central" data-row="0" data-col="2">A</text>
+    <text x="179" y="29" dominant-baseline="central" data-row="0" data-col="3">T</text>
+    <text x="29" y="79" dominant-baseline="central" data-row="1" data-col="0">S</text>
+    <text x="79" y="79" dominant-baseline="central" font-size="16" data-row="1" data-col="1">ING</text>
+    <text x="179" y="79" dominant-baseline="central" data-row="1" data-col="3">A</text>
+    <text x="229" y="79" dominant-baseline="central" data-row="1" data-col="4">★</text>
+    <text x="79" y="129" dominant-baseline="central" data-row="2" data-col="1">D</text>
+    <text x="129" y="129" dominant-baseline="central" data-row="2" data-col="2">O</text>
+    <text x="179" y="129" dominant-baseline="central" data-row="2" data-col="3">G</text>
+  </g>
+</svg>

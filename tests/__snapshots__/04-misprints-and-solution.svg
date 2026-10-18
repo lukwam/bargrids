@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 208 158" width="208" height="158" class="bargrids" data-rows="3" data-cols="4" data-size="50" data-layer="solution">
+  <title>Change of Heart</title>
+  <g class="bargrids-squares">
+    <rect x="4" y="4" width="50" height="50" fill="white" data-row="0" data-col="0"/>
+    <rect x="54" y="4" width="50" height="50" fill="white" data-row="0" data-col="1"/>
+    <rect x="104" y="4" width="50" height="50" fill="white" data-row="0" data-col="2"/>
+    <rect x="154" y="4" width="50" height="50" fill="yellow" data-row="0" data-col="3"/>
+    <rect x="4" y="54" width="50" height="50" fill="white" data-row="1" data-col="0"/>
+    <rect x="54" y="54" width="50" height="50" fill="white" data-row="1" data-col="1"/>
+    <rect x="104" y="54" width="50" height="50" fill="white" data-row="1" data-col="2"/>
+    <rect x="154" y="54" width="50" height="50" fill="white" data-row="1" data-col="3"/>
+    <rect x="4" y="104" width="50" height="50" fill="white" data-row="2" data-col="0"/>
+    <rect x="54" y="104" width="50" height="50" fill="white" data-row="2" data-col="1"/>
+    <rect x="104" y="104" width="50" height="50" fill="white" data-row="2" data-col="2"/>
+    <rect x="154" y="104" width="50" height="50" fill="white" data-row="2" data-col="3"/>
+  </g>
+  <g class="bargrids-gridLines" stroke="black" stroke-width="1">
+    <line x1="4" y1="4" x2="54" y2="4"/>
+    <line x1="4" y1="4" x2="4" y2="54"/>
+    <line x1="54" y1="4" x2="104" y2="4"/>
+    <line x1="54" y1="4" x2="54" y2="54"/>
+    <line x1="104" y1="4" x2="154" y2="4"/>
+    <line x1="104" y1="4" x2="104" y2="54"/>
+    <line x1="154" y1="4" x2="204" y2="4"/>
+    <line x1="154" y1="4" x2="154" y2="54"/>
+    <line x1="204" y1="4" x2="204" y2="54"/>
+    <line x1="4" y1="54" x2="54" y2="54"/>
+    <line x1="4" y1="54" x2="4" y2="104"/>
+    <line x1="54" y1="54" x2="104" y2="54"/>
+    <line x1="54" y1="54" x2="54" y2="104"/>
+    <line x1="104" y1="54" x2="154" y2="54"/>
+    <line x1="104" y1="54" x2="104" y2="104"/>
+    <line x1="154" y1="54" x2="204" y2="54"/>
+    <line x1="154" y1="54" x2="154" y2="104"/>
+    <line x1="204" y1="54" x2="204" y2="104"/>
+    <line x1="4" y1="104" x2="54" y2="104"/>
+    <line x1="4" y1="104" x2="4" y2="154"/>
+    <line x1="4" y1="154" x2="54" y2="154"/>
+    <line x1="54" y1="104" x2="104" y2="104"/>
+    <line x1="54" y1="104" x2="54" y2="154"/>
+    <line x1="54" y1="154" x2="104" y2="154"/>
+    <line x1="104" y1="104" x2="154" y2="104"/>
+    <line x1="104" y1="104" x2="104" y2="154"/>
+    <line x1="104" y1="154" x2="154" y2="154"/>
+    <line x1="154" y1="104" x2="204" y2="104"/>
+    <line x1="154" y1="104" x2="154" y2="154"/>
+    <line x1="204" y1="104" x2="204" y2="154"/>
+    <line x1="154" y1="154" x2="204" y2="154"/>
+  </g>
+  <g class="bargrids-bars" stroke="black" stroke-width="4">
+    <line x1="54" y1="54" x2="104" y2="54" data-side="below" data-row="0" data-col="1"/>
+    <line x1="104" y1="54" x2="154" y2="54" data-side="below" data-row="0" data-col="2"/>
+    <line x1="54" y1="104" x2="104" y2="104" data-side="below" data-row="1" data-col="1"/>
+    <line x1="104" y1="104" x2="154" y2="104" data-side="below" data-row="1" data-col="2"/>
+    <line x1="54" y1="104" x2="54" y2="154" data-side="right" data-row="2" data-col="0"/>
+    <line x1="104" y1="104" x2="104" y2="154" data-side="right" data-row="2" data-col="1"/>
+    <line x1="154" y1="104" x2="154" y2="154" data-side="right" data-row="2" data-col="2"/>
+  </g>
+  <g class="bargrids-barJoinCaps" fill="black">
+    <rect x="52" y="102" width="4" height="4"/>
+    <rect x="102" y="102" width="4" height="4"/>
+    <rect x="152" y="102" width="4" height="4"/>
+  </g>
+  <g class="bargrids-border" stroke="black" stroke-width="4">
+    <line x1="4" y1="2" x2="4" y2="56"/>
+    <line x1="2" y1="4" x2="56" y2="4"/>
+    <line x1="52" y1="4" x2="106" y2="4"/>
+    <line x1="102" y1="4" x2="156" y2="4"/>
+    <line x1="204" y1="2" x2="204" y2="56"/>
+    <line x1="152" y1="4" x2="206" y2="4"/>
+    <line x1="4" y1="52" x2="4" y2="106"/>
+    <line x1="204" y1="52" x2="204" y2="106"/>
+    <line x1="4" y1="102" x2="4" y2="156"/>
+    <line x1="2" y1="154" x2="56" y2="154"/>
+    <line x1="52" y1="154" x2="106" y2="154"/>
+    <line x1="102" y1="154" x2="156" y2="154"/>
+    <line x1="204" y1="102" x2="204" y2="156"/>
+    <line x1="152" y1="154" x2="206" y2="154"/>
+  </g>
+  <g class="bargrids-numbers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="14">
+    <text x="8" y="19" data-row="0" data-col="0">1</text>
+    <text x="158" y="19" data-row="0" data-col="3">2</text>
+  </g>
+  <g class="bargrids-answers" fill="black" font-family="Helvetica, Arial, sans-serif" font-size="24" text-anchor="middle">
+    <text x="29" y="29" dominant-baseline="central" data-row="0" data-col="0">W</text>
+    <text x="79" y="29" dominant-baseline="central" data-row="0" data-col="1">A</text>
+    <text x="129" y="29" dominant-baseline="central" data-row="0" data-col="2">R</text>
+    <text x="179" y="29" dominant-baseline="central" data-row="0" data-col="3">D</text>
+    <text x="29" y="79" dominant-baseline="central" data-row="1" data-col="0">A</text>
+    <text x="79" y="79" dominant-baseline="central" data-row="1" data-col="1">I</text>
+    <text x="129" y="79" dominant-baseline="central" data-row="1" data-col="2">R</text>
+    <text x="179" y="79" dominant-baseline="central" data-row="1" data-col="3">E</text>
+    <text x="29" y="129" dominant-baseline="central" data-row="2" data-col="0">X</text>
+    <text x="79" y="129" dominant-baseline="central" data-row="2" data-col="1">Y</text>
+    <text x="129" y="129" dominant-baseline="central" data-row="2" data-col="2">Z</text>
+    <text x="179" y="129" dominant-baseline="central" data-row="2" data-col="3">W</text>
+  </g>
+</svg>

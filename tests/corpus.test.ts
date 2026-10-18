@@ -9,7 +9,7 @@ import { join } from "node:path";
 import { loads, normalize } from "hexword";
 import { describe, expect, it } from "vitest";
 
-import { Grid } from "../src/index.js";
+import { Grid, renderSvg } from "../src/index.js";
 
 const corpus = process.env.BARGRIDS_CORPUS;
 const files = corpus ? readdirSync(corpus).filter((name) => /\.(json|ya?ml)$/.test(name)).sort() : [];
@@ -22,7 +22,7 @@ function meaning(doc: Record<string, unknown>) {
 }
 
 describe.skipIf(!corpus)("corpus", () => {
-  it(`round-trips the puzzles in ${files.length} documents`, () => {
+  it(`round-trips and draws the puzzles in ${files.length} documents`, () => {
     const failures: string[] = [];
     let checked = 0;
     for (const name of files) {
@@ -35,11 +35,12 @@ describe.skipIf(!corpus)("corpus", () => {
       grid.undo();
       try {
         expect(meaning(grid.toHexword())).toEqual(meaning(original));
+        for (const layer of ["puzzle", "solution"] as const) expect(renderSvg(grid, { layer })).toContain("</svg>");
       } catch {
         failures.push(name);
       }
     }
     expect(failures).toEqual([]);
-    console.log(`corpus: ${checked} grids round-tripped`);
-  });
+    console.log(`corpus: ${checked} grids round-tripped and drawn`);
+  }, 120_000);
 });
