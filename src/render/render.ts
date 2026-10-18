@@ -13,6 +13,7 @@ export const LAYERS = [
   "circles",
   "gridLines",
   "bars",
+  "hiddenBars",
   "barJoinCaps",
   "border",
   "numbers",
@@ -68,6 +69,7 @@ export function renderTree(grid: Grid, options: RenderOptions = {}): SvgNode {
     circles: true,
     gridLines: settings.show_grid_lines !== false,
     bars: (options.layer === "solution" ? settings.show_solution_bars : settings.show_puzzle_bars) !== false,
+    hiddenBars: false,
     barJoinCaps: true,
     border: settings.show_grid_border !== false,
     numbers: settings.show_grid_labels !== false,
@@ -155,6 +157,17 @@ export function renderTree(grid: Grid, options: RenderOptions = {}): SvgNode {
     return out;
   });
 
+  // Hidden bars (answer boundaries that aren't printed) only show where asked, as in the editor: faint and dashed.
+  const hiddenBars = each((square, row, col) => {
+    const out: SvgNode[] = [];
+    const [x, y] = [x0(col), y0(row)];
+    if (square.hiddenBarRight && !square.barRight && col < width - 1)
+      out.push(el("line", { x1: x + size, y1: y, x2: x + size, y2: y + size, "data-side": "right", ...at(row, col) }));
+    if (square.hiddenBarBelow && !square.barBelow && row < height - 1)
+      out.push(el("line", { x1: x, y1: y + size, x2: x + size, y2: y + size, "data-side": "below", ...at(row, col) }));
+    return out;
+  });
+
   // A cap fills the notch where a vertical and a horizontal bar meet at a grid point, as in BarGrids.
   const caps: SvgNode[] = [];
   for (let row = 1; row < height; row++)
@@ -226,6 +239,7 @@ export function renderTree(grid: Grid, options: RenderOptions = {}): SvgNode {
     ...group("circles", {}, circles),
     ...group("gridLines", { stroke: "black", "stroke-width": GRID_LINE * k }, gridLines),
     ...group("bars", { stroke: "black", "stroke-width": BAR * k }, bars),
+    ...group("hiddenBars", { stroke: "#4a7bd0", "stroke-width": BAR * k, "stroke-dasharray": `${6 * k} ${4 * k}`, opacity: 0.6 }, hiddenBars),
     ...(show.bars ? group("barJoinCaps", { fill: "black" }, caps) : []),
     ...group("border", { stroke: "black", "stroke-width": BORDER * k }, border),
     ...group("numbers", { fill: "black", "font-family": options.numberFont ?? DEFAULT_FONT, "font-size": 14 * k }, numberNodes),

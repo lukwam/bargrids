@@ -332,7 +332,7 @@ export class Editor extends EventTarget {
     const tree = renderTree(this.grid, {
       ...this.renderOptions,
       layer: this._layer,
-      show: { answers: true, ...this.renderOptions.show },
+      show: { answers: true, hiddenBars: true, ...this.renderOptions.show },
     });
     if (this._tool === "letters") {
       const highlight = this.highlight();

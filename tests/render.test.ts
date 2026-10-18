@@ -135,6 +135,14 @@ describe("layers and settings", () => {
     expect(layer(tree, "barJoinCaps")).toBeUndefined();
   });
 
+  it("draws hidden bars only when asked", () => {
+    const grid = doc(["ABCD", "EFGH"], ["AE", "BF", "CG", "DH"], { entry_rows: ["AB|CD", "EFGH"], entry_columns: ["AE", "BF", "CG", "DH"] });
+    expect(layer(renderTree(grid), "hiddenBars")).toBeUndefined();
+    const hidden = layer(renderTree(grid, { show: { hiddenBars: true } }), "hiddenBars")!;
+    expect(hidden.attrs["stroke-dasharray"]).toBe("6 4");
+    expect(hidden.children.map((l) => l.attrs)).toEqual([{ x1: 104, y1: 4, x2: 104, y2: 54, "data-side": "right", "data-row": 0, "data-col": 1 }]);
+  });
+
   it("leaves out data-row and data-col when asked", () => {
     expect(renderSvg(fixture("01-word-square"), { positions: false })).not.toContain(" data-row=");
   });

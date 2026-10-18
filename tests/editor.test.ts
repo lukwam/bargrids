@@ -145,6 +145,7 @@ describe("the other tools", () => {
     expect(e.grid.canUndo).toBe(true);
     e.clickAt(...edge(1, 1, "below"), { alt: true });
     expect(e.grid.square(1, 1).hiddenBarBelow).toBe(true);
+    expect(host.querySelectorAll(".bargrids-hiddenBars line").length).toBe(1);
     expect(e.grid.square(3, 3).barBelow).toBe(false);
   });
 

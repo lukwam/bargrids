@@ -135,11 +135,11 @@ bar-joins button; version 1 draws its grid with 4.) Styles are read as the Hex r
 `shape: circle` draws a filled circle for `fill` and an outline for `stroke` (or a plain black outline, as version
 1's circles, when neither is given), `shape: x` a grey cross, `opacity` applies to the shape. Labels in letter
 squares go in the corner after the number; labels in voids and blocks (margins, row letters) are centred. Layers:
-squares, shading, blocks, circles, gridLines, bars, barJoinCaps, border, numbers, labels, answers. Their defaults
+squares, shading, blocks, circles, gridLines, bars, hiddenBars, barJoinCaps, border, numbers, labels, answers. Their defaults
 follow the document's settings (`show_puzzle_bars` / `show_solution_bars`, `show_grid_lines`, `show_grid_border`,
 `show_grid_labels`); answers show on the solution grid only; `show` overrides any of them. Elements carry
 `data-row`/`data-col` (and bars `data-side`) for the editor; there are no ids, so several grids can share a page.
-Hidden bars aren't drawn yet (the editor will want a faint dashed style for them).
+Hidden bars are drawn only when the `hiddenBars` layer is asked for (the editor does): faint, dashed and blue.
 
 ## 6. The editor
 
@@ -167,7 +167,7 @@ grid into the element with the renderer and redraws on every change; `editor.toH
   shaded circle adds `fill`. A style with the same properties is reused; otherwise a new one-character key is made.
 - Ctrl/Cmd-Z undoes, Ctrl/Cmd-Shift-Z and Ctrl-Y redo. `layer: "solution"` edits the solution grid (adding one).
 - Not yet: the **numbers** tool (see "Hand-set numbers" below; numbers follow the clues or are automatic), the
-  clue lists beside the grid, drawing hidden bars, and the screen-reader table.
+  clue lists beside the grid, and the screen-reader table.
 
 A development demo (`npm run demo`, `demo/`) has the toolbar, the editor and the live hexword document; editing the
 document redraws the grid. It was checked in headless Chromium (bars with symmetry, marks, typing, rebus, resize,
