@@ -26,6 +26,18 @@ const editor = new Editor(element, { document: yamlText, symmetry: "180" });
 editor.addEventListener("change", () => save(editor.toHexword()));
 ```
 
+In a page, with no build step:
+
+```html
+<script src="dist/bargrids.min.js"></script>
+<bargrids-viewer src="puzzle.yaml" layer="solution"></bargrids-viewer>
+<form>
+  <bargrids-editor name="puzzle" src="puzzle.yaml" symmetry="180"></bargrids-editor>
+</form>
+```
+
+See [`examples/elements.html`](examples/elements.html).
+
 Working on it needs the hexword format's JavaScript library built beside this repository
 (`../hexword-format/js`, `npm run build` there), until the format is published.
 
@@ -33,7 +45,7 @@ Working on it needs the hexword format's JavaScript library built beside this re
 npm install
 npm test                 # unit and golden tests
 npm run check            # type-check
-npm run build            # dist/bargrids.js and type definitions
+npm run build            # dist/bargrids.js (ES module), dist/bargrids.min.js (one file) and type definitions
 npm run demo             # the editor beside its live hexword document, at http://localhost:5173
 BARGRIDS_CORPUS=/path/to/puzzles npm test   # also round-trip a folder of real puzzles
 npm run golden -- /path/to/bargrids-re/results   # rebuild tests/golden/symmetry.json from the symmetry probes

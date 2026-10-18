@@ -12,7 +12,7 @@ The first BarGrids (docs/script.js) was written to learn JavaScript and SVG by r
 BarGrids (1991-95), which Emily Cox and Henry Rathvon used for decades. It is now the specification: version 2 keeps
 every feature and look, with the original's behaviour recovered by reverse engineering (see "Symmetry").
 
-Status: milestones 1 (the model), 2 (the renderer) and 3 (the editor) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
+Status: milestones 1 (the model), 2 (the renderer), 3 (the editor) and 4 (the elements) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
 version 2 matches it.
 
 ---
@@ -176,7 +176,7 @@ undo, document edits). Milestone 4 turns it into the public demo on the custom e
 ## 7. Using it
 
 ```html
-<script type="module" src="https://cdn.jsdelivr.net/npm/bargrids@2/dist/bargrids.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bargrids@2/dist/bargrids.min.js"></script>
 <bargrids-viewer src="puzzle.yaml"></bargrids-viewer>
 <bargrids-editor src="puzzle.yaml" symmetry="180"></bargrids-editor>
 ```
@@ -192,6 +192,18 @@ editor.addEventListener("change", () => save(editor.toHexword()));
 it a separate cell matrix with bars on all four sides of each square was rejected: two sides per bar can contradict
 each other, which is why the format stores bars only to the right of and below a square, and clue lists in the
 format aren't limited to Across and Down.)
+
+**As built (milestone 4).** `dist/bargrids.min.js` is one file (138 kB, 45 kB gzipped; most of it is the YAML
+parser) that defines both elements and puts the library on `window.BarGrids`; `dist/bargrids.js` is the ES module
+for bundlers, which defines nothing until `defineElements()` is called, so servers can import it without a DOM.
+- Both elements read the document from `src`, from a `<script type="application/yaml">` (or JSON) child, or from
+  the `document` property; they send `load`, and `error` with a readable message in place of the grid. Attributes:
+  `layer` (`puzzle` or `solution`), `size`, and `show` (`"answers -numbers"`: names show layers, a minus hides).
+- `<bargrids-editor>` adds `symmetry` (a name or BarGrids' number), `tools`, `tool` and `shade`; it sends `change`,
+  exposes `.editor`, and is form-associated: inside a `<form>` with a `name`, it submits the edited document as JSON.
+  That is the hook for the CMS widget.
+- `examples/elements.html` shows a viewer pair and an editor in a form; it was checked in headless Chromium.
+- The public demo on GitHub Pages still serves version 1 (`docs/`); replacing it is for when version 2 matches it.
 
 **In the Hex CMS:** the Grid tab gets a Text / Visual switch; Visual mounts the editor on the stored grid and writes
 back to the same fields, so either can be used and the other stays in step. The CMS pins a release.

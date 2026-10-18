@@ -14,3 +14,5 @@ export { Editor, TOOLS } from "./editor/editor.js";
 export type { Cursor, Direction, EditorChangeDetail, EditorOptions, Tool } from "./editor/editor.js";
 export { hitTest, type Hit } from "./editor/hit.js";
 export { marksOf, propertiesOf, toggleMark, type Mark } from "./editor/styles.js";
+export { defineElements } from "./element/elements.js";
+export type { BarGridsEditorElement, BarGridsViewerElement } from "./element/elements.js";

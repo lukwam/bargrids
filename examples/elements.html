@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BarGrids elements</title>
+  <link rel="icon" href="data:,">
+  <!-- After a release: https://cdn.jsdelivr.net/npm/bargrids@2/dist/bargrids.min.js -->
+  <script src="../dist/bargrids.min.js"></script>
+  <style>
+    body { font: 15px/1.45 system-ui, sans-serif; margin: 16px; background: #fafaf7; color: #1b1b1b; }
+    .pair { display: flex; flex-wrap: wrap; gap: 24px; }
+    bargrids-viewer, bargrids-editor { display: block; width: min(100%, 320px); }
+  </style>
+</head>
+<body>
+  <h1>BarGrids elements</h1>
+  <div class="pair">
+    <figure>
+      <bargrids-viewer>
+        <script type="application/yaml">
+          title: Square Deal
+          grid:
+            rows: [HEART, EM|BER, ABUSE, RES|IN, TREND]
+            columns: [HEART, EMB|ER, ABUSE, RE|SIN, TREND]
+        </script>
+      </bargrids-viewer>
+      <figcaption>The puzzle</figcaption>
+    </figure>
+    <figure>
+      <bargrids-viewer layer="solution">
+        <script type="application/yaml">
+          title: Square Deal
+          grid:
+            rows: [HEART, EM|BER, ABUSE, RES|IN, TREND]
+            columns: [HEART, EMB|ER, ABUSE, RE|SIN, TREND]
+        </script>
+      </bargrids-viewer>
+      <figcaption>The solution</figcaption>
+    </figure>
+  </div>
+  <form id="form">
+    <h2>An editor in a form</h2>
+    <bargrids-editor name="puzzle" symmetry="180" tools="bars blocks letters">
+      <script type="application/yaml">
+        title: New
+        grid:
+          rows: [".....", ".....", ".....", ".....", "....."]
+          columns: [".....", ".....", ".....", ".....", "....."]
+      </script>
+    </bargrids-editor>
+    <button>Submit</button>
+  </form>
+</body>
+</html>
