@@ -1,0 +1,29 @@
+{
+  "name": "bargrids",
+  "version": "2.0.0-dev.0",
+  "description": "Draw and edit barred and blocked puzzle grids in the hexword format.",
+  "type": "module",
+  "license": "MIT",
+  "repository": "github:lukwam/bargrids",
+  "main": "dist/bargrids.js",
+  "types": "dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/bargrids.js" } },
+  "files": ["dist"],
+  "sideEffects": false,
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.build.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "golden": "node scripts/symmetry-golden.mjs"
+  },
+  "dependencies": {
+    "hexword": "file:../hexword-format/js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.0",
+    "vitest": "^5.0.0"
+  }
+}

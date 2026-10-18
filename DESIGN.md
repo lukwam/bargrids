@@ -12,7 +12,8 @@ The first BarGrids (docs/script.js) was written to learn JavaScript and SVG by r
 BarGrids (1991-95), which Emily Cox and Henry Rathvon used for decades. It is now the specification: version 2 keeps
 every feature and look, with the original's behaviour recovered by reverse engineering (see "Symmetry").
 
-Status: design, for review. Version 1 stays live until version 2 matches it.
+Status: milestone 1 (the model) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
+version 2 matches it.
 
 ---
 
@@ -71,7 +72,29 @@ starts a word across or down), with manual numbers kept.
 so the grid and the format's checks always agree; everything the model can't represent is kept and written back
 untouched.
 
+**As built (milestone 1).**
+- `Grid` holds the puzzle squares, an optional solution grid, and the styles. Squares mirror the normalized model's
+  cells in camelCase (`kind`, `across`, `down`, `barRight`, `barBelow`, `hiddenBarRight`, `hiddenBarBelow`, `style`,
+  `label`). Labels and hidden bars live on the puzzle grid and the solution shares them, as in the format.
+- Commands: `setContent`, `setKind`, `setBar` (printed or hidden), `toggleBar` (the BarGrids click, with symmetry),
+  `setStyle`, `defineStyle`, `setLabel`, `resize`, `addSolution`, `removeSolution` and `batch`. A failed command
+  leaves the grid as it was; one that changes nothing isn't recorded. Undo steps keep copies of the state.
+- **Numbers aren't stored.** `grid.numbers()` places them as the format does, by linking clues (SPEC §5.4); a grid
+  without clues is numbered the usual way. `grid.words()` and `grid.issues()` come from the same `normalize()`.
+- Writing replaces only the grid keys. An unedited grid gives back its document unchanged; lines whose tokens didn't
+  change keep their spacing; styles that weren't edited are written exactly as they were. Version 0's implicit
+  styles and style-mask labels become explicit `styles` and `labels`, which read the same in both versions.
+  Invalid grids are repaired on writing (rows decide a square's kind, as readers must).
+- Sizes are 2 to 25 for `create` and `resize`; larger documents still read.
+- Tests: the probes' 25 single clicks and 15 two-click sequences, the probes' special cases, closure of every mode
+  on several sizes, the format's fixtures round-tripped, and a corpus test (`BARGRIDS_CORPUS=folder`) that passed
+  on the 484 grids entered in the Hex CMS so far.
+
 ## 4. Symmetry
+
+Mode names in the API: `none`, `180`, `90`, `left-right`, `top-bottom`, `diagonal-backslash`, `diagonal-slash`,
+`plus`, `x`, `all` (`SYMMETRIES[n]` is basebars' choice n; `toSymmetry()` reads either). BarGrids' "diagonal \\"
+swaps the top-left and bottom-right corners.
 
 The ten modes of BarGrids' `basebars` XFCN, recovered by running it under emulation (temp-experiment
 bargrids-re/results/symmetry_probe*.txt):
@@ -173,3 +196,10 @@ lives in the hexword libraries (Python and JS, at parity), so the CMS can export
 - **Squares with different letters across and down** (Merger Mania): how to show and edit them (split squares, as
   the format's OQ-10 discusses for split-square puzzles?).
 - **Paths** (Rectangular's rectangles, rings): view-only highlighting first; editing paths later.
+- **Hand-set numbers.** Version 1's numbers tool sets a square's number by hand; in the format, numbers come only
+  from clues (a clue's `name`, `label` and `position`). In the CMS the clues are there, so numbers follow them. For
+  the standalone editor, either the numbers tool writes clue stubs (a name and a `position`, no text yet), or the
+  format gains a place for printed numbers. The first needs no format change.
+- **The hexword dependency** is `file:../hexword-format/js` until the format has a repository and an npm release.
+- **The one-file `<script>` build** (`bargrids.min.js` with hexword and its YAML parser inside) comes with the
+  custom elements (milestone 4); for now the build is an ES module that imports `hexword`.
