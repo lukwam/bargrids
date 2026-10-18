@@ -24,7 +24,8 @@
     "build": "vite build && tsc -p tsconfig.build.json",
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
-    "golden": "node scripts/symmetry-golden.mjs"
+    "golden": "node scripts/symmetry-golden.mjs",
+    "demo": "vite demo"
   },
   "dependencies": {
     "hexword": "file:../hexword-format/js"
@@ -34,6 +35,7 @@
     "happy-dom": "^20.14.6",
     "typescript": "~5.9.3",
     "vite": "^8.0.0",
-    "vitest": "^5.0.0"
+    "vitest": "^5.0.0",
+    "yaml": "^2.9.1"
   }
 }

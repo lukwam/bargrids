@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BarGrids 2</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./demo.css">
+</head>
+<body>
+  <header>
+    <h1>BarGrids <small>2, in development</small></h1>
+  </header>
+  <main>
+    <section class="editor-pane">
+      <div class="toolbar" role="toolbar" aria-label="Tools">
+        <div class="tools" id="tools"></div>
+        <label>Symmetry <select id="symmetry"></select></label>
+        <label>Shade <input id="shade" type="range" min="0" max="100" step="5" value="25"> <output id="shade-value">25%</output></label>
+        <label>Grid <select id="layer"><option value="puzzle">Puzzle</option><option value="solution">Solution</option></select></label>
+        <label>Size <input id="width" type="number" min="2" max="25" value="13"> × <input id="height" type="number" min="2" max="25" value="13"></label>
+        <button id="undo" type="button">Undo</button>
+        <button id="redo" type="button">Redo</button>
+      </div>
+      <div id="editor" class="editor"></div>
+      <p class="hint" id="hint"></p>
+    </section>
+    <section class="document-pane">
+      <h2>hexword document</h2>
+      <textarea id="document" spellcheck="false" aria-label="hexword document"></textarea>
+      <p class="status" id="status"></p>
+    </section>
+  </main>
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

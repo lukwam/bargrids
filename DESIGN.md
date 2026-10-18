@@ -12,7 +12,7 @@ The first BarGrids (docs/script.js) was written to learn JavaScript and SVG by r
 BarGrids (1991-95), which Emily Cox and Henry Rathvon used for decades. It is now the specification: version 2 keeps
 every feature and look, with the original's behaviour recovered by reverse engineering (see "Symmetry").
 
-Status: milestones 1 (the model) and 2 (the renderer) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
+Status: milestones 1 (the model), 2 (the renderer) and 3 (the editor) built on the `v2` branch; the rest is design, for review. Version 1 stays live until
 version 2 matches it.
 
 ---
@@ -152,6 +152,26 @@ layer visibility, and the bar join caps toggle. Later tools: **link squares** in
 `cells`: Rectangular's rectangles, rings, scattered squares; PuzzleMe has a link/unlink tool for the same idea) and
 **split squares** (the format's OQ-10, diagonal or straight, as in Mixed Doubles). Accessible: every tool reachable from the keyboard, the grid exposed
 to screen readers as a table of squares.
+
+**As built (milestone 3).** `new Editor(element, {document | grid, tools, tool, symmetry, shade, layer})` draws the
+grid into the element with the renderer and redraws on every change; `editor.toHexword()` gives the document and a
+`change` event follows every edit, undo and redo. Tools: **letters**, **bars**, **blocks**, **voids**, **circles**,
+**shadedSquares** and **shadedCircles**.
+- Letters: click a square (again, or Enter, to turn); typing fills and moves on; Backspace clears or goes back;
+  Delete clears; arrows move and turn; Insert starts a rebus, Enter ends it, Escape drops it. The cursor's square
+  and word are highlighted, the word ending at printed or hidden bars.
+- Bars: click near the line between two squares (7 units either side); symmetry applies as in BarGrids; Alt-click
+  sets a hidden bar.
+- Circles and shading combine into one style per square, since a square has one style key: shading is the
+  square's `background-color` (the shade slider's grey), a circle is `shape: circle` with `stroke: black`, a
+  shaded circle adds `fill`. A style with the same properties is reused; otherwise a new one-character key is made.
+- Ctrl/Cmd-Z undoes, Ctrl/Cmd-Shift-Z and Ctrl-Y redo. `layer: "solution"` edits the solution grid (adding one).
+- Not yet: the **numbers** tool (see "Hand-set numbers" below; numbers follow the clues or are automatic), the
+  clue lists beside the grid, drawing hidden bars, and the screen-reader table.
+
+A development demo (`npm run demo`, `demo/`) has the toolbar, the editor and the live hexword document; editing the
+document redraws the grid. It was checked in headless Chromium (bars with symmetry, marks, typing, rebus, resize,
+undo, document edits). Milestone 4 turns it into the public demo on the custom elements.
 
 ## 7. Using it
 

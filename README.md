@@ -18,6 +18,14 @@ grid.undo();
 const document = grid.toHexword();
 ```
 
+```ts
+import { Editor, renderSvg } from "bargrids";
+
+const svg = renderSvg(grid, { layer: "solution" });
+const editor = new Editor(element, { document: yamlText, symmetry: "180" });
+editor.addEventListener("change", () => save(editor.toHexword()));
+```
+
 Working on it needs the hexword format's JavaScript library built beside this repository
 (`../hexword-format/js`, `npm run build` there), until the format is published.
 
@@ -26,6 +34,7 @@ npm install
 npm test                 # unit and golden tests
 npm run check            # type-check
 npm run build            # dist/bargrids.js and type definitions
+npm run demo             # the editor beside its live hexword document, at http://localhost:5173
 BARGRIDS_CORPUS=/path/to/puzzles npm test   # also round-trip a folder of real puzzles
 npm run golden -- /path/to/bargrids-re/results   # rebuild tests/golden/symmetry.json from the symmetry probes
 ```

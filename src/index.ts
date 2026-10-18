@@ -10,3 +10,7 @@ export type { BarPosition, Layer, Square, SquareKind, StyleProperties } from "./
 export { LAYERS, answerFontSize, renderSvg, renderSvgElement, renderTree, shade } from "./render/render.js";
 export type { LayerName, RenderOptions } from "./render/render.js";
 export { toSvgString, type SvgNode } from "./render/svg-tree.js";
+export { Editor, TOOLS } from "./editor/editor.js";
+export type { Cursor, Direction, EditorChangeDetail, EditorOptions, Tool } from "./editor/editor.js";
+export { hitTest, type Hit } from "./editor/hit.js";
+export { marksOf, propertiesOf, toggleMark, type Mark } from "./editor/styles.js";
