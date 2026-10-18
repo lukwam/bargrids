@@ -104,10 +104,14 @@ printable; the CMS and the PDF generator can use it in place of their own render
 
 ## 6. The editor
 
-Version 1's tools, each a mode: **letters** (typing moves on; rebus squares hold several characters), **bars**
+The clue lists sit beside the grid while editing, linked both ways: the cursor's square, its word and its clue are
+highlighted together, and choosing a clue selects its squares (as PuzzleMe's editor does). Version 1's tools, each
+a mode: **letters** (typing moves on; rebus squares hold several characters), **bars**
 (click a square's edge; symmetry applies), **numbers** (by hand, or auto-number), **blocks**, **blanks** (voids),
 **circles**, **shaded squares**, **shaded circles** (with a level). Plus: undo/redo, keyboard movement, grid size,
-layer visibility, and the bar join caps toggle. Accessible: every tool reachable from the keyboard, the grid exposed
+layer visibility, and the bar join caps toggle. Later tools: **link squares** into an answer's path (the format's
+`cells`: Rectangular's rectangles, rings, scattered squares; PuzzleMe has a link/unlink tool for the same idea) and
+**split squares** (the format's OQ-10, diagonal or straight, as in Mixed Doubles). Accessible: every tool reachable from the keyboard, the grid exposed
 to screen readers as a table of squares.
 
 ## 7. Using it
