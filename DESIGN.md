@@ -202,6 +202,12 @@ for bundlers, which defines nothing until `defineElements()` is called, so serve
 - `<bargrids-editor>` adds `symmetry` (a name or BarGrids' number), `tools`, `tool` and `shade`; it sends `change`,
   exposes `.editor`, and is form-associated: inside a `<form>` with a `name`, it submits the edited document as JSON.
   That is the hook for the CMS widget.
+- `toolbar` on `<bargrids-editor>` adds a ready-made toolbar above the grid: tool buttons, symmetry (square-only
+  modes disabled on oblong grids), the shade slider (shown with the shading tools), puzzle or solution grid, and
+  undo/redo. `toolbar="tools undo"` picks controls. Its default styles go in the page once, inside `:where()` so a
+  page's own CSS wins. `createToolbar(editor)` gives the same toolbar for an `Editor` used without the element.
+- Clue numbers come from the document's clues (their `name`, or `label`), linked to the grid as SPEC §5.4 says; a
+  document with no clues is numbered automatically. A host that wants its own numbers sends its clue groups along.
 - `examples/elements.html` shows a viewer pair and an editor in a form; it was checked in headless Chromium.
 - The public demo on GitHub Pages still serves version 1 (`docs/`); replacing it is for when version 2 matches it.
 

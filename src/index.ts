@@ -16,3 +16,5 @@ export { hitTest, type Hit } from "./editor/hit.js";
 export { marksOf, propertiesOf, toggleMark, type Mark } from "./editor/styles.js";
 export { defineElements } from "./element/elements.js";
 export type { BarGridsEditorElement, BarGridsViewerElement } from "./element/elements.js";
+export { SYMMETRY_LABELS, TOOL_LABELS, createToolbar } from "./editor/toolbar.js";
+export type { Toolbar, ToolbarOptions } from "./editor/toolbar.js";

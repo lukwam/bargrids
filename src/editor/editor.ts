@@ -81,6 +81,9 @@ export class Editor extends EventTarget {
     element.addEventListener("pointerdown", this.onPointerDown);
     element.addEventListener("keydown", this.onKeyDown);
     this.stop = this.grid.subscribe((event) => {
+      // A resize can leave a square-only symmetry on a grid that isn't square.
+      if (!symmetryAllowed(this._symmetry, this.grid.width, this.grid.height)) this.symmetry = "none";
+      if (this._cursor.row >= this.grid.height || this._cursor.col >= this.grid.width) this._cursor = { ...this._cursor, row: 0, col: 0 };
       this.draw();
       this.dispatchEvent(new CustomEvent<EditorChangeDetail>("change", { detail: { command: event.command, reason: event.reason } }));
     });
@@ -104,6 +107,7 @@ export class Editor extends EventTarget {
     this.commitRebus();
     this._tool = tool;
     this.draw();
+    this.settingsChanged();
   }
 
   get symmetry(): Symmetry {
@@ -113,6 +117,7 @@ export class Editor extends EventTarget {
   set symmetry(mode: Symmetry) {
     if (!symmetryAllowed(mode, this.grid.width, this.grid.height)) throw new Error(`symmetry '${mode}' needs a square grid`);
     this._symmetry = mode;
+    this.settingsChanged();
   }
 
   get shade(): number {
@@ -121,6 +126,7 @@ export class Editor extends EventTarget {
 
   set shade(percent: number) {
     this._shade = Math.min(100, Math.max(0, percent));
+    this.settingsChanged();
   }
 
   get layer(): Layer {
@@ -131,6 +137,12 @@ export class Editor extends EventTarget {
     if (layer === "solution" && !this.grid.hasSolution) this.grid.apply({ type: "addSolution" });
     this._layer = layer;
     this.draw();
+    this.settingsChanged();
+  }
+
+  /** Tell toolbars that the tool, symmetry, shade or layer changed. */
+  private settingsChanged(): void {
+    this.dispatchEvent(new CustomEvent("settings"));
   }
 
   get cursor(): Cursor {

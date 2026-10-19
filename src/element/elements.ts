@@ -8,6 +8,7 @@
 // without a DOM.
 
 import { Editor, TOOLS, type EditorChangeDetail, type Tool } from "../editor/editor.js";
+import { createToolbar, type Toolbar, type ToolbarOptions } from "../editor/toolbar.js";
 import { Grid } from "../model/grid.js";
 import { toSymmetry } from "../model/symmetry.js";
 import type { Layer } from "../model/types.js";
@@ -27,6 +28,32 @@ export interface BarGridsEditorElement extends HTMLElement {
   readonly editor: Editor | null;
   /** The edited document as JSON text, which is also the element's form value. */
   readonly value: string;
+}
+
+// The toolbar's default look, added to the page once. :where() keeps it easy to override.
+const TOOLBAR_CSS = `
+:where(.bargrids-toolbar) { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: 8px; font: 14px/1.3 system-ui, sans-serif; }
+:where(.bargrids-toolbar-tools) { display: flex; flex-wrap: wrap; gap: 4px; }
+:where(.bargrids-toolbar button, .bargrids-toolbar select, .bargrids-toolbar input) { font: inherit; }
+:where(.bargrids-toolbar button) { padding: 3px 8px; border: 1px solid #b8b8b8; border-radius: 4px; background: #fff; color: #222; cursor: pointer; }
+:where(.bargrids-toolbar button[aria-pressed="true"]) { background: #222; border-color: #222; color: #fff; }
+:where(.bargrids-toolbar button:disabled) { opacity: 0.45; cursor: default; }
+:where(.bargrids-toolbar-shade) { vertical-align: middle; width: 90px; }
+`;
+
+function addToolbarStyles(document: Document): void {
+  if (document.getElementById("bargrids-toolbar-styles")) return;
+  const style = document.createElement("style");
+  style.id = "bargrids-toolbar-styles";
+  style.textContent = TOOLBAR_CSS;
+  document.head.appendChild(style);
+}
+
+/** Read toolbar="tools symmetry undo" (empty or "toolbar" means every control). */
+function readToolbar(text: string): ToolbarOptions {
+  const names = ["tools", "symmetry", "shade", "layer", "undo"] as const;
+  const words = text.split(/[\s,]+/).filter((w): w is (typeof names)[number] => (names as readonly string[]).includes(w));
+  return words.length ? { controls: words } : {};
 }
 
 /** Read show="answers -numbers" into layer switches: a name shows a layer, a leading minus hides it. */
@@ -171,10 +198,11 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
   class BarGridsEditor extends GridElement implements BarGridsEditorElement {
     static formAssociated = true;
     private _editor: Editor | null = null;
+    private toolbar: Toolbar | null = null;
     private internals: ElementInternals | null = null;
 
     static get observedAttributes(): string[] {
-      return [...GridElement.observedAttributes, "symmetry", "tool", "tools", "shade"];
+      return [...GridElement.observedAttributes, "symmetry", "tool", "tools", "shade", "toolbar"];
     }
 
     constructor() {
@@ -196,6 +224,12 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
 
     disconnectedCallback(): void {
       super.disconnectedCallback();
+      this.stopEditor();
+    }
+
+    private stopEditor(): void {
+      this.toolbar?.destroy();
+      this.toolbar = null;
       this._editor?.destroy();
       this._editor = null;
     }
@@ -207,9 +241,8 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
       else if (editor && name === "tool" && after && editor.tools.includes(after as Tool)) editor.tool = after as Tool;
       else if (editor && name === "shade") editor.shade = Number(after);
       else if (name !== "src") {
-        // How the grid is drawn or which tools are offered: start the editor again on the same grid.
-        this._editor?.destroy();
-        this._editor = null;
+        // How the grid is drawn, which tools are offered, or the toolbar: start the editor again on the same grid.
+        this.stopEditor();
         this.update();
       } else super.attributeChangedCallback(name, before, after);
     }
@@ -217,7 +250,7 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
     protected update(): void {
       if (!this._grid) return;
       if (this._editor?.grid === this._grid) return;
-      this._editor?.destroy();
+      this.stopEditor();
       this.replaceChildren();
       const holder = this.ownerDocument.createElement("div");
       this.appendChild(holder);
@@ -238,6 +271,11 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
         this.dispatchEvent(new CustomEvent("change", { detail, bubbles: true }));
       });
       this._editor = editor;
+      if (this.hasAttribute("toolbar")) {
+        addToolbarStyles(this.ownerDocument);
+        this.toolbar = createToolbar(editor, readToolbar(this.getAttribute("toolbar")!));
+        this.insertBefore(this.toolbar.element, holder);
+      }
       this.internals?.setFormValue(this.value);
     }
   }

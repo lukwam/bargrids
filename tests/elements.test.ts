@@ -74,6 +74,21 @@ describe("<bargrids-viewer>", () => {
 });
 
 describe("<bargrids-editor>", () => {
+  it("numbers the grid from the clues when the document has them", async () => {
+    const doc = {
+      title: "Clued",
+      grid: { rows: ["AB|C", "DEF", "GHI"], columns: ["ADG", "BEH", "CFI"] },
+      clues: [
+        { name: "Across", clues: [{ name: "4", answers: ["DEF"] }, { name: "9", label: "9a", answers: ["GHI"] }] },
+        { name: "Down", clues: [{ name: "1", answers: ["ADG"] }] },
+      ],
+    };
+    const element = await mount<BarGridsEditorElement>("<bargrids-editor></bargrids-editor>");
+    element.document = doc;
+    const numbers = Array.from(element.querySelectorAll(".bargrids-numbers text")).map((t) => [t.getAttribute("data-row"), t.getAttribute("data-col"), t.textContent]);
+    expect(numbers).toEqual([["0", "0", "1"], ["1", "0", "4"], ["2", "0", "9a"]]);
+  });
+
   it("edits the document with the tools and symmetry it's given", async () => {
     const element = await mount<BarGridsEditorElement>(`<bargrids-editor symmetry="180" tools="bars blocks"><script type="application/yaml">${YAML}</script></bargrids-editor>`);
     const editor = element.editor!;

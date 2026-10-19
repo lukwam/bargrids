@@ -32,7 +32,7 @@ In a page, with no build step:
 <script src="dist/bargrids.min.js"></script>
 <bargrids-viewer src="puzzle.yaml" layer="solution"></bargrids-viewer>
 <form>
-  <bargrids-editor name="puzzle" src="puzzle.yaml" symmetry="180"></bargrids-editor>
+  <bargrids-editor name="puzzle" src="puzzle.yaml" symmetry="180" toolbar></bargrids-editor>
 </form>
 ```
 
