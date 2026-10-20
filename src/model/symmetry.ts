@@ -13,8 +13,8 @@ export const SYMMETRIES = [
   "90",
   "left-right",
   "top-bottom",
-  "diagonal-backslash",
   "diagonal-slash",
+  "diagonal-backslash",
   "plus",
   "x",
   "all",
@@ -31,9 +31,10 @@ const rotate90: Transform = (x, y, w, h) => [h - y, x];
 const rotate270: Transform = (x, y, w) => [y, w - x];
 const leftRight: Transform = (x, y, w) => [w - x, y];
 const topBottom: Transform = (x, y, w, h) => [x, h - y];
-// BarGrids' "diagonal \" swaps the top-left and bottom-right corners; "diagonal /" swaps top-right and bottom-left.
-const backslash: Transform = (x, y, w, h) => [h - y, w - x];
-const slash: Transform = (x, y) => [y, x];
+// Mirrors across a diagonal, named by the line's shape: "/" runs from bottom-left to top-right (and swaps the top-left
+// and bottom-right corners), "\" runs from top-left to bottom-right.
+const slash: Transform = (x, y, w, h) => [h - y, w - x];
+const backslash: Transform = (x, y) => [y, x];
 
 const TRANSFORMS: Record<Symmetry, Transform[]> = {
   none: [identity],
@@ -41,15 +42,15 @@ const TRANSFORMS: Record<Symmetry, Transform[]> = {
   "90": [identity, rotate90, rotate180, rotate270],
   "left-right": [identity, leftRight],
   "top-bottom": [identity, topBottom],
-  "diagonal-backslash": [identity, backslash],
   "diagonal-slash": [identity, slash],
+  "diagonal-backslash": [identity, backslash],
   plus: [identity, leftRight, topBottom, rotate180],
-  x: [identity, backslash, slash, rotate180],
-  all: [identity, rotate90, rotate180, rotate270, leftRight, topBottom, backslash, slash],
+  x: [identity, slash, backslash, rotate180],
+  all: [identity, rotate90, rotate180, rotate270, leftRight, topBottom, slash, backslash],
 };
 
 /** Modes that turn the grid on its side work only on square grids, as in BarGrids. */
-const SQUARE_ONLY: ReadonlySet<Symmetry> = new Set(["90", "diagonal-backslash", "diagonal-slash", "x", "all"]);
+const SQUARE_ONLY: ReadonlySet<Symmetry> = new Set(["90", "diagonal-slash", "diagonal-backslash", "x", "all"]);
 
 /** Whether a mode can be used on a grid of this size. */
 export function symmetryAllowed(mode: Symmetry, width: number, height: number): boolean {

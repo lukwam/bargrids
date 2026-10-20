@@ -33,7 +33,7 @@ describe("createToolbar", () => {
     const { editor, q } = setup(undefined, Grid.create(6, 4));
     const select = q<HTMLSelectElement>(".bargrids-toolbar-symmetry");
     const disabled = Array.from(select.options).filter((o) => o.disabled).map((o) => o.value);
-    expect(disabled).toEqual(["90", "diagonal-backslash", "diagonal-slash", "x", "all"]);
+    expect(disabled).toEqual(["90", "diagonal-slash", "diagonal-backslash", "x", "all"]);
     select.value = "plus";
     select.dispatchEvent(new Event("change"));
     expect(editor.symmetry).toBe("plus");

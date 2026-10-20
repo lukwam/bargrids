@@ -36,10 +36,11 @@ venv/bin/python scripts/compare_web.py       # needs node, this repository, and 
 - The scripts look for version 1 at `~/src/bargrids/docs/script.js`; change `WEB_SCRIPT` in `compare_web.py` if the
   repository is elsewhere.
 
-## A naming question
+## A labelling slip
 
-The two probes label the diagonal modes differently: `symmetry_probe.py` (and so `symmetry_probe.txt` and
-`compare_web.txt`) calls mode 5 "diagonal /" and mode 6 "diagonal \\", while `symmetry_probe2.txt` calls mode 5
-"diagonal \\" and mode 6 "diagonal /". The bar results are the same either way; only the names differ. Version 2's
-API follows `symmetry_probe2.txt` (`SYMMETRIES[5]` is `diagonal-backslash`). The stacks' popup menu would settle
-which matches what BarGrids showed.
+`symmetry_probe.py` labels mode 5 "diagonal /" and mode 6 "diagonal \\", but its saved outputs
+(`symmetry_probe.txt`, `symmetry_probe2.txt`) call mode 5 "diagonal \\". The "\\" there most likely came from a
+side question being explored at the time (whether any puzzle splits a square's two entries with \\ rather than /;
+split squares are the format's OQ-10), not from the stacks. The bar results are the same whichever name is used.
+Geometrically, mode 5 mirrors across a "/" line (bottom-left to top-right), so version 2 calls it `diagonal-slash`
+and mode 6 `diagonal-backslash`. The stacks' popup menu remains the authority for what BarGrids called them.

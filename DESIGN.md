@@ -92,9 +92,10 @@ untouched.
 
 ## 4. Symmetry
 
-Mode names in the API: `none`, `180`, `90`, `left-right`, `top-bottom`, `diagonal-backslash`, `diagonal-slash`,
-`plus`, `x`, `all` (`SYMMETRIES[n]` is basebars' choice n; `toSymmetry()` reads either). BarGrids' "diagonal \\"
-swaps the top-left and bottom-right corners.
+Mode names in the API: `none`, `180`, `90`, `left-right`, `top-bottom`, `diagonal-slash`, `diagonal-backslash`,
+`plus`, `x`, `all` (`SYMMETRIES[n]` is basebars' choice n; `toSymmetry()` reads either). The diagonals are named by
+the mirror line's shape: mode 5 mirrors across "/" (bottom-left to top-right), mode 6 across "\\". (An earlier draft
+had them the other way round, from a mislabelled probe; see research/hypercard/README.md.)
 
 The ten modes of BarGrids' `basebars` XFCN, recovered by running it under emulation (temp-experiment
 bargrids-re/results/symmetry_probe*.txt):
@@ -106,8 +107,8 @@ bargrids-re/results/symmetry_probe*.txt):
 | 2 | 90° rotation | yes | no |
 | 3 | left-right mirror | yes | yes |
 | 4 | top-bottom mirror | yes | yes |
-| 5 | diagonal \ | yes | no |
-| 6 | diagonal / | yes | no |
+| 5 | diagonal / | yes | no |
+| 6 | diagonal \ | yes | no |
 | 7 | plus (3 + 4) | yes | yes |
 | 8 | X (5 + 6) | yes | no |
 | 9 | all | yes | no |
