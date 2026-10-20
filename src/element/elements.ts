@@ -45,10 +45,12 @@ const STYLES = `
 :where(.bargrids-layout > .bargrids-grid) { flex: 1 1 340px; min-width: 0; }
 :where(.bargrids-layout > .bargrids-clues) { flex: 1 1 240px; min-width: 0; max-height: 80vh; overflow-y: auto; font: 14px/1.35 system-ui, sans-serif; }
 :where(.bargrids-clue-group h3) { font-size: 14px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.04em; }
-:where(.bargrids-clue-group ol) { list-style: none; margin: 0 0 12px; padding: 0; }
-:where(.bargrids-clue button) { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 2.6em 1fr; column-gap: 4px; width: 100%; padding: 2px 4px; border-radius: 3px; cursor: pointer; }
-:where(.bargrids-clue button:focus-visible) { outline: 2px solid #4a7bd0; }
-:where(.bargrids-clue[aria-current="true"] button) { background: #fff3c4; }
+/* Layout the clue lists depend on, specific enough to hold against a host page's list and button styles. */
+.bargrids-clues .bargrids-clue-list { list-style: none; margin: 0 0 12px; padding: 0; }
+.bargrids-clues .bargrids-clue-list > .bargrids-clue { margin: 0; padding: 0; }
+.bargrids-clues .bargrids-clue > button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 2.2em 1fr; column-gap: 6px; width: 100%; padding: 2px 4px; border-radius: 3px; cursor: pointer; text-align: left; }
+:where(.bargrids-clue > button:focus-visible) { outline: 2px solid #4a7bd0; }
+:where(.bargrids-clue[aria-current="true"] > button) { background: #fff3c4; }
 :where(.bargrids-clue-number) { font-weight: 600; text-align: right; }
 :where(.bargrids-clue-answer) { grid-column: 2; color: #777; font-size: 12px; letter-spacing: 0.03em; }
 :where(.bargrids-clue-unlinked) { color: #888; }

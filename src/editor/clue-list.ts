@@ -69,6 +69,7 @@ export function createClueList(editor: Editor, options: ClueListOptions = {}): C
       heading.textContent = group.name;
       section.appendChild(heading);
       const list = doc.createElement("ol");
+      list.className = "bargrids-clue-list";
       const enumerate = group.settings.show_enumerations !== "none";
       group.clues.forEach((clue, c) => {
         const item = doc.createElement("li");
