@@ -1,0 +1,195 @@
+﻿What it does:
+
+
+Specifically focused on rectangular grids with bars. 
+File Menu
+
+
+* New Puzzle - create a new puzzle
+   * Set the size of the puzzle grid
+   * Either choose from a dropdown list of common sizes
+   * Or pick a custom size with width and depth
+* Open Puzzle - open an existing puzzle (from EPS file only?)
+* Close Puzzle - close the currently open puzzle
+* Set Suffixes - set the filename extensions for saves
+* Quit BarGrids - quit the mac app
+
+
+Title
+At the top is the Title of the puzzle, as defined when you click save or the name of the file you import. 
+Location Status
+In the top right hand corner there is a box that always shows your current location by row and column.
+Bar Joins
+This allows you to decide if Bar Joins should have caps on them or not. 
+Number Font
+This lets you select which font to use for the numbers
+Answer Font
+This lets you select which font to use for the answers
+Save Files
+This allows you to save out the EPS files for the number and answer grids. 
+
+
+Not sure what “Save Picture” does exactly?
+
+
+Puzzle Grid
+Creating a new puzzle draws a grid of boxes that are the width and depth of the size chosen.
+Layers
+Allows you to turn on or off various layers, including:
+* Answers
+* Bars
+* Numbers
+* Shading
+* All On
+* All Off
+Edit Answer / Clear Answer
+You can type text in the boxes, which is really just creating a row of text for each line.
+
+
+So a 11x13 grid would have 13 rows of answers. 
+
+
+The Clear Answer button clears the entire grid. 
+Add Bars
+Allows you to add bars to the puzzle. 
+
+
+Allows you to set the symmetry, from one of the following options:
+* None
+* Rotational 
+* Horizontal
+* Vertical
+* 4 Way
+
+
+With the symmetry set, then you can start clicking on lines in the grid to add or remove a bar. 
+
+
+With Bars in place you can use the Auto-Numbering feature.
+Add Numbers
+You can add numbers to the grid by clicking on a box and then putting the number into the box in the add number section.  If you click on a box, enter the number and then click off of it, the number will show up in the grid. If you have “prompting” turned on, then it will automatically increment the number each time you click on another box.
+
+
+If you have Bars set, then you can use the autonumber button to automatically number all of the numbers based on the bars. 
+
+
+Shade Squares
+Set the percent shade for a given box, or clear the box. 
+Shade Circles
+Set the percent shade for a circle inside the given box, or clear a box. 
+Open Circles 
+Draw an open circle around the answer in the given square.
+
+
+
+
+________________
+
+
+Components
+The top-level components of the app include the following:
+
+
+* Title (title)
+* Grid (grid-container)
+* Controls (grid-controls)
+Title
+The title just contains a text input for setting/updating the title of the puzzle.
+Grid
+The grid contains the actual SVG and all its components, as well as the layers that are placed on top of the grid to add the interactive components.
+
+
+* Grid SVG (grid)
+* Answers Layer (grid-answers-layer)
+   * answer-ROW-COL
+* Bars Layer (grid-bars-layer)
+   * acrossbar-ROW-COL
+   * downbar-ROW-COL
+   * barjoin-ROW-COL
+* Numbers Layer (grid-numbers-layer)
+   * number-ROW-COL
+* Shade Squares Layer (grid-shadesquares-layer)
+   * shadesquare-ROW-COL
+* Shade Circles Layer (grid-shadeciercles-layer)
+   * shadecirlce-ROW-COL
+* Circles Layer (grid-circles-layers)
+   * circle-ROW-COL
+Grid SVG
+The grid image is an SVG that is made up of a bunch of elements laid on top of each other. The SVG element has a black border and is filled with a white background.
+
+
+* Rectangles
+* Shade Squares
+* Shade Circles
+* Circles
+* Bars
+* Bar Join Caps
+* Numbers
+* Answers
+
+
+The SVG is displayed in the web interface and can be downloaded as a file.
+
+
+
+
+
+
+
+
+
+
+
+
+BarGrid Container
+Contains all the components of the BarGrid. This includes the Grid of Squares, the Lines between the Squares
+Grid
+The base Grid element, which includes:
+
+
+* Border, Margin and Padding settings for the 
+* Size (Width and Depth) of the grid in pixels
+* Number of Rows and Columns in the grid
+* 
+
+
+
+
+
+Controls Container
+Contains all the control components.
+
+
+Layers
+
+
+1. grid__square
+2. grid__shadesquare__square
+3. grid__shadecircle__square
+4. grid__circle__square
+5. grid__bar__square
+6. grid__index__square
+7. grid__answer__square
+8. grid__shadesquare__button
+9. grid__shadecircle__button
+10. grid__circle__button
+11. grid__bar__button--across
+12. grid__bar__button--down
+13. grid__index__input
+14. grid__answer__input
+15. Across Bar Buttons (disabled when across Bar tool is disabled)
+16. Down Bar Buttons (disabled when down Bar tool is disabled)
+17. Shade Square (disabled when Shade squares are hidden)
+18. Shade Square Button (disabled when Shade Square tool is disabled)
+19. Shade Circle (disabled when Shade Layer id disabled )
+20. Shade Circle Button (disabled when Shade Circle tool is disabled)
+21. Circle (disabled when Circle layer is disabled)
+22. Circle Button (disabled when Circle tool is disabled)
+23. 24. Numbers
+25. Answers
+26. Background squares
+27. Background circles
+28. Circles
+29. Across clues
+30. Down clues
+31.

@@ -1,0 +1,54 @@
+Single clicks (one click per run): does the web app pick the same partner bars?
+  7x7 mode 0 none                   mismatches  0/40  errors 0
+  7x7 mode 1 180 rotation           mismatches  0/40  errors 0
+  7x7 mode 2 90 rotation            mismatches  0/40  errors 0
+  7x7 mode 3 left-right mirror      mismatches  0/40  errors 0
+  7x7 mode 4 top-bottom mirror      mismatches  0/40  errors 0
+  7x7 mode 5 diagonal / (symdiag1)  mismatches  0/40  errors 0
+  7x7 mode 6 diagonal \ (symdiag2)  mismatches  0/40  errors 0
+  7x7 mode 7 plus (LR+TB)           mismatches  0/40  errors 0
+  7x7 mode 8 X (both diagonals)     mismatches  0/40  errors 0
+  7x7 mode 9 all                    mismatches  0/40  errors 0
+  8x8 mode 0 none                   mismatches  0/40  errors 0
+  8x8 mode 1 180 rotation           mismatches  0/40  errors 0
+  8x8 mode 2 90 rotation            mismatches  0/40  errors 0
+  8x8 mode 3 left-right mirror      mismatches  0/40  errors 0
+  8x8 mode 4 top-bottom mirror      mismatches  0/40  errors 0
+  8x8 mode 5 diagonal / (symdiag1)  mismatches  0/40  errors 0
+  8x8 mode 6 diagonal \ (symdiag2)  mismatches  0/40  errors 0
+  8x8 mode 7 plus (LR+TB)           mismatches  0/40  errors 0
+  8x8 mode 8 X (both diagonals)     mismatches  0/40  errors 0
+  8x8 mode 9 all                    mismatches  0/40  errors 0
+  9x6 mode 0 none                   mismatches  0/40  errors 0
+  9x6 mode 1 180 rotation           mismatches  0/40  errors 0
+  9x6 mode 2 90 rotation            mismatches 14/40  errors 30
+  9x6 mode 3 left-right mirror      mismatches  0/40  errors 0
+  9x6 mode 4 top-bottom mirror      mismatches  0/40  errors 0
+  9x6 mode 7 plus (LR+TB)           mismatches  0/40  errors 0
+
+Click sequences (20 clicks per run): does the final grid match?
+  7x7 mode 0 none                   grids differ  0/15
+  7x7 mode 1 180 rotation           grids differ  0/15
+  7x7 mode 2 90 rotation            grids differ  0/15
+  7x7 mode 3 left-right mirror      grids differ  0/15
+  7x7 mode 4 top-bottom mirror      grids differ  0/15
+  7x7 mode 5 diagonal / (symdiag1)  grids differ  0/15
+  7x7 mode 6 diagonal \ (symdiag2)  grids differ  0/15
+  7x7 mode 7 plus (LR+TB)           grids differ  0/15
+  7x7 mode 8 X (both diagonals)     grids differ  0/15
+  7x7 mode 9 all                    grids differ  0/15
+  11x11 mode 0 none                   grids differ  0/15
+  11x11 mode 1 180 rotation           grids differ  0/15
+  11x11 mode 2 90 rotation            grids differ  0/15
+  11x11 mode 3 left-right mirror      grids differ  0/15
+  11x11 mode 4 top-bottom mirror      grids differ  0/15
+  11x11 mode 5 diagonal / (symdiag1)  grids differ  0/15
+  11x11 mode 6 diagonal \ (symdiag2)  grids differ  0/15
+  11x11 mode 7 plus (LR+TB)           grids differ  0/15
+  11x11 mode 8 X (both diagonals)     grids differ  0/15
+  11x11 mode 9 all                    grids differ  0/15
+  9x6 mode 0 none                   grids differ  0/15
+  9x6 mode 1 180 rotation           grids differ  0/15
+  9x6 mode 3 left-right mirror      grids differ  0/15
+  9x6 mode 4 top-bottom mirror      grids differ  0/15
+  9x6 mode 7 plus (LR+TB)           grids differ  0/15
