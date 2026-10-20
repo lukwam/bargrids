@@ -108,7 +108,7 @@ describe("<bargrids-editor toolbar>", () => {
     const element = await mount('toolbar tools="letters bars blocks"');
     expect(element.firstElementChild!.className).toBe("bargrids-toolbar");
     expect(element.querySelectorAll(".bargrids-toolbar-tool").length).toBe(3);
-    expect(document.querySelectorAll("#bargrids-toolbar-styles").length).toBe(1);
+    expect(document.querySelectorAll("#bargrids-styles").length).toBe(1);
     element.querySelector<HTMLButtonElement>('[data-tool="blocks"]')!.click();
     expect(element.editor!.tool).toBe("blocks");
   });

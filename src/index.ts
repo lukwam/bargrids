@@ -18,3 +18,6 @@ export { defineElements } from "./element/elements.js";
 export type { BarGridsEditorElement, BarGridsViewerElement } from "./element/elements.js";
 export { SYMMETRY_LABELS, TOOL_LABELS, createToolbar } from "./editor/toolbar.js";
 export type { Toolbar, ToolbarOptions } from "./editor/toolbar.js";
+export { appendClueText, createClueList } from "./editor/clue-list.js";
+export type { ClueList, ClueListOptions } from "./editor/clue-list.js";
+export { clueFor, hasClues, pathDirection, type ClueRef } from "./editor/clues.js";

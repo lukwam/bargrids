@@ -8,6 +8,8 @@
 // without a DOM.
 
 import { Editor, TOOLS, type EditorChangeDetail, type Tool } from "../editor/editor.js";
+import { createClueList, type ClueList } from "../editor/clue-list.js";
+import { hasClues } from "../editor/clues.js";
 import { createToolbar, type Toolbar, type ToolbarOptions } from "../editor/toolbar.js";
 import { Grid } from "../model/grid.js";
 import { toSymmetry } from "../model/symmetry.js";
@@ -30,8 +32,8 @@ export interface BarGridsEditorElement extends HTMLElement {
   readonly value: string;
 }
 
-// The toolbar's default look, added to the page once. :where() keeps it easy to override.
-const TOOLBAR_CSS = `
+// The default look of the toolbar and clue lists, added to the page once. :where() keeps it easy to override.
+const STYLES = `
 :where(.bargrids-toolbar) { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-bottom: 8px; font: 14px/1.3 system-ui, sans-serif; }
 :where(.bargrids-toolbar-tools) { display: flex; flex-wrap: wrap; gap: 4px; }
 :where(.bargrids-toolbar button, .bargrids-toolbar select, .bargrids-toolbar input) { font: inherit; }
@@ -39,13 +41,25 @@ const TOOLBAR_CSS = `
 :where(.bargrids-toolbar button[aria-pressed="true"]) { background: #222; border-color: #222; color: #fff; }
 :where(.bargrids-toolbar button:disabled) { opacity: 0.45; cursor: default; }
 :where(.bargrids-toolbar-shade) { vertical-align: middle; width: 90px; }
+:where(.bargrids-layout) { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: flex-start; }
+:where(.bargrids-layout > .bargrids-grid) { flex: 1 1 340px; min-width: 0; }
+:where(.bargrids-layout > .bargrids-clues) { flex: 1 1 240px; min-width: 0; max-height: 80vh; overflow-y: auto; font: 14px/1.35 system-ui, sans-serif; }
+:where(.bargrids-clue-group h3) { font-size: 14px; margin: 0 0 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+:where(.bargrids-clue-group ol) { list-style: none; margin: 0 0 12px; padding: 0; }
+:where(.bargrids-clue button) { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 2.6em 1fr; column-gap: 4px; width: 100%; padding: 2px 4px; border-radius: 3px; cursor: pointer; }
+:where(.bargrids-clue button:focus-visible) { outline: 2px solid #4a7bd0; }
+:where(.bargrids-clue[aria-current="true"] button) { background: #fff3c4; }
+:where(.bargrids-clue-number) { font-weight: 600; text-align: right; }
+:where(.bargrids-clue-answer) { grid-column: 2; color: #777; font-size: 12px; letter-spacing: 0.03em; }
+:where(.bargrids-clue-unlinked) { color: #888; }
+:where(.bargrids-clue-problem .bargrids-clue-number)::after { content: " ⚠"; color: #c0392b; }
 `;
 
-function addToolbarStyles(document: Document): void {
-  if (document.getElementById("bargrids-toolbar-styles")) return;
+function addStyles(document: Document): void {
+  if (document.getElementById("bargrids-styles")) return;
   const style = document.createElement("style");
-  style.id = "bargrids-toolbar-styles";
-  style.textContent = TOOLBAR_CSS;
+  style.id = "bargrids-styles";
+  style.textContent = STYLES;
   document.head.appendChild(style);
 }
 
@@ -199,10 +213,11 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
     static formAssociated = true;
     private _editor: Editor | null = null;
     private toolbar: Toolbar | null = null;
+    private clueList: ClueList | null = null;
     private internals: ElementInternals | null = null;
 
     static get observedAttributes(): string[] {
-      return [...GridElement.observedAttributes, "symmetry", "tool", "tools", "shade", "toolbar"];
+      return [...GridElement.observedAttributes, "symmetry", "tool", "tools", "shade", "toolbar", "clues"];
     }
 
     constructor() {
@@ -230,6 +245,8 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
     private stopEditor(): void {
       this.toolbar?.destroy();
       this.toolbar = null;
+      this.clueList?.destroy();
+      this.clueList = null;
       this._editor?.destroy();
       this._editor = null;
     }
@@ -252,8 +269,12 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
       if (this._editor?.grid === this._grid) return;
       this.stopEditor();
       this.replaceChildren();
+      const layout = this.ownerDocument.createElement("div");
+      layout.className = "bargrids-layout";
       const holder = this.ownerDocument.createElement("div");
-      this.appendChild(holder);
+      holder.className = "bargrids-grid";
+      layout.appendChild(holder);
+      this.appendChild(layout);
       const tools = (this.getAttribute("tools") ?? "").split(/[\s,]+/).filter((t): t is Tool => (TOOLS as readonly string[]).includes(t));
       const options = this.renderOptions();
       const editor = new Editor(holder, {
@@ -272,9 +293,16 @@ export function defineElements(registry: CustomElementRegistry = globalThis.cust
       });
       this._editor = editor;
       if (this.hasAttribute("toolbar")) {
-        addToolbarStyles(this.ownerDocument);
+        addStyles(this.ownerDocument);
         this.toolbar = createToolbar(editor, readToolbar(this.getAttribute("toolbar")!));
-        this.insertBefore(this.toolbar.element, holder);
+        this.insertBefore(this.toolbar.element, layout);
+      }
+      // Clue lists when the document has clues: clues="none" leaves them out, clues="text" leaves out the answers.
+      const clues = this.getAttribute("clues");
+      if (clues !== "none" && hasClues(this._grid.normalized())) {
+        addStyles(this.ownerDocument);
+        this.clueList = createClueList(editor, { answers: clues !== "text" });
+        layout.appendChild(this.clueList.element);
       }
       this.internals?.setFormValue(this.value);
     }

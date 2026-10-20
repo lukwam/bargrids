@@ -28,3 +28,14 @@ input[type="number"] { width: 4em; }
 .hint, .status { color: var(--muted); font-size: 13px; }
 .status.error { color: #c0392b; }
 textarea { width: 100%; min-height: 60vh; font: 13px/1.4 ui-monospace, Menlo, monospace; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 8px; }
+.editor-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+.editor-row .editor { flex: 1 1 320px; }
+.clues { flex: 1 1 220px; max-height: 70vh; overflow-y: auto; font-size: 14px; }
+.clues h3 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em; margin: 0 0 4px; }
+.clues ol { list-style: none; padding: 0; margin: 0 0 12px; }
+.clues button { all: unset; box-sizing: border-box; display: grid; grid-template-columns: 2.4em 1fr; gap: 0 4px; width: 100%; padding: 2px 4px; border-radius: 3px; cursor: pointer; }
+.clues [aria-current="true"] button { background: color-mix(in srgb, var(--accent) 25%, transparent); }
+.bargrids-clue-number { font-weight: 600; text-align: right; }
+.bargrids-clue-answer { grid-column: 2; color: var(--muted); font-size: 12px; }
+.bargrids-clue-unlinked { color: var(--muted); }
+.bargrids-clue-problem .bargrids-clue-number::after { content: " ⚠"; color: #c0392b; }

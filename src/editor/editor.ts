@@ -8,6 +8,7 @@ import { symmetryAllowed, type Symmetry } from "../model/symmetry.js";
 import { isLetterSquare, type Layer } from "../model/types.js";
 import { renderTree, shade, type RenderOptions } from "../render/render.js";
 import { el, toSvgElement, type SvgNode } from "../render/svg-tree.js";
+import { clueAt, clueFor, covers, pathDirection, type ClueRef } from "./clues.js";
 import { hitTest } from "./hit.js";
 import { toggleMark } from "./styles.js";
 
@@ -57,6 +58,8 @@ export class Editor extends EventTarget {
   private _cursor: Cursor = { row: 0, col: 0, direction: "across" };
   /** Rebus typing: characters collect here until Enter, Escape or a move. */
   private rebus: string | null = null;
+  /** The clue chosen from a clue list; it stays active while the cursor is in its squares. */
+  private selected: ClueRef | null = null;
   private svg: SVGSVGElement | null = null;
   private renderOptions: RenderOptions;
   private stop: () => void;
@@ -158,6 +161,33 @@ export class Editor extends EventTarget {
       direction,
     };
     this.draw();
+    this.dispatchEvent(new CustomEvent("cursor"));
+  }
+
+  /**
+   * The clue the cursor is in: the one chosen from a clue list while the cursor stays in its squares, otherwise the
+   * clue covering the cursor's square in the cursor's direction (or any clue covering it). Null without clues.
+   */
+  get activeClue(): ClueRef | null {
+    const model = this.grid.normalized();
+    const { row, col, direction } = this._cursor;
+    const chosen = clueAt(model, this.selected);
+    if (chosen && (covers(chosen, row, col) || !chosen.cells.length)) return this.selected;
+    return clueFor(model, row, col, direction);
+  }
+
+  /** Make a clue active, as clicking it in a clue list does: the cursor goes to its first square. */
+  selectClue(ref: ClueRef): void {
+    const clue = clueAt(this.grid.normalized(), ref);
+    if (!clue) throw new RangeError(`there's no clue ${ref.clue} in group ${ref.group}`);
+    if (this.tools.includes("letters") && this._tool !== "letters") this.tool = "letters";
+    this.selected = { ...ref };
+    const path = clue.cells[0];
+    if (path?.length) this.setCursor(path[0][0], path[0][1], pathDirection(path) ?? this._cursor.direction);
+    else {
+      this.draw();
+      this.dispatchEvent(new CustomEvent("cursor"));
+    }
   }
 
   /** The document as edited so far. */
@@ -191,6 +221,7 @@ export class Editor extends EventTarget {
       case "letters": {
         const same = row === this._cursor.row && col === this._cursor.col;
         const direction = same ? (this._cursor.direction === "across" ? "down" : "across") : this._cursor.direction;
+        this.selected = null;
         this.setCursor(row, col, direction);
         return;
       }
@@ -316,7 +347,10 @@ export class Editor extends EventTarget {
     if (this._tool !== "letters") return;
     if (event.key === "Enter") {
       if (this.rebus !== null) this.commitRebus();
-      else this.setCursor(this._cursor.row, this._cursor.col, this._cursor.direction === "across" ? "down" : "across");
+      else {
+        this.selected = null;
+        this.setCursor(this._cursor.row, this._cursor.col, this._cursor.direction === "across" ? "down" : "across");
+      }
       this.draw();
     } else if (event.key === "Escape") {
       if (this.rebus === null) return;
@@ -372,6 +406,13 @@ export class Editor extends EventTarget {
     const rect = (r: number, c: number, fill: string) =>
       el("rect", { x: c * size + 4 * k, y: r * size + 4 * k, width: size, height: size, fill });
     const word: SvgNode[] = [];
+    // With clues, the highlight is the active clue's squares; without, the run of squares between bars.
+    const ref = this.activeClue;
+    const clue = clueAt(this.grid.normalized(), ref);
+    if (clue?.cells.length) {
+      for (const [r, c] of clue.cells.flat()) if (r !== row || c !== col) word.push(rect(r, c, WORD_FILL));
+      return el("g", { class: "bargrids-cursor", "data-direction": direction, "data-clue": `${ref!.group}:${ref!.clue}` }, [...word, rect(row, col, CURSOR_FILL)]);
+    }
     const barred = (r: number, c: number) =>
       direction === "across" ? squares[r][c].barRight || squares[r][c].hiddenBarRight : squares[r][c].barBelow || squares[r][c].hiddenBarBelow;
     if (isLetterSquare(squares[row][col])) {

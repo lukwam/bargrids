@@ -167,8 +167,19 @@ grid into the element with the renderer and redraws on every change; `editor.toH
   square's `background-color` (the shade slider's grey), a circle is `shape: circle` with `stroke: black`, a
   shaded circle adds `fill`. A style with the same properties is reused; otherwise a new one-character key is made.
 - Ctrl/Cmd-Z undoes, Ctrl/Cmd-Shift-Z and Ctrl-Y redo. `layer: "solution"` edits the solution grid (adding one).
-- Not yet: the **numbers** tool (see "Hand-set numbers" below; numbers follow the clues or are automatic), the
-  clue lists beside the grid, and the screen-reader table.
+- **Clue lists** (read-only): `createClueList(editor)`, and in `<bargrids-editor>` beside the grid whenever the
+  document has clues (`clues="none"` hides them, `clues="text"` leaves out the answers). Each group's clues show
+  their number, text (with the format's limited HTML, rebuilt so nothing else gets through), enumeration and
+  answers. The clue for the cursor's square and direction is marked and scrolled into view, and the grid highlights
+  that clue's squares rather than the run between bars; clicking a clue moves the cursor to its first square (and to
+  the letters tool) and keeps it active while the cursor stays in its squares. Clues come from the normalized
+  model's `cells`, so a word, a pinned position and an explicit path all link the same way. Clues the checks
+  couldn't place are flagged; clues in a group that isn't linked on purpose are only greyed. The lists relink after
+  every edit, so a mistyped letter shows at once as a clue that no longer fits.
+- Paths are linked and highlighted like words, but not drawn as a route, and typing still moves across or down.
+  Editing clues, drawing paths and typing along them come later.
+- Not yet: the **numbers** tool (see "Hand-set numbers" below; numbers follow the clues or are automatic), and the
+  screen-reader table.
 
 A development demo (`npm run demo`, `demo/`) has the toolbar, the editor and the live hexword document; editing the
 document redraws the grid. It was checked in headless Chromium (bars with symmetry, marks, typing, rebus, resize,

@@ -3,7 +3,7 @@
 
 import { parse, stringify } from "yaml";
 
-import { Editor, Grid, SYMMETRIES, TOOLS, symmetryAllowed, type Tool } from "../src/index.js";
+import { Editor, Grid, SYMMETRIES, TOOLS, createClueList, symmetryAllowed, type ClueList, type Tool } from "../src/index.js";
 
 const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
 
@@ -13,6 +13,23 @@ title: Square Deal
 grid:
   rows: [HEART, EMBER, ABUSE, RESIN, TREND]
   columns: [HEART, EMBER, ABUSE, RESIN, TREND]
+settings:
+  show_enumerations: answers
+clues:
+  - name: Across
+    clues:
+      - "1. Core of the earth, at heart ~ HEART"
+      - "6. Glowing coal from the member ~ EMBER"
+      - "7. Misuse ~ ABUSE"
+      - "8. Sap ~ RESIN"
+      - "9. Fashion ~ TREND"
+  - name: Down
+    clues:
+      - "1. Centre of feeling ~ HEART"
+      - "2. Ash ~ EMBER"
+      - "3. Mistreat ~ ABUSE"
+      - "4. Gum ~ RESIN"
+      - "5. Direction ~ TREND"
 `;
 
 const TOOL_NAMES: Record<Tool, string> = {
@@ -30,6 +47,7 @@ const HINTS: Record<Tool, string> = {
 };
 
 let editor: Editor;
+let clueList: ClueList | null = null;
 let editingText = false;
 
 function start(grid: Grid): void {
@@ -42,6 +60,9 @@ function start(grid: Grid): void {
     shade: Number($<HTMLInputElement>("shade").value),
   });
   editor.addEventListener("change", showDocument);
+  clueList?.destroy();
+  clueList = createClueList(editor);
+  $("clues").replaceChildren(clueList.element);
   $<HTMLInputElement>("width").value = String(grid.width);
   $<HTMLInputElement>("height").value = String(grid.height);
   updateControls();
