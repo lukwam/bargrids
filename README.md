@@ -47,6 +47,7 @@ npm test                 # unit and golden tests
 npm run check            # type-check
 npm run build            # dist/bargrids.js (ES module), dist/bargrids.min.js (one file) and type definitions
 npm run demo             # the editor beside its live hexword document, at http://localhost:5173
-BARGRIDS_CORPUS=/path/to/puzzles npm test   # also round-trip a folder of real puzzles
+python3 scripts/corpus-from-cms.py backup.json /path/to/puzzles   # real puzzles from a CMS dumpdata backup
+BARGRIDS_CORPUS=/path/to/puzzles npm test   # also round-trip and draw them
 npm run golden -- /path/to/bargrids-re/results   # rebuild tests/golden/symmetry.json from the symmetry probes
 ```
